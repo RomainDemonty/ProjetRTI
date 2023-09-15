@@ -1,0 +1,84 @@
+body{
+    background-color: #26577C;
+    max-width: 1100px;
+    margin: auto;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+}
+
+h1{
+    text-align: center;
+    padding: 5px;
+    border: solid black 1px;
+    background-color: white;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 15px 30px 15px 30px;
+}
+
+h2{
+    text-decoration: underline;
+    color: white;
+}
+
+span{
+    color: white;
+}
+
+article{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+div{
+    margin: 10px;
+}
+
+#imageArticleSelect{
+    width: 150px;
+}
+
+#imageArticleSelect img{
+    width: 100%;
+    border-radius: 20px;
+    border: solid white 3px;
+    padding: 8px;
+}
+
+input[type="number"] {
+    width: 50px;
+}
+
+#articleSelect{
+    border: solid white 3px;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+#tableau{
+    width: 400px;
+}
+
+td , th{
+    text-align: center;
+    width: 100%;
+    border: lightgray solid 1px;
+    padding: none;
+    width: 25%;
+    height: 30px;
+    color:white;
+}
+
+th{
+    background-color: white;
+    color: black;
+}
+
+table {
+    border-collapse: collapse;
+    margin: auto;
+  }
