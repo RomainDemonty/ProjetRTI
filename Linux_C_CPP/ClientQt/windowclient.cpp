@@ -32,6 +32,9 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
     // Exemples à supprimer
     setArticle("pommes",5.53,18,"pommes.jpg");
     ajouteArticleTablePanier("cerises",8.96,2);
+
+
+    // doit se connecter a la socket pour permetre d'echanger
 }
 
 WindowClient::~WindowClient()
@@ -42,6 +45,7 @@ WindowClient::~WindowClient()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Fonctions utiles : ne pas modifier /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void WindowClient::setNom(const char* Text)
 {
   if (strlen(Text) == 0 )

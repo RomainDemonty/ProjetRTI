@@ -1,4 +1,4 @@
-all : Client CreationBD
+all : Client CreationBD Serveur
 
 mainclient.o:	mainclient.cpp
 		g++ -Wno-unused-parameter -c -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I../UNIX_DOSSIER_FINAL -I. -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtCore -I. -I. -I/usr/lib64/qt5/mkspecs/linux-g++ -o mainclient.o mainclient.cpp
@@ -14,4 +14,8 @@ CreationBD :	CreationBD.cpp
 		g++ -o CreationBD CreationBD.cpp -I/usr/include/mysql -m64 -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
 
 
+Serveur:	Serveur.cpp ServeurLib.cpp
+		g++ -Wall -std=c++11 Serveur.cpp ServeurLib.cpp -o Serveur
 
+ServeurLib : ServeurLib.cpp 
+		g++ -Wall -std=c++11 ServeurLib.cpp -o ServeurLib
