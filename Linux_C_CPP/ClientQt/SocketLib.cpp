@@ -77,6 +77,32 @@ int Socket::ClientSocket(char * ipServeur , int portServeur)
     // construit l'addr reseau grace a getaddrinfo 
     // connect() au serveur 
     // retourne la socketservice qui va lui permetre de communiquer avec le serveur 
+
+
+    int sClient;
+    if ((sClient = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    {
+        perror("Erreur de socket()");
+        exit(1);
+    }
+
+    printf("socket du client réusssis!\n");
+
+    struct addrinfo hints;
+    struct addrinfo *results;
+    memset(&hints,0,sizeof(struct addrinfo));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_NUMERICSERV;
+    if (getaddrinfo(NULL,"1500",&hints,&results) != 0)
+    exit(1);
+    // Demande de connexion
+    if (connect(sClient,results->ai_addr,results->ai_addrlen) == -1)
+    {
+        perror("Erreur de connect()");
+        exit(1);
+    }
+    printf("connect() reussi !\n");
     return 0 ; 
 
 }
