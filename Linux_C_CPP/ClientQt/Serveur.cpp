@@ -4,11 +4,16 @@
 #include <time.h>
 #include <string.h>
 
-#include "ServeurLib.h"
+#include "SocketLib.h"
 
  int main() 
  {  
-     
-     Socket::serverSocket(1);
-        
+    int sServeur , sService;
+    
+
+    sServeur = Socket::ServerSocket(1500);
+
+    sService = Socket::Accept(sServeur,NULL);//Redemander quand même au prof si on peut mettre null
+
+    pause();
 }
