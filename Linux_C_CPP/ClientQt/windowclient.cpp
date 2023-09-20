@@ -41,7 +41,7 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
 
     printf("Hello ca commence !!!!!!!!!\n");
     
-     Socket::ClientSocket("192.168.242.128" , 1500) ; 
+     Socket::ClientSocket(NULL , 1500) ; 
   
 
 }
