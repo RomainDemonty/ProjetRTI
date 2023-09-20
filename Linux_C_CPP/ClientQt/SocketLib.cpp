@@ -114,8 +114,10 @@ int Socket::ClientSocket(char * ipServeur , int portServeur)
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_NUMERICSERV;
     if (getaddrinfo(ipServeur,"1500",&hints,&results) != 0)
-    exit(1);
+            exit(1);
     // Demande de connexion
+    printf("dmd de connect()\n");
+    //printf("addr = %s  , result = %d \n ",results->ai_addr,results->ai_addrlen);
     if (connect(sClient,results->ai_addr,results->ai_addrlen) == -1)
     {
         perror("Erreur de connect()");

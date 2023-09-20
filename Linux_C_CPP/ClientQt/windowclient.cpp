@@ -36,6 +36,14 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
 
 
     // doit se connecter a la socket pour permetre d'echanger
+
+
+
+    printf("Hello ca commence !!!!!!!!!\n");
+    
+     Socket::ClientSocket("192.168.242.128" , 1500) ; 
+  
+
 }
 
 WindowClient::~WindowClient()

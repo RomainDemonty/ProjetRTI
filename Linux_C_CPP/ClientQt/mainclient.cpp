@@ -1,7 +1,7 @@
 #include "windowclient.h"
 
 #include <QApplication>
-
+#include "SocketLib.h"
 WindowClient *w;
 
 int main(int argc, char *argv[])
