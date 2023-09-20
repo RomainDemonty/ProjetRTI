@@ -36,12 +36,24 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
 
 
     // doit se connecter a la socket pour permetre d'echanger
-
-
-
-    printf("Hello ca commence !!!!!!!!!\n");
     
-     Socket::ClientSocket(NULL , 1500) ; 
+    int sService;
+    sService = Socket::ClientSocket(NULL , 1600); 
+
+    //Test de send
+    printf("Debut du send !\n");
+    char  charstr[10]= "Romdem"; 
+    printf("Envoie de : %s\n",charstr);
+    int envoye = Socket::Send(sService , charstr, sizeof(charstr));
+    if(envoye != -1)
+    {
+        printf("Envoye");
+    }
+    else
+    {
+        printf("Trame trop longue/mal passe");
+    }
+    //fin test de send
   
 
 }

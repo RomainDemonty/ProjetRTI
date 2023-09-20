@@ -124,7 +124,7 @@ int Socket::ClientSocket(char * ipServeur , int portServeur)
         exit(1);
     }
     printf("connect() reussi !\n");
-    return 0 ; 
+    return sClient ; 
 
 }
 int Socket::Send (int sSocket, char* data, int taille)
@@ -156,9 +156,11 @@ int Socket::Send (int sSocket, char* data, int taille)
     trame[taille] = '#';
     trame[taille+1] = ')';
 
+    printf("%s",trame);
     // Ecriture sur la socket
-    return write(sSocket,trame,taille+2)-2;
-
+    int test = write(sSocket,trame,taille+2)-2;
+    printf("%d",test);
+    return test;
     //Fin Test 2
 
 

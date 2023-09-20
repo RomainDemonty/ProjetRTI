@@ -1,4 +1,4 @@
- #include <stdio.h> 
+#include <stdio.h> 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -15,7 +15,7 @@
 
     sService = Socket::Accept(sServeur,NULL);//Redemander quand même au prof si on peut mettre null
 
-
+    /*
     //Test de send
     char charstr[10] = "Test12";
     int envoye = Socket::Send(sService ,  charstr , sizeof(charstr));
@@ -28,20 +28,27 @@
         printf("Trame trop longue/mal passe");
     }
     //fin test de send
+    */
 
     //Test de Receive
     int result;
     char charReceive[10];
 
+
     if((result = Socket::Receive(sService, charReceive)) == -1)
     {
-        printf("/nErreur de receive");
+        printf("Erreur de receive\n");
     }
     else
     {
-        printf("/ntrame lue : %d",result);//Renvoie le nombre de carractére lue
+        printf("Taille trame lue : %d\n",result);//Renvoie le nombre de carractére lue
+        printf("Lue : %s\n",charReceive);
     }
     //Fin test de Receive
 
+    close(sService);
+    close(sServeur);
+
     pause();
 }
+
