@@ -20,9 +20,10 @@ int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la p
     }
     printf("socket creee = %d\n",sServeur);
 
+    struct addrinfo *results;
     // Construction de l'adresse
     struct addrinfo hints;
-    struct addrinfo *results;
+    
     memset(&hints,0,sizeof(struct addrinfo));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
@@ -33,6 +34,24 @@ int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la p
         close(sServeur);
         exit(1);
     }
+
+
+
+
+    printf("test !!!!!!!!!!!!!!!!!!!\n");
+    char host[NI_MAXHOST];
+    char port[NI_MAXSERV];
+    struct addrinfo* info;
+    getnameinfo(results->ai_addr,results->ai_addrlen,
+    host,NI_MAXHOST,port,NI_MAXSERV,
+    NI_NUMERICSERV | NI_NUMERICHOST);
+    printf("Mon Adresse IP: %s -- Mon Port: %s\n",host,port);
+    printf("fin test !!!!!!!!!!!!!!!!!!!\n");
+
+
+
+
+   
 
     if (bind(sServeur,results->ai_addr,results->ai_addrlen) < 0)
     {
@@ -94,7 +113,7 @@ int Socket::ClientSocket(char * ipServeur , int portServeur)
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_NUMERICSERV;
-    if (getaddrinfo(NULL,"1500",&hints,&results) != 0)
+    if (getaddrinfo(ipServeur,"1500",&hints,&results) != 0)
     exit(1);
     // Demande de connexion
     if (connect(sClient,results->ai_addr,results->ai_addrlen) == -1)
@@ -125,6 +144,7 @@ int Socket::Send (int sSocket, char* data, int taille)
     return nbEcrits; //On peut changer par la taille envoyée
     */
 
+    //Test de manière 2 mais pas optimal on préfére mettre la taille devant 
      if (taille > TAILLE_MAX_DATA)
     return -1;
 
@@ -136,12 +156,25 @@ int Socket::Send (int sSocket, char* data, int taille)
 
     // Ecriture sur la socket
     return write(sSocket,trame,taille+2)-2;
+
+    //Fin Test 2
+
+
+    /*Test 3
+    if (taille > TAILLE_MAX_DATA)
+    return -1;
+
+
+
+    Fin test 3*/
+
+
 }
 int Socket::Receive(int sSocket , char* data)
 {
     // utilise par le client et le serveur 
     // retourne le nb de byte lu 
-     bool fini = false;
+    bool fini = false;
     int nbLus, i = 0;
     char lu1,lu2;
     while(!fini)

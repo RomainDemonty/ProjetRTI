@@ -39,7 +39,7 @@
     }
     else
     {
-        printf("/ntrame lue : %d",result);//Renvoie le nombre de trame lue
+        printf("/ntrame lue : %d",result);//Renvoie le nombre de carractére lue
     }
     //Fin test de Receive
 
