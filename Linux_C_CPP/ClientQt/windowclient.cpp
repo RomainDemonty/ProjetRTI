@@ -71,6 +71,7 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
         if(deco == true)
         {
           printf("Deconnection\n");
+          exit(0);
         }
       }
       else
