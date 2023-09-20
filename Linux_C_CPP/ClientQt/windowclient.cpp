@@ -42,7 +42,7 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
 
     //Test de send
     printf("Debut du send !\n");
-    char  charstr[10]= "Romdem"; 
+    char  charstr[15]= "DECONNECT"; 
     printf("Envoie de : %s\n",charstr);
     int envoye = Socket::Send(sService , charstr, sizeof(charstr));
     if(envoye != -1)

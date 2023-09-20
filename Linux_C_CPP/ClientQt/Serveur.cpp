@@ -6,6 +6,8 @@
 
 #include "SocketLib.h"
 
+#define DECONNECT 0
+
  int main() 
  {  
     int sServeur , sService;
@@ -32,7 +34,7 @@
 
     //Test de Receive
     int result;
-    char charReceive[10];
+    char charReceive[15];
 
 
     if((result = Socket::Receive(sService, charReceive)) == -1)
@@ -46,9 +48,15 @@
     }
     //Fin test de Receive
 
-    close(sService);
-    close(sServeur);
 
-    pause();
+    switch(charReceive)
+    {
+        case DECONNECT: 
+            close(sService);
+            close(sServeur);
+            exit(0);
+        break;
+    }
+
 }
 
