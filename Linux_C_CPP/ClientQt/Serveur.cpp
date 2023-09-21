@@ -112,12 +112,12 @@ void*FctCaddie(ts *threadsService)
             }
             else
             {
+                sleep(5);
                 printf("\n***********\n");
                 printf("Thread %d - Taille trame lue : %d\n",threadsService->indiceThread,result);//Renvoie le nombre de carractére lue
                 printf("Thread %d - Lue : %s\n",threadsService->indiceThread,charReceive);
                 if(strcmp(charReceive,"DECONNECT") ==0 )
                 {
-                    sleep(5);
                     close(threadsService->sService);
                     threadCaddie[threadsService->indiceThread] = 0;//Remettre à l indice du tableau de thread 0 pour dire que il est libre
                     nbCaddie--;
