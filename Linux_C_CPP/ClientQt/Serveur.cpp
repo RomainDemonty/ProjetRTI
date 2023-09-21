@@ -45,6 +45,10 @@ int nbCaddie = 0;
             nbCaddie++;
             printf("Nombre de client connecte: %d\n",nbCaddie);
         }
+        else
+        {
+            printf("Le nombre maximum de client connecte au serveur est atteint\n");
+        }
 
 
 
