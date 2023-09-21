@@ -43,9 +43,9 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
     sService = Socket::ClientSocket(NULL , 1600); 
 
     //Test de send
-  
-    //  int envoye = Socket::Send(sService , charstr, sizeof(charstr));
-
+    char charstr[15];
+    strcpy(charstr,"DECONNECT");
+    int ret =  Socket::Send(sService , charstr, sizeof(charstr));
     //fin test de send
   
 
