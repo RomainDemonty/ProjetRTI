@@ -15,7 +15,7 @@ CreationBD :	CreationBD.cpp
 
 
 Serveur:	Serveur.cpp SocketLib.cpp
-		g++ -Wall -std=c++11 Serveur.cpp SocketLib.cpp -o Serveur
+		g++ -Wall -std=c++11 Serveur.cpp SocketLib.cpp -lrt -lpthread -lSDL -o Serveur
 
 SocketLib : SocketLib.cpp 
 		g++ -Wall -std=c++11 SocketLib.cpp -o SocketLib
