@@ -9,6 +9,8 @@ extern WindowClient *w;
 
 #define REPERTOIRE_IMAGES "images/"
 
+int sService;
+
 WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::WindowClient)
 {
     ui->setupUi(this);
@@ -37,50 +39,12 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
 
     // doit se connecter a la socket pour permetre d'echanger
     
-    int sService;
+    
     sService = Socket::ClientSocket(NULL , 1600); 
 
     //Test de send
-    printf("Debut du send !\n");
-
-    char  charstr[15];
-    bool deco = false;
-    char yes;
-
-    while (1)
-    {  
-      printf("\n\nY pour envoyer :\n");
-      fgets(charstr, sizeof(char), stdin);
-      if(yes == 'Y')
-      {
-        printf("Deconnection client");
-        deco = true;
-        strcpy(charstr,"DECONNECT");
-      }
-      else
-      {
-        printf("Texte a envoyer :");
-        fgets(charstr, sizeof(charstr), stdin);
-      }
-
-      printf("Envoie de ce texte: %s\n",charstr);
-      int envoye = Socket::Send(sService , charstr, sizeof(charstr));
-      if(envoye != -1)
-      {
-        printf("Envoye\n");
-        if(deco == true)
-        {
-          printf("Deconnection\n");
-          exit(0);
-        }
-      }
-      else
-      {
-          printf("Trame trop longue/mal passe\n");
-      }
-    }
   
-
+    //  int envoye = Socket::Send(sService , charstr, sizeof(charstr));
 
     //fin test de send
   

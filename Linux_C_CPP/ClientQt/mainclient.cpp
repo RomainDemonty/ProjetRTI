@@ -2,6 +2,8 @@
 
 #include <QApplication>
 #include "SocketLib.h"
+#include <iostream>
+#include <unistd.h> 
 WindowClient *w;
 
 int main(int argc, char *argv[])
