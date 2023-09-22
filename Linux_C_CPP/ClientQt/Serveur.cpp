@@ -4,37 +4,83 @@
 #include <time.h>
 #include <string.h>
 #include <pthread.h>
+#include <signal.h>
 
 #include "SocketLib.h"
 
-struct  ts{
-    int indiceThread;
-    int sService;
-};
+void HandlerSIGINT(int s);
 
-void* FctCaddie(ts *threadsService);
+void* FctCaddie(void * );
 
 pthread_t threadCaddie[10];
 
-ts tabClientConnect [10];
 
-int nbCaddie = 0;
+#define NB_THREADS_POOL 4
+#define TAILLE_FILE_ATTENTE 20
+int socketsAcceptees[TAILLE_FILE_ATTENTE];
+int indiceEcriture=0, indiceLecture=0;
+pthread_mutex_t mutexSocketsAcceptees;
+pthread_cond_t condSocketsAcceptees;
+
+int sServeur ;
 
  int main() 
  {  
-    int sServeur , sService;
-    
-
-    sServeur = Socket::ServerSocket(1500);
-
-    for(int i  = 0 ; i<10 ; i++)
+     // preparation du stockage des descripteur de socket 
+     for (int i=0 ; i<TAILLE_FILE_ATTENTE ; i++)
+     {
+         socketsAcceptees[i] = -1;
+     }
+            
+    // armement de sigaction
+    struct sigaction A;
+    A.sa_flags = 0;
+    sigemptyset(&A.sa_mask);
+    A.sa_handler = HandlerSIGINT;
+    if (sigaction(SIGINT,&A,NULL) == -1)
     {
-        threadCaddie[i] = 0;
-        tabClientConnect [i].indiceThread = i;
+        perror("Serveur - Erreur de sigaction");
+        exit(1);
+    }
+
+    // creation du pool de thread 
+    pthread_t th;
+    for (int i=0 ; i<NB_THREADS_POOL ; i++)
+    {
+      pthread_create(&th,NULL,FctCaddie,NULL);
     }
 
 
-    while(1)
+    int sService;
+    
+    sServeur = Socket::ServerSocket(1500);
+
+     while(1)
+    {
+        printf("Serveur -  Attente d'une connexion...\n");
+        if ((sService = Socket::Accept(sServeur,NULL)) == -1)
+        {
+            perror("Serveur - Erreur de Accept");
+            close(sServeur);
+            exit(1);
+        }
+        printf("Serveur -  Connexion acceptée : socket=%d\n",sService);
+        // Insertion en liste d'attente et réveil d'un thread du pool
+        // (Production d'une tâche)
+        pthread_mutex_lock(&mutexSocketsAcceptees);
+        socketsAcceptees[indiceEcriture] = sService; // !!!
+        indiceEcriture++;
+        if (indiceEcriture == TAILLE_FILE_ATTENTE)
+        {
+            indiceEcriture = 0;
+        } 
+        pthread_mutex_unlock(&mutexSocketsAcceptees);
+        pthread_cond_signal(&condSocketsAcceptees);
+    }
+
+
+
+    /*while(1)
     {
         if(nbCaddie != 10)
         {
@@ -65,41 +111,39 @@ int nbCaddie = 0;
         }
 
 
+    }*/
 
 
-        /*
-        //Test de Receive
-        int result;
-        char charReceive[15];
-        while (1)
-        {
-            if((result = Socket::Receive(sService, charReceive)) == -1)
-            {
-                printf("Erreur de receive\n");
-            }
-            else
-            {
-                printf("Taille trame lue : %d\n",result);//Renvoie le nombre de carractére lue
-                printf("Lue : %s\n",charReceive);
-            }
-            //Fin test de Receive
 
-            if(strcmp(charReceive,"DECONNECT") ==0 )
-            {
-                close(sService);
-                close(sServeur);
-                printf("\nFin du serveur\n");
-                exit(0);
-            }
-
-        }
-        */
-    }
 }
 
-void*FctCaddie(ts *threadsService)
+void*FctCaddie(void * )
 {
-    printf("Thread %d - Hello pret a repondre\n",threadsService->indiceThread);
+
+    int sService;
+ 
+    while(1)
+    {
+        printf("\t[THREAD %p] Attente socket...\n",pthread_self());
+        // Attente d'une tâche
+        pthread_mutex_lock(&mutexSocketsAcceptees);
+        while (indiceEcriture == indiceLecture)
+        {
+            pthread_cond_wait(&condSocketsAcceptees,&mutexSocketsAcceptees);
+        }
+        sService = socketsAcceptees[indiceLecture];
+        socketsAcceptees[indiceLecture] = -1;
+        indiceLecture++;
+        if (indiceLecture == TAILLE_FILE_ATTENTE)
+        {
+            indiceLecture = 0;
+        } 
+        pthread_mutex_unlock(&mutexSocketsAcceptees);
+        printf("\t[THREAD %p] Je m'occupe de la socket %d\n", pthread_self(),sService);
+
+        // debut trait tache
+    }
+    /*printf("Thread %d - Hello pret a repondre\n",threadsService->indiceThread);
             
         //Test de Receive
         int result;
@@ -132,6 +176,18 @@ void*FctCaddie(ts *threadsService)
                 
             }
         }
-    return 0;
+    return 0;*/
+}
+
+void HandlerSIGINT(int s)
+{
+    printf("\nServeur - Arret du serveur.\n");
+    close(sServeur);
+    pthread_mutex_lock(&mutexSocketsAcceptees);
+    for (int i=0 ; i<TAILLE_FILE_ATTENTE ; i++)
+    if (socketsAcceptees[i] != -1) close(socketsAcceptees[i]);
+    pthread_mutex_unlock(&mutexSocketsAcceptees);
+    
+    exit(0);
 }
 

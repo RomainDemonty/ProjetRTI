@@ -10,15 +10,15 @@ int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la p
 
 
     int sServeur;
-    printf("pid = %d\n",getpid());
+    printf("Serveur- id = %d\n",getpid());
 
     // Creation de la socket
     if ((sServeur = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
-        perror("Erreur de socket()");
+        perror("Serveur - Erreur de socket()");
         exit(1);
     }
-    printf("socket creee = %d\n",sServeur);
+    printf("Serveur - socket creee = %d\n",sServeur);
 
     struct addrinfo *results;
     // Construction de l'adresse
@@ -35,38 +35,30 @@ int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la p
         exit(1);
     }
 
-
-
-
-    printf("test !!!!!!!!!!!!!!!!!!!\n");
     char host[NI_MAXHOST];
     char port[NI_MAXSERV];
     struct addrinfo* info;
     getnameinfo(results->ai_addr,results->ai_addrlen,
     host,NI_MAXHOST,port,NI_MAXSERV,
     NI_NUMERICSERV | NI_NUMERICHOST);
-    printf("Mon Adresse IP: %s -- Mon Port: %s\n",host,port);
-    printf("fin test !!!!!!!!!!!!!!!!!!!\n");
-
-
-
+    printf("Serveur - Mon Adresse IP: %s -- Mon Port: %s\n",host,port);
 
    
 
     if (bind(sServeur,results->ai_addr,results->ai_addrlen) < 0)
     {
-        perror("Erreur de bind()");
+        perror("Serveur - Erreur de bind()");
         exit(1);
     }
     freeaddrinfo(results);
-    printf("bind() reussi !\n");
+    printf("Serveur - bind() reussi !\n");
 
     if (listen(sServeur,10) == -1)//Faire attention au 10 juste pour le teste. Maxcon
     {
-        perror("Erreur de listen()");
+        perror("Serveur - Erreur de listen()");
         exit(1);
     }
-    printf("listen() reussi !\n");
+    printf("Serveur - listen() reussi !\n");
 
     return sServeur ; 
 }
@@ -82,11 +74,11 @@ int Socket::Accept(int ecoute ,char * ipclient )
     int sService;
     if ((sService = accept(ecoute,NULL,NULL)) == -1)
     {
-        perror("Erreur de accept()");
+        perror("Serveur - Erreur de accept()");
         exit(1);
     }
-    printf("accept() reussi !");
-    printf("socket de service = %d\n",sService);
+    printf("Serveur -accept() reussi !\n");
+    printf("Serveur -socket de service = %d\n",sService);
     return sService ; 
 }
 int Socket::ClientSocket(char * ipServeur , int portServeur) 
@@ -101,11 +93,11 @@ int Socket::ClientSocket(char * ipServeur , int portServeur)
     int sClient;
     if ((sClient = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
-        perror("Erreur de socket()");
+        perror("Client - Erreur de socket()");
         exit(1);
     }
 
-    printf("socket du client réusssis!\n");
+    printf("Client - socket du client réusssis!\n");
 
     struct addrinfo hints;
     struct addrinfo *results;
@@ -116,14 +108,14 @@ int Socket::ClientSocket(char * ipServeur , int portServeur)
     if (getaddrinfo(ipServeur,"1500",&hints,&results) != 0)
             exit(1);
     // Demande de connexion
-    printf("dmd de connect()\n");
+    printf("Client - dmd de connect()\n");
     //printf("addr = %s  , result = %d \n ",results->ai_addr,results->ai_addrlen);
     if (connect(sClient,results->ai_addr,results->ai_addrlen) == -1)
     {
-        perror("Erreur de connect()");
+        perror("Client - Erreur de connect()");
         exit(1);
     }
-    printf("connect() reussi !\n");
+    printf("Client - connect() reussi !\n");
     return sClient ; 
 
 }
