@@ -10,6 +10,7 @@ extern WindowClient *w;
 #define REPERTOIRE_IMAGES "images/"
 
 int sService;
+bool logged=0;
 
 WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::WindowClient)
 {
@@ -282,7 +283,16 @@ void WindowClient::dialogueErreur(const char* titre,const char* message)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::closeEvent(QCloseEvent *event)
 {
-  // prevenir le serv que on se deconnecte
+  MESSAGE  msg ; 
+
+  if (logged==1)
+  {
+
+   //on envois un msg pour  vider le panier 
+   // on envois un msg pour se deconnecter (libere du coup le thread )
+
+  }
+  
   exit(0);
 }
 
@@ -293,6 +303,8 @@ void WindowClient::on_pushButtonLogin_clicked()
 {
     //on dmd au serv si on peut se connecter 
     // gerer l'erreur 
+    // doit faire en sorte de mettre logged=1 ; 
+    // appel a loginok
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -300,17 +312,21 @@ void WindowClient::on_pushButtonLogout_clicked()
 {
     //on dmd au serv si on peut se deconnecter 
     // gerer l'erreur 
+    //logged = 0 a la fin . 
+    //appel a logout ok 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonSuivant_clicked()
 {
-
+  // envois d'une trame au serveur en demandant l'artcileencours+1
+  //pas oublier de modif cet artcicle en cours var global
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonPrecedent_clicked()
 {
+  // envois d'une trame au serveur en demandant l'artcileencours-1
 
 }
 
@@ -343,4 +359,5 @@ void WindowClient::on_pushButtonViderPanier_clicked()
 void WindowClient::on_pushButtonPayer_clicked()
 {
     // vide le panier 
+    //reset le prix a 0 
 }
