@@ -15,7 +15,7 @@ CreationBD :	CreationBD.cpp
 
 
 Serveur:	Serveur.cpp SocketLib.cpp
-		g++ -Wall -std=c++11 Serveur.cpp SocketLib.cpp -lrt -lpthread -lSDL -o Serveur
+		g++ -Wall -std=c++11 Serveur.cpp SocketLib.cpp -lrt -lpthread -lSDL  -o Serveur -I/usr/include/mysql -m64 -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
 
 SocketLib : SocketLib.cpp 
 		g++ -Wall -std=c++11 SocketLib.cpp -o SocketLib

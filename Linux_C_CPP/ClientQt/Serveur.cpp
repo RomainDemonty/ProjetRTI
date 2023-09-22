@@ -5,6 +5,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <signal.h>
+#include <mysql.h>
 
 #include "SocketLib.h"
 
@@ -24,8 +25,42 @@ pthread_cond_t condSocketsAcceptees;
 
 int sServeur ;
 
+
+//ACCES BASE DE DONNEES 
+MYSQL_RES  *resultat;
+MYSQL_ROW  Tuple;
+MYSQL * connexion;
+
+
  int main() 
  {  
+     //preparation de la base de données
+     connexion = mysql_init(NULL);
+    if (mysql_real_connect(connexion,"localhost","Student","PassStudent1_","PourStudent",0,0,0) == NULL)
+    {
+        fprintf(stderr,"(SERVEUR) Erreur de connexion à la base de données...\n");
+        exit(1);  
+    }
+    printf("Serveur - connexion réalisé\n");
+    /* test sur le fait de recup une requete CA MARCHE 
+
+
+        if (mysql_query(connexion, "select * from UNIX_FINAL where id = 1") != 0)   // cense renvoyer les elts sur carottes 
+        {
+        fprintf (stderr, "Serveur - Erreur de Mysql-query");
+        }
+
+        if((resultat = mysql_store_result(connexion)) == NULL)
+        {
+        fprintf (stderr, "Serveur - Erreur de mysql store");
+        }
+        //
+        // Preparation de la reponse
+        if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+        {
+        printf("Serveur -  le resultat de la requete sql est :  %s \n", Tuple[1]); // censé donner carotes 
+        }
+        else printf("Serveur -  le resultat de la requete sql ne donne aucune reponse");*/
      // preparation du stockage des descripteur de socket 
      for (int i=0 ; i<TAILLE_FILE_ATTENTE ; i++)
      {
