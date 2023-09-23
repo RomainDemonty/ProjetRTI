@@ -18,9 +18,9 @@ pthread_mutex_t mutexClients = PTHREAD_MUTEX_INITIALIZER;
 bool SMOP(char* requete, char* reponse,int socket)
 {
     // ***** Récupération nom de la requete *****************
-    char *ptr = strtok(requete,"#");
+    char *cas = strtok(requete,"#");
     // ***** LOGIN ******************************************
-    if (strcmp(ptr,"LOGIN") == 0) 
+    if (strcmp(cas,"LOGIN") == 0) 
     {
         char user[50], password[50];
         strcpy(user,strtok(NULL,"#"));
@@ -46,7 +46,7 @@ bool SMOP(char* requete, char* reponse,int socket)
         }
     }
     // ***** LOGOUT *****************************************
-    if (strcmp(ptr,"LOGOUT") == 0)
+    if (strcmp(cas,"LOGOUT") == 0)
     {
         printf("\t[THREAD %p] LOGOUT\n",pthread_self());
         retire(socket);
@@ -54,29 +54,52 @@ bool SMOP(char* requete, char* reponse,int socket)
         return false;
     }
     // ***** OPER *******************************************
-    if (strcmp(ptr,"OPER") == 0)
+    if (strcmp(cas,"LOGOUT") != 0 && strcmp(cas,"LOGIN") != 0)
     {
-        char op;
-        int a,b;
-        ptr = strtok(NULL,"#");
-        op = ptr[0];
-        a = atoi(strtok(NULL,"#"));
-        b = atoi(strtok(NULL,"#"));
-        printf("\t[THREAD %p] OPERATION %d %c %d\n",pthread_self(),a,op,b);
+        int id, quantite;
+
         if (estPresent(socket) == -1)
         {
             sprintf(reponse,"OPER#ko#Client non loggé !");
         } 
         else
         {
-            try
-            {
-                int resultat = SMOP_Operation(op,a,b);
-                sprintf(reponse,"OPER#ok#%d",resultat);
+
+            if(strcmp(cas,"CONSULT") == 0)
+            {                
+                id = atoi(strtok(NULL,"#"));
+                //Consultation d’un article en BD → si article non trouvé, retour -1 au client
             }
-            catch(int) 
-            { 
-                sprintf(reponse,"OPER#ko#Division par zéro !"); 
+            if(strcmp(cas,"ACHAT") == 0)
+            {
+                id = atoi(strtok(NULL,"#"));
+                quantite = atoi(strtok(NULL,"#"));
+                /*Si article non trouvé, retour -1. Si 
+                trouvé mais que stock insuffisant, 
+                retour d’une quantité 0 → Si ok, le 
+                stock est mis à jour en BD et le 
+                contenu du caddie est mémorisé au 
+                niveau du serveur → actuellement 
+                aucune action sur tables factures et 
+                ventes*/
+            }
+            if(strcmp(cas,"CADDIE") == 0)
+            {                
+                id = atoi(strtok(NULL,"#"));
+                //Retourne l’entièreté du contenu du caddie au client
+            }
+            if(strcmp(cas,"CANCEL") == 0)
+            {                
+                id = atoi(strtok(NULL,"#"));
+                //Supprime un article du caddie et met à jour à la BD
+            }
+            if(strcmp(cas,"CANCELALL") == 0)
+            {                
+                //Supprime tous les articles du caddie et met à jour la BD
+            }
+            if(strcmp(cas,"CONFIRMER") == 0)
+            {                
+                //Création d’une facture et BD et ajout des éléments du caddie dans la BD
             }
         }
     }
@@ -96,6 +119,7 @@ bool SMOP_Login(const char* user,const char* password)
 
     return false;
 }
+/*
 int SMOP_Operation(char op,int a,int b)
 {
     if (op == '+') return a+b;
@@ -111,6 +135,9 @@ int SMOP_Operation(char op,int a,int b)
     }
     return 0;
 }
+*/
+
+
 //***** Gestion de l'état du protocole ******************************
 int estPresent(int socket)
 {
