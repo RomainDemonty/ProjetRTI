@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <string>
 #include "SocketLib.h" //Rajouter la librérie car aussi non on peut pas se connecter aux socket
+
 using namespace std;
 
 extern WindowClient *w;
@@ -283,7 +284,7 @@ void WindowClient::dialogueErreur(const char* titre,const char* message)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::closeEvent(QCloseEvent *event)
 {
-  MESSAGE  msg ; 
+  //MESSAGE  msg ; 
 
   if (logged==1)
   {

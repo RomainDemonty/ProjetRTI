@@ -53,13 +53,6 @@ int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la p
     freeaddrinfo(results);
     printf("Serveur - bind() reussi !\n");
 
-    if (listen(sServeur,10) == -1)//Faire attention au 10 juste pour le teste. Maxcon
-    {
-        perror("Serveur - Erreur de listen()");
-        exit(1);
-    }
-    printf("Serveur - listen() reussi !\n");
-
     return sServeur ; 
 }
 int Socket::Accept(int ecoute ,char * ipclient )
@@ -69,6 +62,13 @@ int Socket::Accept(int ecoute ,char * ipclient )
     //fais appel a accept() 
     // peut recup l'adresse ip du client , place dans ipclient si celui ci est non null 
     //retourne la socket de service obtenue apres conenction avec un client
+
+    if (listen(ecoute,10) == -1)//Faire attention au 10 juste pour le teste. Maxcon
+    {
+        perror("Serveur - Erreur de listen()");
+        exit(1);
+    }
+    printf("Serveur - listen() reussi !\n");
 
     // Attente d'une connexion
     int sService;

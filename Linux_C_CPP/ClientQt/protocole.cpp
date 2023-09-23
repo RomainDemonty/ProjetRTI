@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <mysql.h>
 
 //***** Etat du protocole : liste des clients loggés ****************
 int clients[NB_MAX_CLIENTS];
@@ -15,7 +16,7 @@ void retire(int socket);
 pthread_mutex_t mutexClients = PTHREAD_MUTEX_INITIALIZER;
 
 //***** Parsing de la requete et creation de la reponse *************
-bool SMOP(char* requete, char* reponse,int socket)
+bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
 {
     // ***** Récupération nom de la requete *****************
     char *cas = strtok(requete,"#");
@@ -82,6 +83,60 @@ bool SMOP(char* requete, char* reponse,int socket)
                 niveau du serveur → actuellement 
                 aucune action sur tables factures et 
                 ventes*/
+
+                // TO DO
+
+                      // Acces BD , comme en php l'annee passee 
+                      sprintf(requete,"select * from UNIX_FINAL where id = %d", id);
+                      if (mysql_query(con, requete) != 0)
+                      {
+                        fprintf (stderr, "Erreur de Mysql-query");
+                      }
+                      if((resultat = mysql_store_result(connexion)) == NULL)
+                      {
+                        fprintf (stderr, "Erreur de mysql store");
+                      }
+                      if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+                      {
+                            
+                        qtedispo = atoi(Tuple[3]);
+                        qtedemandee = atoi(m.data2);//conversion pour pouvoir faire les calcus 
+                        reponse.type = m.expediteur; 
+                        reponse.expediteur = getpid();
+                        reponse.requete = ACHAT;
+                        reponse.data1 = atoi(Tuple[0]);
+                        strcpy(reponse.data2, Tuple[1]);
+                        strcpy(reponse.data4, Tuple[4]);
+
+                        if (qtedemandee > qtedispo)
+                        {
+                         sprintf(reponse.data3,"0"); // condition donne par le prof , on renvoi 0 quand pas possible 
+                        }
+                        else
+                        {
+                          //maj
+                          newqte = qtedispo - qtedemandee;
+
+                          sprintf(reponse.data3,  m.data2);//qte
+                          sprintf(requete,"UPDATE UNIX_FINAL SET stock = %d where id = %d", newqte, reponse.data1);
+                          if (mysql_query(connexion, requete) != 0) //requete de mise a jour
+                          {
+                            fprintf (stderr, "Erreur de Mysql-query");
+                          }
+
+                        }
+
+
+                        // Finalisation et envoi de la reponse
+                        if(msgsnd(idQ,&reponse,sizeof(MESSAGE)-sizeof(long),0) == -1)
+                        {
+                          perror("(AccesBD) Erreur de msgsnd");
+                          msgctl(idQ,IPC_RMID,NULL);
+                          exit(1);
+                        }
+
+                      }
+                      // Finalisation et envoi de la reponse
             }
             if(strcmp(cas,"CADDIE") == 0)
             {                
@@ -108,6 +163,8 @@ bool SMOP(char* requete, char* reponse,int socket)
 //***** Traitement des requetes *************************************
 bool SMOP_Login(const char* user,const char* password)
 {
+    //Demander a la bd si le mot de passe etc est correct
+    /*
     if (strcmp(user,"wagner")==0 && strcmp(password,"abc123")==0) 
     {
         return true;
@@ -116,6 +173,7 @@ bool SMOP_Login(const char* user,const char* password)
     {
         return true;
     }
+    */
 
     return false;
 }

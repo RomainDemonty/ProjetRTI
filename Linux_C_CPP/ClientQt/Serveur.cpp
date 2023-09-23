@@ -35,7 +35,7 @@ MYSQL * connexion;
  int main() 
  {  
      //preparation de la base de données
-     connexion = mysql_init(NULL);
+    connexion = mysql_init(NULL);
     if (mysql_real_connect(connexion,"localhost","Student","PassStudent1_","PourStudent",0,0,0) == NULL)
     {
         fprintf(stderr,"(SERVEUR) Erreur de connexion à la base de données...\n");
