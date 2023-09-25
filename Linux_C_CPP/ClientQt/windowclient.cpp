@@ -362,3 +362,33 @@ void WindowClient::on_pushButtonPayer_clicked()
     // vide le panier 
     //reset le prix a 0 
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// fonction pour communiquer avec le serv. 
+void Echange(char* requete, char* reponse)
+{
+  int nbEcrits, nbLus;
+  // ***** Envoi de la requete ****************************
+  if ((nbEcrits = Socket::Send(sService,requete,strlen(requete))) == -1)
+  {
+    perror("Erreur de Send");
+    close(sService);
+    exit(1);
+  }
+  // ***** Attente de la reponse **************************
+  if ((nbLus = Socket::Receive(sService,reponse)) < 0)
+  {
+    perror("Erreur de Receive");
+    close(sService);
+    exit(1);
+  }
+  if (nbLus == 0)
+  {
+    printf("Serveur arrete, pas de reponse reçue...\n");
+    close(sService);
+    exit(1);
+  }
+  reponse[nbLus] = 0;
+}
