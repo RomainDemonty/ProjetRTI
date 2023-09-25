@@ -8,6 +8,7 @@
 #include <mysql.h>
 
 #include "SocketLib.h"
+#include "protocole.h"
 
 void HandlerSIGINT(int s);
 
@@ -176,25 +177,45 @@ void*FctCaddie(void * )
         pthread_mutex_unlock(&mutexSocketsAcceptees);
         printf("\t[THREAD %p] Je m'occupe de la socket %d\n", pthread_self(),sService);
 
+        //TEst
+        int result;
+        bool test;
+        char charReceive[60];
+        char reponse[60];
+        if((result = Socket::Receive(sService, charReceive)) == -1)
+            {
+                printf("Mal passe\n");
+               // printf("Thread %d - Erreur de receive\n",threadsService->indiceThread);
+            }
+
+        test = SMOP(charReceive,reponse, sService, connexion);
+        printf("Reponse : %s\n",reponse);
+
+        //Fin test
         // debut trait tache
     }
-    /*printf("Thread %d - Hello pret a repondre\n",threadsService->indiceThread);
-            
+    //printf("Thread %d - Hello pret a repondre\n",threadsService->indiceThread);
+        /* 
         //Test de Receive
         int result;
-        char charReceive[15];
+        char charReceive[60];
+        char reponse[60];
+
         while (1)
         {
-            if((result = Socket::Receive(threadsService->sService, charReceive)) == -1)
+            if((result = Socket::Receive(sService, charReceive)) == -1)
             {
-                printf("Thread %d - Erreur de receive\n",threadsService->indiceThread);
+                printf("Mal passe\n");
+               printf("Thread %d - Erreur de receive\n",threadsService->indiceThread);
             }
+        
             else
             {
                 sleep(5);
                 printf("\n***********\n");
                 printf("Thread %d - Taille trame lue : %d\n",threadsService->indiceThread,result);//Renvoie le nombre de carractére lue
                 printf("Thread %d - Lue : %s\n",threadsService->indiceThread,charReceive);
+                
                 if(strcmp(charReceive,"DECONNECT") ==0 )
                 {
                     close(threadsService->sService);
@@ -206,12 +227,18 @@ void*FctCaddie(void * )
                 }
                 else
                 {
-                    printf("***********\n");
+                    
+                    SMOP(charReceive,reponse, sService, connexion);
+                    printf("Reponse : %s\n",reponse);
+                    
                 }
                 
+                
             }
+            
         }
-    return 0;*/
+        */
+    return 0;
 }
 
 void HandlerSIGINT(int s)

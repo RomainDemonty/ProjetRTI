@@ -1,15 +1,17 @@
 #include "protocole.h"
+#include "FichierClient.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <iostream>
 #include <mysql.h>
 
 //***** Etat du protocole : liste des clients loggés ****************
 int clients[NB_MAX_CLIENTS];
 int nbClients = 0;
-int estPresent(int socket);
+int estPresentServeur(int socket);
 void ajoute(int socket);
 void retire(int socket);
 
@@ -24,24 +26,23 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     if (strcmp(cas,"LOGIN") == 0) 
     {
         char user[50], password[50];
+        bool newuser;
         strcpy(user,strtok(NULL,"#"));
         strcpy(password,strtok(NULL,"#"));
-        printf("\t[THREAD %p] LOGIN de %s\n",pthread_self(),user);
-        if (estPresent(socket) >= 0) // client déjà loggé
+        newuser = strtok(NULL,"#");
+        if (estPresentServeur(socket) >= 0) // client déjà loggé
         {
             sprintf(reponse,"LOGIN#ko#Client déjà loggé !");
             return false;
         }
         else
         {
-            if (SMOP_Login(user,password))
+            if (SMOP_Login(user,password,newuser,reponse))
             {
-                sprintf(reponse,"LOGIN#ok");
                 ajoute(socket);
             } 
             else
             {
-                sprintf(reponse,"LOGIN#ko#Mauvais identifiants !");
                 return false;
             }
         }
@@ -49,7 +50,6 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     // ***** LOGOUT *****************************************
     if (strcmp(cas,"LOGOUT") == 0)
     {
-        printf("\t[THREAD %p] LOGOUT\n",pthread_self());
         retire(socket);
         sprintf(reponse,"LOGOUT#ok");
         return false;
@@ -57,11 +57,11 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     // ***** OPER *******************************************
     if (strcmp(cas,"LOGOUT") != 0 && strcmp(cas,"LOGIN") != 0)
     {
-        int id, quantite;
+        int id, quantitedem;
 
-        if (estPresent(socket) == -1)
+        if (estPresentServeur(socket) == -1)
         {
-            sprintf(reponse,"OPER#ko#Client non loggé !");
+            strcpy(reponse,"OPER#ko#Client non loggé !");
         } 
         else
         {
@@ -73,8 +73,15 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
             }
             if(strcmp(cas,"ACHAT") == 0)
             {
+                //Strtok
                 id = atoi(strtok(NULL,"#"));
-                quantite = atoi(strtok(NULL,"#"));
+                quantitedem = atoi(strtok(NULL,"#"));
+
+                //Variables
+                MYSQL_RES *resultat;
+                MYSQL_ROW  Tuple;
+                int qtedispo,newqte;
+
                 /*Si article non trouvé, retour -1. Si 
                 trouvé mais que stock insuffisant, 
                 retour d’une quantité 0 → Si ok, le 
@@ -86,57 +93,39 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
 
                 // TO DO
 
-                      // Acces BD , comme en php l'annee passee 
-                      sprintf(requete,"select * from UNIX_FINAL where id = %d", id);
-                      if (mysql_query(con, requete) != 0)
-                      {
-                        fprintf (stderr, "Erreur de Mysql-query");
-                      }
-                      if((resultat = mysql_store_result(connexion)) == NULL)
-                      {
-                        fprintf (stderr, "Erreur de mysql store");
-                      }
-                      if ((Tuple = mysql_fetch_row(resultat)) != NULL)
-                      {
-                            
-                        qtedispo = atoi(Tuple[3]);
-                        qtedemandee = atoi(m.data2);//conversion pour pouvoir faire les calcus 
-                        reponse.type = m.expediteur; 
-                        reponse.expediteur = getpid();
-                        reponse.requete = ACHAT;
-                        reponse.data1 = atoi(Tuple[0]);
-                        strcpy(reponse.data2, Tuple[1]);
-                        strcpy(reponse.data4, Tuple[4]);
-
-                        if (qtedemandee > qtedispo)
+                // Acces BD , comme en php l'annee passee 
+                sprintf(requete,"select * from UNIX_FINAL where id = %d", id);
+                if (mysql_query(con, requete) != 0)
+                {
+                    strcpy(reponse,"ACHAT#ko#ERREUR_SQL#-1");
+                }
+                if((resultat = mysql_store_result(con)) == NULL)
+                {
+                    strcpy(reponse,"ACHAT#ko#ERREUR_SQL#-1");
+                }
+                if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+                {
+                    qtedispo = atoi(Tuple[3]);
+ 
+                    if (quantitedem > qtedispo)
+                    {
+                        strcpy(reponse,"ACHAT#ko#Stock_Insufisant#0");
+                    }
+                    else
+                    {
+                        //maj dans la bd
+                        newqte = qtedispo - quantitedem;
+                        sprintf(requete,"UPDATE UNIX_FINAL SET stock = %d where id = %d", newqte, id);
+                        if (mysql_query(con, requete) != 0) //requete de mise a jour
                         {
-                         sprintf(reponse.data3,"0"); // condition donne par le prof , on renvoi 0 quand pas possible 
+                            strcpy(reponse,"ACHAT#ko#ERREUR_SQL#-1");
                         }
                         else
                         {
-                          //maj
-                          newqte = qtedispo - qtedemandee;
-
-                          sprintf(reponse.data3,  m.data2);//qte
-                          sprintf(requete,"UPDATE UNIX_FINAL SET stock = %d where id = %d", newqte, reponse.data1);
-                          if (mysql_query(connexion, requete) != 0) //requete de mise a jour
-                          {
-                            fprintf (stderr, "Erreur de Mysql-query");
-                          }
-
+                            strcpy(reponse,"ACHAT#ok#Achat_fait#1");//Il faut dire au serveur que je le rajoute au panier du coup
                         }
-
-
-                        // Finalisation et envoi de la reponse
-                        if(msgsnd(idQ,&reponse,sizeof(MESSAGE)-sizeof(long),0) == -1)
-                        {
-                          perror("(AccesBD) Erreur de msgsnd");
-                          msgctl(idQ,IPC_RMID,NULL);
-                          exit(1);
-                        }
-
-                      }
-                      // Finalisation et envoi de la reponse
+                    }
+                }
             }
             if(strcmp(cas,"CADDIE") == 0)
             {                
@@ -161,7 +150,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     return true;
  }
 //***** Traitement des requetes *************************************
-bool SMOP_Login(const char* user,const char* password)
+bool SMOP_Login(const char* user,const char* password, const bool newuser , char *reponse)
 {
     //Demander a la bd si le mot de passe etc est correct
     /*
@@ -174,8 +163,46 @@ bool SMOP_Login(const char* user,const char* password)
         return true;
     }
     */
+   // TO DO Oui ou non, message (+ idClient) ou raison
+    int res;
+    char resChar[10];
+    fprintf(stderr,"(SERVEUR) Requete LOGIN reçue");  
 
-    return false;
+    if(newuser == true)
+    {
+        if ((estPresent(user))>0)
+        {    
+            strcpy(reponse,"LOGIN#ko#Deja_present");
+        }
+        else
+        {
+            strcpy(reponse,"LOGIN#ok#Client_cree");
+            ajouteClient(user ,password);
+        }
+    }
+    else
+    {
+        if ((res = estPresent(user)>0))
+        {
+        
+            if (verifieMotDePasse(estPresent(user), password )==1)
+            {
+                strcpy(reponse,"LOGIN#ok#Connexion_reussie#");
+                sprintf(resChar, "%d",res);
+                strcat(reponse,resChar);
+            }
+            else
+            {
+                strcpy(reponse,"LOGIN#ko#Mot_de_passe_incorect");
+            }
+        }
+        else
+        {
+            strcpy(reponse,"LOGIN#ko#Client_inconnu");
+        }
+
+    }       
+    return true;             
 }
 /*
 int SMOP_Operation(char op,int a,int b)
@@ -197,7 +224,7 @@ int SMOP_Operation(char op,int a,int b)
 
 
 //***** Gestion de l'état du protocole ******************************
-int estPresent(int socket)
+int estPresentServeur(int socket)
 {
     int indice = -1;
     pthread_mutex_lock(&mutexClients);
@@ -224,7 +251,7 @@ void ajoute(int socket)
 
 void retire(int socket)
 {
-    int pos = estPresent(socket);
+    int pos = estPresentServeur(socket);
     if(pos == -1)
     {
         return;

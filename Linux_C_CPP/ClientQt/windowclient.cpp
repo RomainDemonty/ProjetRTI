@@ -45,8 +45,8 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
     sService = Socket::ClientSocket(NULL , 1600); 
 
     //Test de send
-    char charstr[15];
-    strcpy(charstr,"DECONNECT");
+    char charstr[60];
+    strcpy(charstr,"LOGIN#Romain#Test#true");
     int ret =  Socket::Send(sService , charstr, sizeof(charstr));
     //fin test de send
   
