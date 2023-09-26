@@ -20,9 +20,6 @@ Serveur:	Serveur.cpp SocketLib.cpp Protocole.cpp
 SocketLib : SocketLib.cpp 
 		g++ -Wall -std=c++11 SocketLib.cpp -o SocketLib
 
-FichierClient.o:	FichierClient.cpp
-		g++ FichierClient.cpp -c
-
 Protocole.o : protocole.cpp FichierClient.cpp
-		g++ -Wall -std=c++11 -c protocole.cpp -o Protocole.o -I/usr/include/mysql -m64 -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
+		g++ -Wall -std=c++11  protocole.cpp -o Protocole.o -I/usr/include/mysql -m64 -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
 

@@ -12,6 +12,12 @@ typedef struct
   int   stock;  
   char  image[20];
 } ARTICLE;
+typedef struct
+{
+  int   id;
+  char  username[30];
+  char password[30]
+} ARTICLE;
 
 ARTICLE Elm[] = 
 {
@@ -37,6 +43,11 @@ ARTICLE Elm[] =
   {-1,"echalotes",6.48f,13,"echalotes.jpg"},
   {-1,"tomates",5.49f,22,"tomates.jpg"}
 };
+ARTICLE insertClients[] = 
+{
+  {-1,"cedric","ced123"},
+  {-1,"romain","romain123"},
+};
 
 int main(int argc,char *argv[])
 {
@@ -50,6 +61,11 @@ int main(int argc,char *argv[])
   mysql_query(connexion,"drop table articles;"); // au cas ou elle existerait deja
   mysql_query(connexion,"create table articles (id INT(4) auto_increment primary key, intitule varchar(20),prix FLOAT(4),stock INT(4),image varchar(20));");
 
+//Creation de la table clients 
+ printf("Creation de la table clients...\n");
+  mysql_query(connexion,"drop table clients;"); // au cas ou elle existerait deja
+  mysql_query(connexion,"create table clients (id INT(4) auto_increment primary key, username varchar(30),password varchar(30));");
+
   // Ajout de tuples dans la table UNIX_FINAL
   printf("Ajout de 21 articles la table articles...\n");
   char requete[256];
@@ -58,7 +74,13 @@ int main(int argc,char *argv[])
 	  sprintf(requete,"insert into articles values (NULL,'%s',%f,%d,'%s');",Elm[i].intitule,Elm[i].prix,Elm[i].stock,Elm[i].image);
 	  mysql_query(connexion,requete);
   }
-
+  // Ajout dans la tab
+char requete[256];
+  for (int i=0 ; i<21 ; i++)
+  {
+	  sprintf(requete,"insert into clients values (NULL,'%s','%s');",insertClients[i].username,insertClients[i].password);
+	  mysql_query(connexion,requete);
+  }
   // Deconnection de la BD
   mysql_close(connexion);
   exit(0);
