@@ -1,5 +1,4 @@
 #include "protocole.h"
-#include "FichierClient.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -163,7 +162,8 @@ bool SMOP_Login(const char* user,const char* password, const bool newuser , char
         return true;
     }
     */
-   // TO DO Oui ou non, message (+ idClient) ou raison
+   // TO DO Oui ou non, message (+ idClient) ou raison !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Adapter les est persents etc par des requètes sql
+   /*
     int res;
     char resChar[10];
     fprintf(stderr,"(SERVEUR) Requete LOGIN reçue");  
@@ -201,8 +201,10 @@ bool SMOP_Login(const char* user,const char* password, const bool newuser , char
             strcpy(reponse,"LOGIN#ko#Client_inconnu");
         }
 
-    }       
-    return true;             
+    }     
+    */  
+    return true;  
+
 }
 /*
 int SMOP_Operation(char op,int a,int b)

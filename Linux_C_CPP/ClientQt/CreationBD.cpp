@@ -16,8 +16,8 @@ typedef struct
 {
   int   id;
   char  username[30];
-  char password[30]
-} ARTICLE;
+  char password[30];
+} Client;
 
 ARTICLE Elm[] = 
 {
@@ -43,7 +43,7 @@ ARTICLE Elm[] =
   {-1,"echalotes",6.48f,13,"echalotes.jpg"},
   {-1,"tomates",5.49f,22,"tomates.jpg"}
 };
-ARTICLE insertClients[] = 
+Client insertClients[] = 
 {
   {-1,"cedric","ced123"},
   {-1,"romain","romain123"},
@@ -75,7 +75,6 @@ int main(int argc,char *argv[])
 	  mysql_query(connexion,requete);
   }
   // Ajout dans la tab
-char requete[256];
   for (int i=0 ; i<21 ; i++)
   {
 	  sprintf(requete,"insert into clients values (NULL,'%s','%s');",insertClients[i].username,insertClients[i].password);

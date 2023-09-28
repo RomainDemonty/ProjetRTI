@@ -14,12 +14,11 @@ CreationBD :	CreationBD.cpp
 		g++ -o CreationBD CreationBD.cpp -I/usr/include/mysql -m64 -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
 
 
-Serveur:	Serveur.cpp SocketLib.cpp Protocole.cpp
-		g++ -Wall -std=c++11 Serveur.cpp SocketLib.cpp Protocole.cpp -lrt -lpthread -lSDL  -o Serveur -I/usr/include/mysql -m64 -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
+Serveur:	Serveur.cpp SocketLib.cpp Protocole
+		g++ -Wall -std=c++11 Serveur.cpp SocketLib.cpp protocole.cpp -lrt -lpthread -lSDL  -o Serveur -I/usr/include/mysql -m64 -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
 
 SocketLib : SocketLib.cpp 
 		g++ -Wall -std=c++11 SocketLib.cpp -o SocketLib
 
-Protocole.o : protocole.cpp FichierClient.cpp
-		g++ -Wall -std=c++11  protocole.cpp -o Protocole.o -I/usr/include/mysql -m64 -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
-
+Protocole : protocole.cpp 
+		g++ -Wall -std=c++11  protocole.cpp -c -I/usr/include/mysql -m64 -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl

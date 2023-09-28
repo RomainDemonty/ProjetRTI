@@ -40,8 +40,6 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
 
 
     // doit se connecter a la socket pour permetre d'echanger
-    
-    
     sService = Socket::ClientSocket(NULL , 1600); 
 
     //Test de send
@@ -49,7 +47,6 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
     strcpy(charstr,"LOGIN#Romain#Test#true");
     int ret =  Socket::Send(sService , charstr, sizeof(charstr));
     //fin test de send
-  
 
 }
 
