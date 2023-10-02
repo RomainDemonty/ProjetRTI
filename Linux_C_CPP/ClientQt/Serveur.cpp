@@ -24,6 +24,9 @@ int indiceEcriture=0, indiceLecture=0;
 pthread_mutex_t mutexSocketsAcceptees;
 pthread_cond_t condSocketsAcceptees;
 
+pthread_mutex_t mutexBd;
+
+
 int sServeur ;
 
 
@@ -183,11 +186,12 @@ void*FctCaddie(void * )
         char charReceive[60];
         char reponse[60];
         if((result = Socket::Receive(sService, charReceive)) == -1)
-            {
-                printf("Mal passe\n");
-               // printf("Thread %d - Erreur de receive\n",threadsService->indiceThread);
-            }
+        {
+            printf("Mal passe\n");
+            // printf("Thread %d - Erreur de receive\n",threadsService->indiceThread);
+        }
 
+        printf("Reçu : %s\n",charReceive);
         test = SMOP(charReceive,reponse, sService, connexion);
         printf("Reponse : %s\n",reponse);
 

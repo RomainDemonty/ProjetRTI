@@ -162,7 +162,7 @@ bool SMOP_Login(const char* user,const char* password, const bool newuser , char
         return true;
     }
     */
-   // TO DO Oui ou non, message (+ idClient) ou raison !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Adapter les est persents etc par des requètes sql
+   // TO DO Oui ou non, message (+ idClient) ou raison !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Adapter les estpresent etc par des requètes sql
    /*
     int res;
     char resChar[10];
