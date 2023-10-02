@@ -161,8 +161,6 @@ void*FctCaddie(void * )
 
     int sService;
  
-    while(1)
-    {
         printf("\t[THREAD %p] Attente socket...\n",pthread_self());
         // Attente d'une tâche
         pthread_mutex_lock(&mutexSocketsAcceptees);
@@ -201,6 +199,10 @@ void*FctCaddie(void * )
 
         //Fin test
         // debut trait tache
+
+    while(1)
+    {
+
     }
     //printf("Thread %d - Hello pret a repondre\n",threadsService->indiceThread);
         /* 

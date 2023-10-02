@@ -14,8 +14,10 @@ int sService;
 bool logged=0;
 char nomutilisateur[20];
 char mdp[20];
-char messageRecu[1500];
-char messageEnvoye[1500];
+char messageRecu[1400];
+char messageEnvoye[1400];
+
+void Echange(char* requete, char* reponse);
 
 WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::WindowClient)
 {
@@ -317,7 +319,7 @@ void WindowClient::on_pushButtonLogin_clicked()
     /*To do - envoyer une requète de login aprés avoir vérifié si logged*/
 
     //Creation de la trame
-    strcpy(&nomutilisateur[0],getMotDePasse());
+    strcpy(&nomutilisateur[0],getNom());
     strcpy(&mdp[0],getMotDePasse());
     strcpy(&messageEnvoye[0],"LOGIN#");
     strcat(messageEnvoye,nomutilisateur);
@@ -333,9 +335,12 @@ void WindowClient::on_pushButtonLogin_clicked()
       strcat(messageEnvoye,"0");
     }
 
-    //Echange(messageEnvoye, messageRecu);
-    //printf("J'ai reçu : %s", messageRecu);
+    printf("\n");
+    Echange(messageEnvoye, messageRecu);
+    printf("\n");
+    printf("J'ai reçu : %s\n", messageRecu);
 
+    /*
     //envoie de la trame
     if((Socket::Send(sService , messageEnvoye, sizeof(messageEnvoye))) != -1 )
     {
@@ -352,6 +357,7 @@ void WindowClient::on_pushButtonLogin_clicked()
     {
       printf("Erreur\n");
     }
+    */
 
 
 }
