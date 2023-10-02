@@ -12,6 +12,10 @@ extern WindowClient *w;
 
 int sService;
 bool logged=0;
+char nomutilisateur[20];
+char mdp[20];
+char messageRecu[1500];
+char messageEnvoye[1500];
 
 WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::WindowClient)
 {
@@ -40,12 +44,14 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
 
 
     // doit se connecter a la socket pour permetre d'echanger
-    sService = Socket::ClientSocket(NULL , 1600); 
+    sService = Socket::ClientSocket(NULL , 1500); 
 
     //Test de send
+    /*
     char charstr[60];
     strcpy(charstr,"ACHAT#1#5");
     int ret =  Socket::Send(sService , charstr, sizeof(charstr));
+    */
     //fin test de send
 
 }
@@ -157,13 +163,15 @@ int WindowClient::getQuantite()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::setTotal(float total)
 {
-  if (total >= 0.0)
-  {
-    char Total[20];
+  char Total[6];
+  if(total >= 0.0){/* code */
     sprintf(Total,"%.2f",total);
     ui->lineEditTotal->setText(Total);
   }
-  else ui->lineEditTotal->clear();
+  else 
+  {
+    ui->lineEditTotal->clear();
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,6 +190,7 @@ void WindowClient::loginOK()
   ui->pushButtonSupprimer->setEnabled(true);
   ui->pushButtonViderPanier->setEnabled(true);
   ui->pushButtonPayer->setEnabled(true);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -303,6 +312,48 @@ void WindowClient::on_pushButtonLogin_clicked()
     // gerer l'erreur 
     // doit faire en sorte de mettre logged=1 ; 
     // appel a loginok
+
+
+    /*To do - envoyer une requète de login aprés avoir vérifié si logged*/
+
+    //Creation de la trame
+    strcpy(&nomutilisateur[0],getMotDePasse());
+    strcpy(&mdp[0],getMotDePasse());
+    strcpy(&messageEnvoye[0],"LOGIN#");
+    strcat(messageEnvoye,nomutilisateur);
+    strcat(messageEnvoye,"#");
+    strcat(messageEnvoye,mdp);
+    strcat(messageEnvoye,"#");
+
+    if (isNouveauClientChecked())
+    {
+      strcat(messageEnvoye,"1");
+    }
+    else{
+      strcat(messageEnvoye,"0");
+    }
+
+    //Echange(messageEnvoye, messageRecu);
+    //printf("J'ai reçu : %s", messageRecu);
+
+    //envoie de la trame
+    if((Socket::Send(sService , messageEnvoye, sizeof(messageEnvoye))) != -1 )
+    {
+      printf("Envoye : %s\n",messageEnvoye);
+    }
+
+    sleep(1);
+    //lecture de la réponse
+    if((Socket::Receive(sService , messageRecu)) != -1 )
+    {
+      printf("Reçu : %s\n",messageRecu);
+    }
+    else
+    {
+      printf("Erreur\n");
+    }
+
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

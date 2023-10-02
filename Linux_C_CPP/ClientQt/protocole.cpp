@@ -151,6 +151,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
 //***** Traitement des requetes *************************************
 bool SMOP_Login(const char* user,const char* password, const bool newuser , char *reponse)
 {
+    strcpy(reponse,"BienReçuConnection");
     //Demander a la bd si le mot de passe etc est correct
     /*
     if (strcmp(user,"wagner")==0 && strcmp(password,"abc123")==0) 

@@ -193,7 +193,11 @@ void*FctCaddie(void * )
 
         printf("Reçu : %s\n",charReceive);
         test = SMOP(charReceive,reponse, sService, connexion);
-        printf("Reponse : %s\n",reponse);
+
+        if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
+        {
+            printf("Renvoyé %s\n",reponse);
+        }
 
         //Fin test
         // debut trait tache
