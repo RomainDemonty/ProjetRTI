@@ -5,7 +5,7 @@
 #include <mysql.h>
 
 bool SMOP(char* requete, char* reponse,int socket, MYSQL * con);
-bool SMOP_Login(const char* user,const char* password, const bool newuser , char* reponse);
+//bool SMOP_Login(const char* user,const char* password, const bool newuser , char* reponse);
 //int SMOP_Operation(char op,int a,int b);
 void SMOP_Close();
 

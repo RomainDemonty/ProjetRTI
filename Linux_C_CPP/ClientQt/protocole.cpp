@@ -14,6 +14,12 @@ int estPresentServeur(int socket);
 void ajoute(int socket);
 void retire(int socket);
 
+
+//Variables
+MYSQL_RES *resultat;
+MYSQL_ROW  Tuple;
+int qtedispo,newqte;
+
 pthread_mutex_t mutexClients = PTHREAD_MUTEX_INITIALIZER;
 
 //***** Parsing de la requete et creation de la reponse *************
@@ -24,11 +30,11 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     // ***** LOGIN ******************************************
     if (strcmp(cas,"LOGIN") == 0) 
     {
-        char user[50], password[50];
+        char user[30], password[30];
         bool newuser;
         strcpy(user,strtok(NULL,"#"));
         strcpy(password,strtok(NULL,"#"));
-        newuser = strtok(NULL,"#");
+        newuser = atoi(strtok(NULL,"#"));
         if (estPresentServeur(socket) >= 0) // client déjà loggé
         {
             sprintf(reponse,"LOGIN#ko#Client déjà loggé !");
@@ -36,6 +42,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
         }
         else
         {
+            /*
             if (SMOP_Login(user,password,newuser,reponse))
             {
                 ajoute(socket);
@@ -44,7 +51,57 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
             {
                 return false;
             }
+            */
+            strcpy(requete,"select * from clients where username =");
+            strcat(requete,user);
+
+            if (mysql_query(con, requete) != 0)
+            {
+                strcpy(reponse,"LOGIN#ko#ERREUR_SQL0#-1");
+            }
+            else
+            {
+                resultat = mysql_store_result(con);
+                if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+                {
+                    printf("yes");
+                }
+                if(newuser == true)
+                {
+                    if(strcmp(Tuple[1],user)==0)
+                    {
+                        strcpy(reponse,"LOGIN#ko#Deja_present");
+                    }
+                    else
+                    {
+                        sprintf(requete, "INSERT INTO clients (username, password) VALUES ('%s', '%s')", user, password);
+                        if (mysql_query(con, requete) != 0)
+                        {
+                            strcpy(reponse,"LOGIN#ko#ERREUR_SQL_INSERTION#-1");
+                        }
+                    }
+                }
+                else
+                {
+                    if(strcmp(Tuple[1],user)!=0)
+                    {
+                        strcpy(reponse,"LOGIN#ko#Client_Inconnu");
+                    }
+                    else
+                    {
+                        if(strcmp(Tuple[2],password)==0)
+                        {
+                            strcpy(reponse,"LOGIN#ok#Connexion_reussie#");
+                        }
+                        else
+                        {
+                            strcpy(reponse,"LOGIN#ko#Mot_de_passe_incorect");
+                        }
+                    }
+                }
+            }
         }
+        return true;
     }
     // ***** LOGOUT *****************************************
     if (strcmp(cas,"LOGOUT") == 0)
@@ -75,11 +132,6 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                 //Strtok
                 id = atoi(strtok(NULL,"#"));
                 quantitedem = atoi(strtok(NULL,"#"));
-
-                //Variables
-                MYSQL_RES *resultat;
-                MYSQL_ROW  Tuple;
-                int qtedispo,newqte;
 
                 /*Si article non trouvé, retour -1. Si 
                 trouvé mais que stock insuffisant, 
@@ -149,11 +201,11 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     return true;
  }
 //***** Traitement des requetes *************************************
+/*
 bool SMOP_Login(const char* user,const char* password, const bool newuser , char *reponse)
 {
     strcpy(reponse,"BienReçuConnection");
     //Demander a la bd si le mot de passe etc est correct
-    /*
     if (strcmp(user,"wagner")==0 && strcmp(password,"abc123")==0) 
     {
         return true;
@@ -162,9 +214,8 @@ bool SMOP_Login(const char* user,const char* password, const bool newuser , char
     {
         return true;
     }
-    */
    // TO DO Oui ou non, message (+ idClient) ou raison !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Adapter les estpresent etc par des requètes sql
-   /*
+
     int res;
     char resChar[10];
     fprintf(stderr,"(SERVEUR) Requete LOGIN reçue");  
@@ -203,11 +254,10 @@ bool SMOP_Login(const char* user,const char* password, const bool newuser , char
         }
 
     }     
-    */  
     return true;  
 
 }
-
+*/
 
 //***** Gestion de l'état du protocole ******************************
 int estPresentServeur(int socket)

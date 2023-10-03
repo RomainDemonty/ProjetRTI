@@ -31,8 +31,8 @@ int sServeur ;
 
 
 //ACCES BASE DE DONNEES 
-MYSQL_RES  *resultat;
-MYSQL_ROW  Tuple;
+//MYSQL_RES  *resultat;
+//MYSQL_ROW  Tuple;
 MYSQL * connexion;
 
 
