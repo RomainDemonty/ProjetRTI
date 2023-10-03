@@ -14,8 +14,10 @@ int sService;
 bool logged=0;
 char nomutilisateur[20];
 char mdp[20];
-char messageRecu[1500];
-char messageEnvoye[1500];
+char messageRecu[1400];
+char messageEnvoye[1400];
+
+void Echange(char* requete, char* reponse);
 
 void Echange(char* requete, char* reponse) ; 
 
@@ -318,14 +320,7 @@ void WindowClient::on_pushButtonLogin_clicked()
 
     /*To do - envoyer une requète de login aprés avoir vérifié si logged*/
 
-    //Creation de la trame
-    strcpy(&nomutilisateur[0],getMotDePasse());
-    strcpy(&mdp[0],getMotDePasse());
-    strcpy(&messageEnvoye[0],"LOGIN#");
-    strcat(messageEnvoye,nomutilisateur);
-    strcat(messageEnvoye,"#");
-    strcat(messageEnvoye,mdp);
-    strcat(messageEnvoye,"#");
+    sprintf(messageEnvoye, "LOGIN#%s#%s#", getNom(), getMotDePasse());
 
     if (isNouveauClientChecked())
     {
@@ -335,9 +330,12 @@ void WindowClient::on_pushButtonLogin_clicked()
       strcat(messageEnvoye,"0");
     }
 
+    printf("\n");
     Echange(messageEnvoye, messageRecu);
+    printf("\n");
     printf("J'ai reçu : %s\n", messageRecu);
 
+    /*
     //envoie de la trame
     /*
     if((Socket::Send(sService , messageEnvoye, sizeof(messageEnvoye))) != -1 )
@@ -354,8 +352,13 @@ void WindowClient::on_pushButtonLogin_clicked()
     else
     {
       printf("Erreur\n");
+<<<<<<< HEAD
     }*/
     
+=======
+    }
+    */
+>>>>>>> 0517a36e41cdfba0c6a9fed74ba00be8f08ac2df
 
 
 }

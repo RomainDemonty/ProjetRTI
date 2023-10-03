@@ -207,23 +207,6 @@ bool SMOP_Login(const char* user,const char* password, const bool newuser , char
     return true;  
 
 }
-/*
-int SMOP_Operation(char op,int a,int b)
-{
-    if (op == '+') return a+b;
-    if (op == '-') return a-b;
-    if (op == '*') return a*b;
-    if (op == '/')
-    {
-        if (b == 0) 
-        {
-            throw 1;
-        }
-        return a/b;
-    }
-    return 0;
-}
-*/
 
 
 //***** Gestion de l'état du protocole ******************************
