@@ -352,13 +352,10 @@ void WindowClient::on_pushButtonLogin_clicked()
     else
     {
       printf("Erreur\n");
-<<<<<<< HEAD
-    }*/
+    }
     
-=======
     }
     */
->>>>>>> 0517a36e41cdfba0c6a9fed74ba00be8f08ac2df
 
 
 }
