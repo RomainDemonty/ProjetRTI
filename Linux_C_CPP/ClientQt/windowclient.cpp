@@ -17,6 +17,8 @@ char mdp[20];
 char messageRecu[1500];
 char messageEnvoye[1500];
 
+void Echange(char* requete, char* reponse) ; 
+
 WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::WindowClient)
 {
     ui->setupUi(this);
@@ -333,10 +335,11 @@ void WindowClient::on_pushButtonLogin_clicked()
       strcat(messageEnvoye,"0");
     }
 
-    //Echange(messageEnvoye, messageRecu);
-    //printf("J'ai reçu : %s", messageRecu);
+    Echange(messageEnvoye, messageRecu);
+    printf("J'ai reçu : %s\n", messageRecu);
 
     //envoie de la trame
+    /*
     if((Socket::Send(sService , messageEnvoye, sizeof(messageEnvoye))) != -1 )
     {
       printf("Envoye : %s\n",messageEnvoye);
@@ -351,7 +354,8 @@ void WindowClient::on_pushButtonLogin_clicked()
     else
     {
       printf("Erreur\n");
-    }
+    }*/
+    
 
 
 }
