@@ -318,14 +318,7 @@ void WindowClient::on_pushButtonLogin_clicked()
 
     /*To do - envoyer une requète de login aprés avoir vérifié si logged*/
 
-    //Creation de la trame
-    strcpy(&nomutilisateur[0],getNom());
-    strcpy(&mdp[0],getMotDePasse());
-    strcpy(&messageEnvoye[0],"LOGIN#");
-    strcat(messageEnvoye,nomutilisateur);
-    strcat(messageEnvoye,"#");
-    strcat(messageEnvoye,mdp);
-    strcat(messageEnvoye,"#");
+    sprintf(messageEnvoye, "LOGIN#%s#%s#", getNom(), getMotDePasse());
 
     if (isNouveauClientChecked())
     {
