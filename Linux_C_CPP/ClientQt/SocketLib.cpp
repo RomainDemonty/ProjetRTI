@@ -37,7 +37,7 @@ int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la p
 
     char host[NI_MAXHOST];
     char port[NI_MAXSERV];
-    struct addrinfo* info;
+    //struct addrinfo* info;
     getnameinfo(results->ai_addr,results->ai_addrlen,
     host,NI_MAXHOST,port,NI_MAXSERV,
     NI_NUMERICSERV | NI_NUMERICHOST);

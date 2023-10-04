@@ -160,8 +160,13 @@ void*FctCaddie(void * )
 {
 
     int sService;
- 
-        printf("\t[THREAD %p] Attente socket...\n",pthread_self());
+    int result;
+    bool retour;
+    char charReceive[60];
+    char reponse[60];
+    while(1)
+    {
+        printf("\t[THREAD %ld] Attente socket...\n",pthread_self());
         // Attente d'une tâche
         pthread_mutex_lock(&mutexSocketsAcceptees);
         while (indiceEcriture == indiceLecture)
@@ -176,13 +181,9 @@ void*FctCaddie(void * )
             indiceLecture = 0;
         } 
         pthread_mutex_unlock(&mutexSocketsAcceptees);
-        printf("\t[THREAD %p] Je m'occupe de la socket %d\n", pthread_self(),sService);
+        printf("\t[THREAD %ld] Je m'occupe de la socket %d\n", pthread_self(),sService);
 
         //TEst
-        int result;
-        bool test;
-        char charReceive[60];
-        char reponse[60];
         if((result = Socket::Receive(sService, charReceive)) == -1)
         {
             printf("Mal passe\n");
@@ -190,7 +191,8 @@ void*FctCaddie(void * )
         }
 
         printf("Reçu : %s\n",charReceive);
-        test = SMOP(charReceive,reponse, sService, connexion);
+        retour = SMOP(charReceive,reponse, sService, connexion);
+        printf("Retour client : %d\n",retour);
 
         if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
         {
@@ -199,9 +201,6 @@ void*FctCaddie(void * )
 
         //Fin test
         // debut trait tache
-
-    while(1)
-    {
 
     }
     //printf("Thread %d - Hello pret a repondre\n",threadsService->indiceThread);

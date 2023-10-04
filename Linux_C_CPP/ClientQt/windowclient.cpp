@@ -16,6 +16,7 @@ char nomutilisateur[20];
 char mdp[20];
 char messageRecu[1400];
 char messageEnvoye[1400];
+char tampon[50];
 
 void Echange(char* requete, char* reponse);
 
@@ -315,9 +316,7 @@ void WindowClient::on_pushButtonLogin_clicked()
     //on dmd au serv si on peut se connecter 
     // gerer l'erreur 
     // doit faire en sorte de mettre logged=1 ; 
-    // appel a loginok
-
-
+    // appel a loginok  
     /*To do - envoyer une requète de login aprés avoir vérifié si logged*/
 
     sprintf(messageEnvoye, "LOGIN#%s#%s#", getNom(), getMotDePasse());
@@ -335,8 +334,29 @@ void WindowClient::on_pushButtonLogin_clicked()
     printf("\n");
     printf("J'ai reçu : %s\n", messageRecu);
 
+    strcpy(tampon,strtok(messageRecu,"#"));
+    strcpy(tampon,strtok(NULL,"#"));
+    if(strcmp(tampon,"ok") == 0)
+    {
+      logged =1;
+      if(strcmp(tampon,"Inscription_reussie") == 0)
+      {
+          setPublicite("Inscription reussie bienvenue;)");
+      }
+      else
+      {
+        setPublicite("Vous êtes bien connecté ;)");
+      }
+      loginOK();
+    }
+    else
+    {
+      strcpy(tampon,strtok(NULL,"#"));
+      setPublicite(tampon);
+    }
+
     /*
-    //envoie de la trame
+    //envoie de la trame*/
     /*
     if((Socket::Send(sService , messageEnvoye, sizeof(messageEnvoye))) != -1 )
     {
