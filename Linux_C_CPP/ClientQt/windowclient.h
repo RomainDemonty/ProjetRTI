@@ -26,7 +26,7 @@ public:
     int getQuantite();
     void loginOK();
     void logoutOK();
-    void setArticle(const char *intitule, float prix, int stock, const char *image);
+    void setArticle(const char *intitule, int stock, float prix, const char *image);
     void setTotal(float montant);
 
     void ajouteArticleTablePanier(const char *article, float prix, int quantite);

@@ -10,13 +10,22 @@ extern WindowClient *w;
 
 #define REPERTOIRE_IMAGES "images/"
 
-int sService;
+int sService, numarticle = 1;
 bool logged=0;
 char nomutilisateur[20];
 char mdp[20];
 char messageRecu[1400];
 char messageEnvoye[1400];
 char tampon[50];
+
+typedef struct
+{
+  int   id;
+  char  intitule[20];
+  float prix;
+  int   stock;  
+  char  image[20];
+} ARTICLE;
 
 void Echange(char* requete, char* reponse);
 
@@ -44,8 +53,8 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
     setPublicite("!!! Bienvenue sur le Maraicher en ligne !!!");
 
     // Exemples à supprimer
-    setArticle("pommes",5.53,18,"pommes.jpg");
-    ajouteArticleTablePanier("cerises",8.96,2);
+    //setArticle("pommes",5.53,18,"pommes.jpg");
+    //ajouteArticleTablePanier("cerises",8.96,2);
 
 
     // doit se connecter a la socket pour permetre d'echanger
@@ -139,7 +148,7 @@ int WindowClient::isNouveauClientChecked()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void WindowClient::setArticle(const char* intitule,float prix,int stock,const char* image)
+void WindowClient::setArticle(const char* intitule,int stock,float prix,const char* image)
 {
   ui->lineEditArticle->setText(intitule);
   if (prix >= 0.0)
@@ -318,7 +327,7 @@ void WindowClient::on_pushButtonLogin_clicked()
     // doit faire en sorte de mettre logged=1 ; 
     // appel a loginok  
     /*To do - envoyer une requète de login aprés avoir vérifié si logged*/
-
+    ARTICLE articletampon;
     sprintf(messageEnvoye, "LOGIN#%s#%s#", getNom(), getMotDePasse());
 
     if (isNouveauClientChecked())
@@ -347,6 +356,32 @@ void WindowClient::on_pushButtonLogin_clicked()
       {
         setPublicite("Vous êtes bien connecté ;)");
       }
+
+      //Afficher le premier article
+      sprintf(messageEnvoye, "CONSULT#%d",numarticle);
+      printf("\n");
+      Echange(messageEnvoye, messageRecu);
+      printf("\n");
+      printf("%s\n",messageRecu);
+
+      strcpy(tampon,strtok(messageRecu,"#"));
+      strcpy(tampon,strtok(NULL,"#"));
+      
+      articletampon.id = atof(strtok(NULL,"#"));
+      strcpy(articletampon.intitule,strtok(NULL,"#"));
+      articletampon.stock = atoi(strtok(NULL,"#"));
+      articletampon.prix = atof(strtok(NULL,"#"));
+      strcpy(articletampon.image,strtok(NULL,"#"));
+
+      if(strcmp(tampon,"ok") == 0 )
+      {
+        printf("%s\n",articletampon.intitule);
+        setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
+      }
+      else
+      {
+        setPublicite("Problème suivant :(");
+      }
       loginOK();
     }
     else
@@ -354,30 +389,7 @@ void WindowClient::on_pushButtonLogin_clicked()
       strcpy(tampon,strtok(NULL,"#"));
       setPublicite(tampon);
     }
-
-    /*
-    //envoie de la trame*/
-    /*
-    if((Socket::Send(sService , messageEnvoye, sizeof(messageEnvoye))) != -1 )
-    {
-      printf("Envoye : %s\n",messageEnvoye);
-    }
-
-    sleep(1);
-    //lecture de la réponse
-    if((Socket::Receive(sService , messageRecu)) != -1 )
-    {
-      printf("Reçu : %s\n",messageRecu);
-    }
-    else
-    {
-      printf("Erreur\n");
-    }
-    
-    }
-    */
-
-
+    return ;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,13 +406,81 @@ void WindowClient::on_pushButtonSuivant_clicked()
 {
   // envois d'une trame au serveur en demandant l'artcileencours+1
   //pas oublier de modif cet artcicle en cours var global
+  ARTICLE articletampon;
+
+  if(numarticle != 21)
+  {
+    numarticle ++;
+  }
+  else
+  {
+    numarticle = 1;
+  }
+  sprintf(messageEnvoye, "CONSULT#%d",numarticle);
+  printf("\n");
+  Echange(messageEnvoye, messageRecu);
+  printf("\n");
+  printf("%s\n",messageRecu);
+
+  strcpy(tampon,strtok(messageRecu,"#"));
+  strcpy(tampon,strtok(NULL,"#"));
+  
+  articletampon.id = atof(strtok(NULL,"#"));
+  strcpy(articletampon.intitule,strtok(NULL,"#"));
+  articletampon.stock = atoi(strtok(NULL,"#"));
+  articletampon.prix = atof(strtok(NULL,"#"));
+  strcpy(articletampon.image,strtok(NULL,"#"));
+
+  if(strcmp(tampon,"ok") == 0 )
+  {
+    printf("%s\n",articletampon.intitule);
+    setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
+  }
+  else
+  {
+    setPublicite("Problème suivant :(");
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonPrecedent_clicked()
 {
-  // envois d'une trame au serveur en demandant l'artcileencours-1
+  ARTICLE articletampon;
 
+  if(numarticle != 1)
+  {
+    numarticle --;
+  }
+  else
+  {
+    numarticle = 21;
+  }
+  sprintf(messageEnvoye, "CONSULT#%d",numarticle);
+  printf("\n");
+  Echange(messageEnvoye, messageRecu);
+  printf("\n");
+  printf("%s\n",messageRecu);
+
+  strcpy(tampon,strtok(messageRecu,"#"));
+  strcpy(tampon,strtok(NULL,"#"));
+  
+  articletampon.id = atof(strtok(NULL,"#"));
+  strcpy(articletampon.intitule,strtok(NULL,"#"));
+  articletampon.stock = atoi(strtok(NULL,"#"));
+  articletampon.prix = atof(strtok(NULL,"#"));
+  strcpy(articletampon.image,strtok(NULL,"#"));
+
+  if(strcmp(tampon,"ok") == 0 )
+  {
+    printf("%s\n",articletampon.intitule);
+    setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
+  }
+  else
+  {
+    setPublicite("Problème suivant :(");
+  }
+
+  return ;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

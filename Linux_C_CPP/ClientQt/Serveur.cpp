@@ -28,6 +28,8 @@ pthread_mutex_t mutexBd;
 
 
 int sServeur ;
+//int clients[NB_MAX_CLIENTS];
+//int nbClients = 0;
 
 
 //ACCES BASE DE DONNEES 
@@ -183,20 +185,24 @@ void*FctCaddie(void * )
         pthread_mutex_unlock(&mutexSocketsAcceptees);
         printf("\t[THREAD %ld] Je m'occupe de la socket %d\n", pthread_self(),sService);
 
-        //TEst
-        if((result = Socket::Receive(sService, charReceive)) == -1)
+        retour = true; 
+        while(retour == true)
         {
-            printf("Mal passe\n");
-            // printf("Thread %d - Erreur de receive\n",threadsService->indiceThread);
-        }
+            if((result = Socket::Receive(sService, charReceive)) == -1)
+            {
+                printf("Mal passe\n");
+                // printf("Thread %d - Erreur de receive\n",threadsService->indiceThread);
+            }
 
-        printf("Reçu : %s\n",charReceive);
-        retour = SMOP(charReceive,reponse, sService, connexion);
-        printf("Retour client : %d\n",retour);
+            printf("Attente d'une requete :\n");
+            printf("Reçu : %s\n",charReceive);
+            retour = SMOP(charReceive,reponse, sService, connexion);
+            printf("Retour client : %d\n",retour);
 
-        if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
-        {
-            printf("Renvoyé %s\n",reponse);
+            if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
+            {
+                printf("Renvoyé %s\n",reponse);
+            }
         }
 
         //Fin test

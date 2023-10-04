@@ -50,7 +50,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
             if (mysql_query(con, chaine) != 0)
             {
                 strcpy(reponse,"LOGIN#ko#ERREUR SQL0#-1");
-                return false;
+                return true;
             }
             else
             {
@@ -69,7 +69,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                     {
                         if(strcmp(Tuple[1],user));
                         strcpy(reponse,"LOGIN#ko#Nom deja utiliser");
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -78,9 +78,10 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                         if (mysql_query(con, chaine) != 0)
                         {
                             strcpy(reponse,"LOGIN#ko#ERREUR SQL INSERTION#-1");
-                            return false;
+                            return true;
                         }
                         strcpy(reponse,"LOGIN#ok#Inscription reussie");
+                        ajoute(socket);
                         return true;
                     }
                 }
@@ -89,19 +90,20 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                     if(strcmp(Tuple[1],user)!=0)
                     {
                         strcpy(reponse,"LOGIN#ko#Client Inconnu");
-                        return false;
+                        return true;
                     }
                     else
                     {
                         if(strcmp(Tuple[2],password)==0)
                         {
                             strcpy(reponse,"LOGIN#ok#Connexion reussie");
+                            ajoute(socket);
                             return true;
                         }
                         else
                         {
                             strcpy(reponse,"LOGIN#ko#Mot de passe incorect");
-                            return false;
+                            return true;
                         }
                     }
                 }
@@ -131,6 +133,24 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
             {                
                 id = atoi(strtok(NULL,"#"));
                 //Consultation d’un article en BD → si article non trouvé, retour -1 au client
+
+                sprintf(requete,"select * from articles where id = %d", id);
+                if (mysql_query(con, requete) != 0)
+                {
+                    strcpy(reponse,"ACHAT#ko#ERREUR_SQL#-1");
+                }
+                if((resultat = mysql_store_result(con)) == NULL)
+                {
+                    strcpy(reponse,"ACHAT#ko#ERREUR_SQL#-1");
+                }
+                if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+                {
+                    sprintf(reponse,"ACHAT#ok#%d#%s#%d#%f#%s",atoi(Tuple[0]),Tuple[1],atoi(Tuple[3]),atof(Tuple[2]),Tuple[4]);//id,intitule,stock,prix,image
+                }
+                else
+                {
+                    sprintf(reponse,"ACHAT#ko#-1");
+                }
             }
             if(strcmp(cas,"ACHAT") == 0)
             {
@@ -150,7 +170,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                 // TO DO
 
                 // Acces BD , comme en php l'annee passee 
-                sprintf(requete,"select * from UNIX_FINAL where id = %d", id);
+                sprintf(requete,"select * from articles where id = %d", id);
                 if (mysql_query(con, requete) != 0)
                 {
                     strcpy(reponse,"ACHAT#ko#ERREUR_SQL#-1");
@@ -171,7 +191,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                     {
                         //maj dans la bd
                         newqte = qtedispo - quantitedem;
-                        sprintf(requete,"UPDATE UNIX_FINAL SET stock = %d where id = %d", newqte, id);
+                        sprintf(requete,"UPDATE articles  SET stock = %d where id = %d", newqte, id);
                         if (mysql_query(con, requete) != 0) //requete de mise a jour
                         {
                             strcpy(reponse,"ACHAT#ko#ERREUR_SQL#-1");
@@ -205,64 +225,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     }
     return true;
  }
-//***** Traitement des requetes *************************************
-/*
-bool SMOP_Login(const char* user,const char* password, const bool newuser , char *reponse)
-{
-    strcpy(reponse,"BienReçuConnection");
-    //Demander a la bd si le mot de passe etc est correct
-    if (strcmp(user,"wagner")==0 && strcmp(password,"abc123")==0) 
-    {
-        return true;
-    }
-    if (strcmp(user,"charlet")==0 && strcmp(password,"xyz456")==0) 
-    {
-        return true;
-    }
-   // TO DO Oui ou non, message (+ idClient) ou raison !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Adapter les estpresent etc par des requètes sql
 
-    int res;
-    char resChar[10];
-    fprintf(stderr,"(SERVEUR) Requete LOGIN reçue");  
-
-    if(newuser == true)
-    {
-        if ((estPresent(user))>0)
-        {    
-            strcpy(reponse,"LOGIN#ko#Deja_present");
-        }
-        else
-        {
-            strcpy(reponse,"LOGIN#ok#Client_cree");
-            ajouteClient(user ,password);
-        }
-    }
-    else
-    {
-        if ((res = estPresent(user)>0))
-        {
-        
-            if (verifieMotDePasse(estPresent(user), password )==1)
-            {
-                strcpy(reponse,"LOGIN#ok#Connexion_reussie#");
-                sprintf(resChar, "%d",res);
-                strcat(reponse,resChar);
-            }
-            else
-            {
-                strcpy(reponse,"LOGIN#ko#Mot_de_passe_incorect");
-            }
-        }
-        else
-        {
-            strcpy(reponse,"LOGIN#ko#Client_inconnu");
-        }
-
-    }     
-    return true;  
-
-}
-*/
 
 //***** Gestion de l'état du protocole ******************************
 int estPresentServeur(int socket)
