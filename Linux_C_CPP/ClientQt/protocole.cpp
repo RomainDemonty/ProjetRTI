@@ -14,28 +14,32 @@ int estPresentServeur(int socket);
 void ajoute(int socket);
 void retire(int socket);
 
-
-//Variables
-MYSQL_RES *resultat;
-MYSQL_ROW  Tuple;
-int qtedispo,newqte;
-char chaine[200];
-
 pthread_mutex_t mutexClients = PTHREAD_MUTEX_INITIALIZER;
 
 //***** Parsing de la requete et creation de la reponse *************
 bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
 {
+    //Variables
+    MYSQL_RES *resultat;
+    MYSQL_ROW  Tuple;
+    int qtedispo,newqte;
+    char chaine[200];
+    char usern[50], password[30];
+    char cas[30];
+    bool newuser;
     // ***** Récupération nom de la requete *****************
-    char *cas = strtok(requete,"#");
+   // char *cas = strtok(requete,"#");
+    strcpy(cas,strtok(requete,"#"));
+    printf("cas : %s\n",cas);
     // ***** LOGIN ******************************************
     if (strcmp(cas,"LOGIN") == 0) 
     {
-        char user[30], password[30];
-        bool newuser;
-        strcpy(user,strtok(NULL,"#"));
+        strcpy(usern,strtok(NULL,"#"));
+        printf("user : %s\n",usern);
         strcpy(password,strtok(NULL,"#"));
+        printf("password : %s\n",password);
         newuser = atoi(strtok(NULL,"#"));
+        printf("new user : %d\n",newuser);
         if (estPresentServeur(socket) >= 0) // client déjà loggé
         {
             sprintf(reponse,"LOGIN#ko#Client déjà loggé !");
@@ -43,7 +47,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
         }
         else
         {
-            sprintf(chaine,"SELECT * FROM clients WHERE username = '%s';",user);
+            sprintf(chaine,"SELECT * FROM clients WHERE username = '%s';",usern);
 
             //printf("\nVoici la requete envoyée : %s\n", chaine);
 
@@ -67,14 +71,14 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                     //printf("OK je suis bien arrivé apres le new User\n");
                     if(Tuple  != NULL )
                     {
-                        if(strcmp(Tuple[1],user));
+                        if(strcmp(Tuple[1],usern));
                         strcpy(reponse,"LOGIN#ko#Nom deja utiliser");
                         return true;
                     }
                     else
                     {
                         //printf("OK je suis bien arrivé apres le Deja presentr\n");
-                        sprintf(chaine, "INSERT INTO clients (username, password) VALUES ('%s', '%s')", user, password);
+                        sprintf(chaine, "INSERT INTO clients (username, password) VALUES ('%s', '%s')", usern, password);
                         if (mysql_query(con, chaine) != 0)
                         {
                             strcpy(reponse,"LOGIN#ko#ERREUR SQL INSERTION#-1");
@@ -87,7 +91,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                 }
                 else
                 {
-                    if(strcmp(Tuple[1],user)!=0)
+                    if(strcmp(Tuple[1],usern)!=0)
                     {
                         strcpy(reponse,"LOGIN#ko#Client Inconnu");
                         return true;
@@ -110,15 +114,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
             }
         }
     }
-    // ***** LOGOUT *****************************************
-    if (strcmp(cas,"LOGOUT") == 0)
-    {
-        retire(socket);
-        sprintf(reponse,"LOGOUT#ok");
-        return false;
-    }
-    // ***** OPER *******************************************
-    if (strcmp(cas,"LOGOUT") != 0 && strcmp(cas,"LOGIN") != 0)
+    else
     {
         int id, quantitedem;
 
@@ -223,6 +219,13 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
             }
         }
     }
+    return true;
+ }
+
+ bool SMOP_Logout(int socket, char* reponse)
+ {
+    retire(socket);
+    sprintf(reponse,"LOGOUT#ok");
     return true;
  }
 

@@ -14,8 +14,7 @@ void HandlerSIGINT(int s);
 
 void* FctCaddie(void * );
 
-pthread_t threadCaddie[10];
-
+//pthread_t threadCaddie[10];
 
 #define NB_THREADS_POOL 4
 #define TAILLE_FILE_ATTENTE 20
@@ -48,25 +47,7 @@ MYSQL * connexion;
         exit(1);  
     }
     printf("Serveur - connexion réalisé\n");
-    /* test sur le fait de recup une requete CA MARCHE 
 
-
-        if (mysql_query(connexion, "select * from UNIX_FINAL where id = 1") != 0)   // cense renvoyer les elts sur carottes 
-        {
-        fprintf (stderr, "Serveur - Erreur de Mysql-query");
-        }
-
-        if((resultat = mysql_store_result(connexion)) == NULL)
-        {
-        fprintf (stderr, "Serveur - Erreur de mysql store");
-        }
-        //
-        // Preparation de la reponse
-        if ((Tuple = mysql_fetch_row(resultat)) != NULL)
-        {
-        printf("Serveur -  le resultat de la requete sql est :  %s \n", Tuple[1]); // censé donner carotes 
-        }
-        else printf("Serveur -  le resultat de la requete sql ne donne aucune reponse");*/
      // preparation du stockage des descripteur de socket 
      for (int i=0 ; i<TAILLE_FILE_ATTENTE ; i++)
      {
@@ -118,44 +99,6 @@ MYSQL * connexion;
         pthread_mutex_unlock(&mutexSocketsAcceptees);
         pthread_cond_signal(&condSocketsAcceptees);
     }
-
-
-
-    /*while(1)
-    {
-        if(nbCaddie != 10)
-        {
-            printf("Serveur - Attente d'un nouuveau client\n");
-            sService = Socket::Accept(sServeur,NULL);//Faire une boucle avec plusieurs thread pour accepter
-
-            for(int i  = 0 ; i<10 ; i++)
-            {
-                if(threadCaddie[i] == 0)
-                {
-                    tabClientConnect[i].sService = sService;
-                    if(pthread_create(&threadCaddie[i], NULL , (void*(*)(void*))FctCaddie,&tabClientConnect[i])!=0)
-                    {
-                        printf("Serveur - Probleme de creation de thread");
-                    }
-                    else
-                    {
-                        nbCaddie++;
-                        printf("Serveur - Creation d un thread caddie\nServeur - Place restante : %d\n",10-nbCaddie);
-                    }
-                    i = 11;
-                }
-            }
-        }
-        else
-        {
-            printf("Serveur - Le nombre maximum de client connecte au serveur est atteint\n");
-        }
-
-
-    }*/
-
-
-
 }
 
 void*FctCaddie(void * )
@@ -163,13 +106,17 @@ void*FctCaddie(void * )
 
     int sService;
     int result;
-    bool retour;
-    char charReceive[60];
+    bool retour , fini;
+    char charReceive[60] ,charReceiveCopy[60];
     char reponse[60];
+    char requete[15];
+
+    printf("\t[THREAD %ld] Créer\n",pthread_self());
+
     while(1)
     {
-        printf("\t[THREAD %ld] Attente socket...\n",pthread_self());
         // Attente d'une tâche
+        printf("Thread %ld - Je suis libre\n",pthread_self());
         pthread_mutex_lock(&mutexSocketsAcceptees);
         while (indiceEcriture == indiceLecture)
         {
@@ -183,76 +130,44 @@ void*FctCaddie(void * )
             indiceLecture = 0;
         } 
         pthread_mutex_unlock(&mutexSocketsAcceptees);
+
         printf("\t[THREAD %ld] Je m'occupe de la socket %d\n", pthread_self(),sService);
 
         retour = true; 
-        while(retour == true)
+        fini = false;
+        while(retour == true && fini == false)
         {
             if((result = Socket::Receive(sService, charReceive)) == -1)
             {
-                printf("Mal passe\n");
-                // printf("Thread %d - Erreur de receive\n",threadsService->indiceThread);
+                printf("\t[THREAD %ld] - Receive mal passe\n",pthread_self());
             }
-
-            printf("Attente d'une requete :\n");
-            printf("Reçu : %s\n",charReceive);
-            retour = SMOP(charReceive,reponse, sService, connexion);
-            printf("Retour client : %d\n",retour);
-
-            if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
-            {
-                printf("Renvoyé %s\n",reponse);
-            }
-        }
-
-        //Fin test
-        // debut trait tache
-
-    }
-    //printf("Thread %d - Hello pret a repondre\n",threadsService->indiceThread);
-        /* 
-        //Test de Receive
-        int result;
-        char charReceive[60];
-        char reponse[60];
-
-        while (1)
-        {
-            if((result = Socket::Receive(sService, charReceive)) == -1)
-            {
-                printf("Mal passe\n");
-               printf("Thread %d - Erreur de receive\n",threadsService->indiceThread);
-            }
-        
             else
             {
-                sleep(5);
-                printf("\n***********\n");
-                printf("Thread %d - Taille trame lue : %d\n",threadsService->indiceThread,result);//Renvoie le nombre de carractére lue
-                printf("Thread %d - Lue : %s\n",threadsService->indiceThread,charReceive);
-                
-                if(strcmp(charReceive,"DECONNECT") ==0 )
-                {
-                    close(threadsService->sService);
-                    threadCaddie[threadsService->indiceThread] = 0;//Remettre à l indice du tableau de thread 0 pour dire que il est libre
-                    nbCaddie--;
-                    printf("Thread %d - Fin du thread\n",threadsService->indiceThread);
-                    printf("***********\n");
-                    pthread_exit(0);
+                printf("\t[THREAD %ld] - j'ai reçu : %s\n",pthread_self(),charReceive);  
+                strcpy(charReceiveCopy,charReceive);
+                printf("%s\n",charReceive);
+                printf("%s\n",charReceiveCopy);
+                strcpy(requete,strtok(charReceiveCopy,"#"));
+                printf("requete : %s\n",requete);
+                printf("%s\n",charReceive);
+                if(strcmp(requete,"LOGOUT")==0)
+                { 
+                    fini = SMOP_Logout( sService,reponse);
                 }
                 else
                 {
-                    
-                    SMOP(charReceive,reponse, sService, connexion);
-                    printf("Reponse : %s\n",reponse);
-                    
+                    pthread_mutex_lock(&mutexBd);
+                    retour = SMOP(charReceive,reponse, sService, connexion);
+                    pthread_mutex_unlock(&mutexBd);
                 }
-                
-                
+
+                if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
+                {
+                    printf("\t[THREAD %ld] - Renvoyé au client %s\n",pthread_self(),reponse);
+                }
             }
-            
         }
-        */
+    }
     return 0;
 }
 

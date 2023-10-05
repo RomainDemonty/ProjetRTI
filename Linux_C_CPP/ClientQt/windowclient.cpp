@@ -12,8 +12,8 @@ extern WindowClient *w;
 
 int sService, numarticle = 1;
 bool logged=0;
-char nomutilisateur[20];
-char mdp[20];
+char nomutilisateur[30];
+char mdp[30];
 char messageRecu[1400];
 char messageEnvoye[1400];
 char tampon[50];
@@ -29,7 +29,7 @@ typedef struct
 
 void Echange(char* requete, char* reponse);
 
-void Echange(char* requete, char* reponse) ; 
+//void Echange(char* requete, char* reponse) ; 
 
 WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::WindowClient)
 {
@@ -523,6 +523,7 @@ void Echange(char* requete, char* reponse)
 {
   int nbEcrits, nbLus;
   // ***** Envoi de la requete ****************************
+  printf("Envoye : %s\n",requete);
   if ((nbEcrits = Socket::Send(sService,requete,strlen(requete))) == -1)
   {
     perror("Erreur de Send");
@@ -536,6 +537,7 @@ void Echange(char* requete, char* reponse)
     close(sService);
     exit(1);
   }
+  printf("Reçu : %s\n",reponse);
   if (nbLus == 0)
   {
     printf("Serveur arrete, pas de reponse reçue...\n");

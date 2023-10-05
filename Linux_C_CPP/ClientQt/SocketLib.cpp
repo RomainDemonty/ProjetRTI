@@ -148,10 +148,10 @@ int Socket::Send (int sSocket, char* data, int taille)
     trame[taille] = '#';
     trame[taille+1] = ')';
 
-    printf("%s",trame);
+    //printf("%s",trame);
     // Ecriture sur la socket
     int test = write(sSocket,trame,taille+2)-2;
-    printf("%d",test);
+    //printf("%d",test);
     return test;
     //Fin Test 2
 
