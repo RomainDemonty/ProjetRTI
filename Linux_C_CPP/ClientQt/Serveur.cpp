@@ -109,7 +109,7 @@ void*FctCaddie(void * )
     bool retour , fini;
     char charReceive[60] ,charReceiveCopy[60];
     char reponse[60];
-    char requete[15];
+    char requeteS[15];
 
     printf("\t[THREAD %ld] Créer\n",pthread_self());
 
@@ -145,12 +145,9 @@ void*FctCaddie(void * )
             {
                 printf("\t[THREAD %ld] - j'ai reçu : %s\n",pthread_self(),charReceive);  
                 strcpy(charReceiveCopy,charReceive);
-                printf("%s\n",charReceive);
-                printf("%s\n",charReceiveCopy);
-                strcpy(requete,strtok(charReceiveCopy,"#"));
-                printf("requete : %s\n",requete);
-                printf("%s\n",charReceive);
-                if(strcmp(requete,"LOGOUT")==0)
+
+                strcpy(requeteS,strtok(charReceiveCopy,"#"));
+                if(strcmp(requeteS,"LOGOUT")==0)//ça ne sert a rien de bloquer la base de donnée pour rien
                 { 
                     fini = SMOP_Logout( sService,reponse);
                 }
@@ -163,7 +160,7 @@ void*FctCaddie(void * )
 
                 if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
                 {
-                    printf("\t[THREAD %ld] - Renvoyé au client %s\n",pthread_self(),reponse);
+                    printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),reponse);
                 }
             }
         }

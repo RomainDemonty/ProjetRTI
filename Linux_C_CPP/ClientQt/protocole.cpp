@@ -30,16 +30,12 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     // ***** Récupération nom de la requete *****************
    // char *cas = strtok(requete,"#");
     strcpy(cas,strtok(requete,"#"));
-    printf("cas : %s\n",cas);
     // ***** LOGIN ******************************************
     if (strcmp(cas,"LOGIN") == 0) 
     {
         strcpy(usern,strtok(NULL,"#"));
-        printf("user : %s\n",usern);
         strcpy(password,strtok(NULL,"#"));
-        printf("password : %s\n",password);
         newuser = atoi(strtok(NULL,"#"));
-        printf("new user : %d\n",newuser);
         if (estPresentServeur(socket) >= 0) // client déjà loggé
         {
             sprintf(reponse,"LOGIN#ko#Client déjà loggé !");
@@ -225,7 +221,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
  bool SMOP_Logout(int socket, char* reponse)
  {
     retire(socket);
-    sprintf(reponse,"LOGOUT#ok");
+    sprintf(reponse,"LOGOUT#ok#");
     return true;
  }
 

@@ -14,9 +14,6 @@ int sService, numarticle = 1;
 bool logged=0;
 char nomutilisateur[30];
 char mdp[30];
-char messageRecu[1400];
-char messageEnvoye[1400];
-char tampon[50];
 
 typedef struct
 {
@@ -322,6 +319,9 @@ void WindowClient::closeEvent(QCloseEvent *event)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonLogin_clicked()
 {
+  char messageRecu[1400];
+  char messageEnvoye[1400];
+  char tampon[50];
     //on dmd au serv si on peut se connecter 
     // gerer l'erreur 
     // doit faire en sorte de mettre logged=1 ; 
@@ -338,10 +338,7 @@ void WindowClient::on_pushButtonLogin_clicked()
       strcat(messageEnvoye,"0");
     }
 
-    printf("\n");
     Echange(messageEnvoye, messageRecu);
-    printf("\n");
-    printf("J'ai reçu : %s\n", messageRecu);
 
     strcpy(tampon,strtok(messageRecu,"#"));
     strcpy(tampon,strtok(NULL,"#"));
@@ -358,11 +355,10 @@ void WindowClient::on_pushButtonLogin_clicked()
       }
 
       //Afficher le premier article
+      strcpy(messageEnvoye,"");
       sprintf(messageEnvoye, "CONSULT#%d",numarticle);
-      printf("\n");
+
       Echange(messageEnvoye, messageRecu);
-      printf("\n");
-      printf("%s\n",messageRecu);
 
       strcpy(tampon,strtok(messageRecu,"#"));
       strcpy(tampon,strtok(NULL,"#"));
@@ -375,7 +371,6 @@ void WindowClient::on_pushButtonLogin_clicked()
 
       if(strcmp(tampon,"ok") == 0 )
       {
-        printf("%s\n",articletampon.intitule);
         setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
       }
       else
@@ -395,15 +390,38 @@ void WindowClient::on_pushButtonLogin_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonLogout_clicked()
 {
+  char messageRecu[1400];
+  char messageEnvoye[1400];
+  char tampon[50];
     //on dmd au serv si on peut se deconnecter 
     // gerer l'erreur 
     //logged = 0 a la fin . 
     //appel a logout ok 
+    strcpy(messageEnvoye, "LOGOUT");
+    Echange(messageEnvoye, messageRecu);
+
+    strcpy(tampon,strtok(messageRecu,"#"));
+    printf("reçu 2 : %s",tampon);
+    strcpy(tampon,strtok(NULL,"#"));
+    if(strcmp(messageRecu,"ok")==0)
+    {
+      videTablePanier();
+      logoutOK();
+      logged = false;
+      numarticle = 1;
+    }
+    return ;
 }
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonSuivant_clicked()
 {
+  char messageRecu[1400];
+  char messageEnvoye[1400];
+  char tampon[50];
   // envois d'une trame au serveur en demandant l'artcileencours+1
   //pas oublier de modif cet artcicle en cours var global
   ARTICLE articletampon;
@@ -417,10 +435,8 @@ void WindowClient::on_pushButtonSuivant_clicked()
     numarticle = 1;
   }
   sprintf(messageEnvoye, "CONSULT#%d",numarticle);
-  printf("\n");
+
   Echange(messageEnvoye, messageRecu);
-  printf("\n");
-  printf("%s\n",messageRecu);
 
   strcpy(tampon,strtok(messageRecu,"#"));
   strcpy(tampon,strtok(NULL,"#"));
@@ -433,7 +449,6 @@ void WindowClient::on_pushButtonSuivant_clicked()
 
   if(strcmp(tampon,"ok") == 0 )
   {
-    printf("%s\n",articletampon.intitule);
     setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
   }
   else
@@ -445,6 +460,9 @@ void WindowClient::on_pushButtonSuivant_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonPrecedent_clicked()
 {
+  char messageRecu[1400];
+  char messageEnvoye[1400];
+  char tampon[50];
   ARTICLE articletampon;
 
   if(numarticle != 1)
@@ -456,10 +474,8 @@ void WindowClient::on_pushButtonPrecedent_clicked()
     numarticle = 21;
   }
   sprintf(messageEnvoye, "CONSULT#%d",numarticle);
-  printf("\n");
+
   Echange(messageEnvoye, messageRecu);
-  printf("\n");
-  printf("%s\n",messageRecu);
 
   strcpy(tampon,strtok(messageRecu,"#"));
   strcpy(tampon,strtok(NULL,"#"));
@@ -472,12 +488,11 @@ void WindowClient::on_pushButtonPrecedent_clicked()
 
   if(strcmp(tampon,"ok") == 0 )
   {
-    printf("%s\n",articletampon.intitule);
     setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
   }
   else
   {
-    setPublicite("Problème suivant :(");
+    setPublicite("Problème précédent :(");
   }
 
   return ;
