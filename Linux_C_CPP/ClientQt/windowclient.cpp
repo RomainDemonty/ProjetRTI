@@ -55,7 +55,7 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
 
 
     // doit se connecter a la socket pour permetre d'echanger
-    sService = Socket::ClientSocket(NULL , 1500); 
+    sService = Socket::ClientSocket(NULL , 1600); 
 
     //Test de send
     /*
@@ -397,20 +397,24 @@ void WindowClient::on_pushButtonLogout_clicked()
     // gerer l'erreur 
     //logged = 0 a la fin . 
     //appel a logout ok 
-    strcpy(messageEnvoye, "LOGOUT");
+    strcpy(messageEnvoye, "");
+    strcpy(messageEnvoye, "LOGOUT#test");
     Echange(messageEnvoye, messageRecu);
 
     strcpy(tampon,strtok(messageRecu,"#"));
-    printf("reçu 2 : %s",tampon);
+    printf("reçu 2 : %s\n",tampon);
     strcpy(tampon,strtok(NULL,"#"));
-    if(strcmp(messageRecu,"ok")==0)
+    if(strcmp(tampon,"ok")==0)
     {
       videTablePanier();
       logoutOK();
       logged = false;
       numarticle = 1;
     }
-    return ;
+    else
+    {
+      printf("Aie\n");
+    }
 }
 
 

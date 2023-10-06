@@ -87,7 +87,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                 }
                 else
                 {
-                    if(strcmp(Tuple[1],usern)!=0)
+                    if(Tuple == NULL || strcmp(Tuple[1],usern)!=0)
                     {
                         strcpy(reponse,"LOGIN#ko#Client Inconnu");
                         return true;
@@ -129,19 +129,19 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                 sprintf(requete,"select * from articles where id = %d", id);
                 if (mysql_query(con, requete) != 0)
                 {
-                    strcpy(reponse,"ACHAT#ko#ERREUR_SQL#-1");
+                    strcpy(reponse,"CONSULT#ko#ERREUR_SQL#-1");
                 }
                 if((resultat = mysql_store_result(con)) == NULL)
                 {
-                    strcpy(reponse,"ACHAT#ko#ERREUR_SQL#-1");
+                    strcpy(reponse,"CONSULT#ko#ERREUR_SQL#-1");
                 }
                 if ((Tuple = mysql_fetch_row(resultat)) != NULL)
                 {
-                    sprintf(reponse,"ACHAT#ok#%d#%s#%d#%f#%s",atoi(Tuple[0]),Tuple[1],atoi(Tuple[3]),atof(Tuple[2]),Tuple[4]);//id,intitule,stock,prix,image
+                    sprintf(reponse,"CONSULT#ok#%d#%s#%d#%f#%s",atoi(Tuple[0]),Tuple[1],atoi(Tuple[3]),atof(Tuple[2]),Tuple[4]);//id,intitule,stock,prix,image
                 }
                 else
                 {
-                    sprintf(reponse,"ACHAT#ko#-1");
+                    sprintf(reponse,"CONSULT#ko#-1");
                 }
             }
             if(strcmp(cas,"ACHAT") == 0)
@@ -218,11 +218,11 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     return true;
  }
 
- bool SMOP_Logout(int socket, char* reponse)
+ bool SMOP_Logout(char* reponse, int socket)
  {
     retire(socket);
-    sprintf(reponse,"LOGOUT#ok#");
-    return true;
+    sprintf(reponse,"LOGOUT#ok");
+    return false;
  }
 
 

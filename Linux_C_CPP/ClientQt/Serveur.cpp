@@ -147,9 +147,11 @@ void*FctCaddie(void * )
                 strcpy(charReceiveCopy,charReceive);
 
                 strcpy(requeteS,strtok(charReceiveCopy,"#"));
+                printf("\tRequete reçue : %s\n",requeteS);
                 if(strcmp(requeteS,"LOGOUT")==0)//ça ne sert a rien de bloquer la base de donnée pour rien
                 { 
-                    fini = SMOP_Logout( sService,reponse);
+                    printf("\tDemande de logout\n");
+                    fini = SMOP_Logout( reponse, sService);
                 }
                 else
                 {
@@ -163,6 +165,8 @@ void*FctCaddie(void * )
                     printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),reponse);
                 }
             }
+            strcpy(charReceive,"");
+            strcpy(reponse,"");
         }
     }
     return 0;

@@ -5,7 +5,7 @@
 #include <mysql.h>
 
 bool SMOP(char* requete, char* reponse,int socket, MYSQL * con);
-bool SMOP_Logout(int socket, char* reponse);
+bool SMOP_Logout(char* reponse,int socket);
 void SMOP_Close();
 
 #endif
