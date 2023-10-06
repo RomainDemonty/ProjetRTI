@@ -13,4 +13,6 @@ Site de marecher qui est accessible de pleins de manière différentes
 2)  Supprimer
 3)  Vider panier
 4)  Confirmer Achat
-5)  nombre flotant 
+5)  nombre flotant
+6)  properties
+7)  entre différentes machines
