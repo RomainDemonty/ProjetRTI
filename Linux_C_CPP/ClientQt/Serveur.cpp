@@ -104,12 +104,12 @@ MYSQL * connexion;
 void*FctCaddie(void * )
 {
 
-    int sService;
-    int result;
-    bool retour , fini;
-    char charReceive[60] ,charReceiveCopy[60];
-    char reponse[60];
-    char requeteS[15];
+    int sService;//socket
+    int result;//receive
+    bool continuer;//Si le client ferme la fêtre graphique le serveur n'attends plus de requete de lui
+    char charReceive[60] ,charReceiveCopy[60];//Requete reçue et ca copie pour afficher le type de requete
+    char reponse[60];//réponse au client
+    char requeteS[15];//affichage apres strtok de charcopy
 
     printf("\t[THREAD %ld] Créer\n",pthread_self());
 
@@ -133,40 +133,32 @@ void*FctCaddie(void * )
 
         printf("\t[THREAD %ld] Je m'occupe de la socket %d\n", pthread_self(),sService);
 
-        retour = true; 
-        fini = false;
-        while(retour == true && fini == false)
+        continuer = true;
+        while(continuer == true)
         {
+            strcpy(charReceive,"");
+            strcpy(reponse,"");
             if((result = Socket::Receive(sService, charReceive)) == -1)
             {
                 printf("\t[THREAD %ld] - Receive mal passe\n",pthread_self());
             }
             else
             {
-                printf("\t[THREAD %ld] - j'ai reçu : %s\n",pthread_self(),charReceive);  
+                printf("\t[THREAD %ld] - J'ai reçu : %s\n",pthread_self(),charReceive);  
                 strcpy(charReceiveCopy,charReceive);
 
                 strcpy(requeteS,strtok(charReceiveCopy,"#"));
-                printf("\tRequete reçue : %s\n",requeteS);
-                if(strcmp(requeteS,"LOGOUT")==0)//ça ne sert a rien de bloquer la base de donnée pour rien
-                { 
-                    printf("\tDemande de logout\n");
-                    fini = SMOP_Logout( reponse, sService);
-                }
-                else
-                {
-                    pthread_mutex_lock(&mutexBd);
-                    retour = SMOP(charReceive,reponse, sService, connexion);
-                    pthread_mutex_unlock(&mutexBd);
-                }
+                printf("\t[THREAD %ld] - Requete a effectuer : %s\n",pthread_self(),requeteS);
+
+                pthread_mutex_lock(&mutexBd);
+                continuer = SMOP(charReceive,reponse, sService, connexion);
+                pthread_mutex_unlock(&mutexBd);
 
                 if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
                 {
                     printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),reponse);
                 }
             }
-            strcpy(charReceive,"");
-            strcpy(reponse,"");
         }
     }
     return 0;

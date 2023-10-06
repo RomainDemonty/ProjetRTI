@@ -31,6 +31,15 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
    // char *cas = strtok(requete,"#");
     strcpy(cas,strtok(requete,"#"));
     // ***** LOGIN ******************************************
+    if(strcmp(cas,"LOGOUT") == 0)
+    {
+        retire(socket);
+        sprintf(reponse,"LOGOUT#ok");
+
+        //vider le caddy et mettre a jour dans la bd
+
+        return true;
+    }
     if (strcmp(cas,"LOGIN") == 0) 
     {
         strcpy(usern,strtok(NULL,"#"));
@@ -39,7 +48,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
         if (estPresentServeur(socket) >= 0) // client déjà loggé
         {
             sprintf(reponse,"LOGIN#ko#Client déjà loggé !");
-            return false;
+            return true;
         }
         else
         {
@@ -217,14 +226,6 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
     }
     return true;
  }
-
- bool SMOP_Logout(char* reponse, int socket)
- {
-    retire(socket);
-    sprintf(reponse,"LOGOUT#ok");
-    return false;
- }
-
 
 //***** Gestion de l'état du protocole ******************************
 int estPresentServeur(int socket)
