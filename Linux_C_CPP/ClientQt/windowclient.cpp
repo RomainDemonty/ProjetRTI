@@ -310,15 +310,42 @@ void WindowClient::dialogueErreur(const char* titre,const char* message)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::closeEvent(QCloseEvent *event)
 {
-  //MESSAGE  msg ; 
-
+  char messageRecu[1400];
+  char messageEnvoye[1400];
+  char tampon[50];
   if (logged==1)
   {
-
-   //on envois un msg pour  vider le panier 
-   // on envois un msg pour se deconnecter (libere du coup le thread )
-
+    on_pushButtonLogout_clicked();
   }
+
+  
+    strcpy(messageEnvoye, "");
+    strcpy(messageEnvoye, "LOGOUT#test");
+    Echange(messageEnvoye, messageRecu);
+
+    strcpy(tampon,strtok(messageRecu,"#"));
+    strcpy(tampon,strtok(NULL,"#"));
+    if(strcmp(tampon,"ok")==0)
+    {
+      videTablePanier();
+      logoutOK();
+      logged = false;
+      numarticle = 1;
+
+      for (int i = 0; i < 20; i++)
+      {
+        tabPanier[i].id = 0;
+        tabPanier[i].prix = 0;
+        tabPanier[i].quantite = 0;
+      }
+      setTotal(0);
+    }
+    else
+    {
+      printf("Aie erreur logout\n");
+    }
+
+  
   
   exit(0);
 }

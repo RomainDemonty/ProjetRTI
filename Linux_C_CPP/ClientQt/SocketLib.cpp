@@ -156,13 +156,6 @@ int Socket::Send (int sSocket, char* data, int taille)
     //Fin Test 2
 
 
-    /*Test 3
-    if (taille > TAILLE_MAX_DATA)
-    return -1;
-
-
-
-    Fin test 3*/
 
 
 }

@@ -106,7 +106,7 @@ void*FctCaddie(void * )
     int sService;//socket
     int result;//receive
     bool continuer;//Si le client ferme la fêtre graphique le serveur n'attends plus de requete de lui
-    char charReceive[60] ,charReceiveCopy[60];//Requete reçue et ca copie pour afficher le type de requete
+    char * charReceive ,charReceiveCopy[60];//Requete reçue et ca copie pour afficher le type de requete
     char reponse[60];//réponse au client
     char requeteS[15];//affichage apres strtok de charcopy
     ARTICLEPANIER tabPanier[20];
@@ -143,11 +143,13 @@ void*FctCaddie(void * )
         continuer = true;
         while(continuer == true)
         {
-            strcpy(charReceive,"");
-            strcpy(reponse,"");
-            if((result = Socket::Receive(sService, charReceive)) == -1)
+
+            charReceive = (char *)malloc(60 * sizeof(char));
+
+            if((result = Socket::Receive(sService, charReceive)) <= 0)
             {
                 printf("\t[THREAD %ld] - Receive mal passe\n",pthread_self());
+                continuer = false ;
             }
             else
             {
@@ -166,6 +168,7 @@ void*FctCaddie(void * )
                     printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),reponse);
                 }
             }
+            free(charReceive);
         }
     }
     return 0;
