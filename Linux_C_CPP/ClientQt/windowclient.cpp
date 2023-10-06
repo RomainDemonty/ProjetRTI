@@ -24,6 +24,17 @@ typedef struct
   char  image[20];
 } ARTICLE;
 
+typedef struct
+{
+  int   id;
+  float prix;
+  int   quantite;  
+} ARTICLEPANIER;
+
+int stockglob;
+
+ARTICLEPANIER tabPanier[20];
+
 void Echange(char* requete, char* reponse);
 
 //void Echange(char* requete, char* reponse) ; 
@@ -53,17 +64,15 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
     //setArticle("pommes",5.53,18,"pommes.jpg");
     //ajouteArticleTablePanier("cerises",8.96,2);
 
-
     // doit se connecter a la socket pour permetre d'echanger
     sService = Socket::ClientSocket(NULL , 1600); 
 
-    //Test de send
-    /*
-    char charstr[60];
-    strcpy(charstr,"ACHAT#1#5");
-    int ret =  Socket::Send(sService , charstr, sizeof(charstr));
-    */
-    //fin test de send
+    for (int i = 0; i < 20; i++)
+    {
+      tabPanier[i].id = 0;
+      tabPanier[i].prix = 0;
+      tabPanier[i].quantite = 0;
+    }
 
 }
 
@@ -402,7 +411,6 @@ void WindowClient::on_pushButtonLogout_clicked()
     Echange(messageEnvoye, messageRecu);
 
     strcpy(tampon,strtok(messageRecu,"#"));
-    printf("reçu 2 : %s\n",tampon);
     strcpy(tampon,strtok(NULL,"#"));
     if(strcmp(tampon,"ok")==0)
     {
@@ -410,10 +418,18 @@ void WindowClient::on_pushButtonLogout_clicked()
       logoutOK();
       logged = false;
       numarticle = 1;
+
+      for (int i = 0; i < 20; i++)
+      {
+        tabPanier[i].id = 0;
+        tabPanier[i].prix = 0;
+        tabPanier[i].quantite = 0;
+      }
+      setTotal(0);
     }
     else
     {
-      printf("Aie\n");
+      printf("Aie erreur logout\n");
     }
 }
 
@@ -448,6 +464,7 @@ void WindowClient::on_pushButtonSuivant_clicked()
   articletampon.id = atof(strtok(NULL,"#"));
   strcpy(articletampon.intitule,strtok(NULL,"#"));
   articletampon.stock = atoi(strtok(NULL,"#"));
+  stockglob = articletampon.stock;
   articletampon.prix = atof(strtok(NULL,"#"));
   strcpy(articletampon.image,strtok(NULL,"#"));
 
@@ -509,6 +526,56 @@ void WindowClient::on_pushButtonAcheter_clicked()
   // on dit au serveur que on achete
   // on gere la reponse du serv 
   // supprimer de la base de donnée 
+  char messageRecu[1400];
+  char messageEnvoye[1400];
+  char tampon[50];
+  float prix, total;
+  int quantite = getQuantite(), j;
+  bool ok;
+  char Stock[20];
+
+  sprintf(messageEnvoye, "ACHAT#%d#%d",numarticle,quantite);
+  Echange(messageEnvoye, messageRecu);
+
+  strcpy(tampon,strtok(messageRecu,"#"));
+  strcpy(tampon,strtok(NULL,"#"));
+
+  if(strcmp(tampon,"ok") == 0 )
+  {
+    strcpy(tampon,strtok(NULL,"#"));
+    prix = atof(strtok(NULL,"#"));
+    ajouteArticleTablePanier(tampon, prix, quantite);
+
+    stockglob = stockglob - quantite;
+    sprintf(Stock,"%d",stockglob);
+    ui->lineEditStock->setText(Stock);
+
+    for (j = 0 ,ok = true; j< 20 && ok == true; j++)
+    {
+      if(tabPanier[j].id == 0 || tabPanier[j].id == numarticle)
+      {
+        ok = false;
+        tabPanier[j].id = numarticle;
+        tabPanier[j].prix = prix;
+        tabPanier[j].quantite = tabPanier[j].quantite + quantite;
+        printf("id = %d  -  prix = %f - qt = %d\n",tabPanier[j].id,tabPanier[j].prix,tabPanier[j].quantite);
+      }
+    }
+
+    for (j = 0 ; j< 20; j++)
+    {
+       total = total + tabPanier[j].prix*tabPanier[j].quantite;
+    }
+
+    setTotal(total);
+  }
+  else
+  {
+    strcpy(tampon,strtok(NULL,"#"));
+    setPublicite(tampon);
+  }
+  
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -17,26 +17,50 @@ void retire(int socket);
 pthread_mutex_t mutexClients = PTHREAD_MUTEX_INITIALIZER;
 
 //***** Parsing de la requete et creation de la reponse *************
-bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
+bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *tabPanier)
 {
     //Variables
     MYSQL_RES *resultat;
     MYSQL_ROW  Tuple;
-    int qtedispo,newqte;
+    int qtedispo,newqte , j;
     char chaine[200];
     char usern[50], password[30];
     char cas[30];
     bool newuser;
+    bool ok;
     // ***** Récupération nom de la requete *****************
    // char *cas = strtok(requete,"#");
     strcpy(cas,strtok(requete,"#"));
     // ***** LOGIN ******************************************
     if(strcmp(cas,"LOGOUT") == 0)
     {
+        for (j = 0; j < 20; j++)
+        {
+            //vider le caddy et mettre a jour dans la bd
+            sprintf(requete,"select * from articles where id = %d", tabPanier[j].id);
+            if (mysql_query(con, requete) != 0)
+            {
+                strcpy(reponse,"LOGOUT#ko#ERREUR_SQL#-1");
+            }
+            if((resultat = mysql_store_result(con)) == NULL)
+            {
+                strcpy(reponse,"LOGOUT#ko#ERREUR_SQL#-1");
+            }
+            if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+            {
+                qtedispo = atoi(Tuple[3]);
+    
+                //maj dans la bd
+                newqte = qtedispo + tabPanier[j].quantite;
+                sprintf(requete,"UPDATE articles  SET stock = %d where id = %d", newqte, tabPanier[j].id);
+                if (mysql_query(con, requete) != 0) //requete de mise a jour
+                {
+                    strcpy(reponse,"LOGOUT#ko#ERREUR_SQL#-1");
+                }
+            }
+        }
         retire(socket);
         sprintf(reponse,"LOGOUT#ok");
-
-        //vider le caddy et mettre a jour dans la bd
 
         return true;
     }
@@ -199,7 +223,18 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con)
                         }
                         else
                         {
-                            strcpy(reponse,"ACHAT#ok#Achat_fait#1");//Il faut dire au serveur que je le rajoute au panier du coup
+                            for (j = 0 ,ok = true; j< 20 || ok == true; j++)
+                            {
+                                if(tabPanier[j].id == 0)
+                                {
+                                    ok = false;
+                                    tabPanier[j].id = id;
+                                    tabPanier[j].prix = atof(Tuple[2]);
+                                    tabPanier[j].quantite = quantitedem;
+                                }
+                            }
+                            
+                            sprintf(reponse,"ACHAT#ok#%s#%f#1",Tuple[1],atof(Tuple[2]));
                         }
                     }
                 }

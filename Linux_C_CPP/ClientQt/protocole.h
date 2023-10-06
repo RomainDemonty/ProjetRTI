@@ -4,7 +4,14 @@
 
 #include <mysql.h>
 
-bool SMOP(char* requete, char* reponse,int socket, MYSQL * con);
+typedef struct
+{
+  int   id;
+  float prix;
+  int   quantite;  
+} ARTICLEPANIER;
+
+bool SMOP(char* requete, char* reponse,int socket, MYSQL * con, ARTICLEPANIER *tabPanier);
 bool SMOP_Logout(char* reponse,int socket);
 void SMOP_Close();
 

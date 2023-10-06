@@ -22,7 +22,6 @@ int socketsAcceptees[TAILLE_FILE_ATTENTE];
 int indiceEcriture=0, indiceLecture=0;
 pthread_mutex_t mutexSocketsAcceptees;
 pthread_cond_t condSocketsAcceptees;
-
 pthread_mutex_t mutexBd;
 
 
@@ -110,11 +109,19 @@ void*FctCaddie(void * )
     char charReceive[60] ,charReceiveCopy[60];//Requete reçue et ca copie pour afficher le type de requete
     char reponse[60];//réponse au client
     char requeteS[15];//affichage apres strtok de charcopy
+    ARTICLEPANIER tabPanier[20];
 
     printf("\t[THREAD %ld] Créer\n",pthread_self());
 
     while(1)
     {
+        for (int i = 0; i < 20; i++)
+        {
+            tabPanier[i].id = 0;
+            tabPanier[i].prix = 0;
+            tabPanier[i].quantite = 0;
+        }
+        
         // Attente d'une tâche
         printf("Thread %ld - Je suis libre\n",pthread_self());
         pthread_mutex_lock(&mutexSocketsAcceptees);
@@ -151,7 +158,7 @@ void*FctCaddie(void * )
                 printf("\t[THREAD %ld] - Requete a effectuer : %s\n",pthread_self(),requeteS);
 
                 pthread_mutex_lock(&mutexBd);
-                continuer = SMOP(charReceive,reponse, sService, connexion);
+                continuer = SMOP(charReceive,reponse, sService, connexion,tabPanier);
                 pthread_mutex_unlock(&mutexBd);
 
                 if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
