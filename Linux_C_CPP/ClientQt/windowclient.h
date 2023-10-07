@@ -32,7 +32,7 @@ public:
     void ajouteArticleTablePanier(const char *article, float prix, int quantite);
     void videTablePanier();
     int getIndiceArticleSelectionne();
-
+    void majCaddie();
     // Clic sur la croix de la fenetre
     void closeEvent(QCloseEvent *event);
 

@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/mysql"
+                "/usr/include/mysql",
+                "/usr/include/qt5/QtWidgets"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

@@ -27,6 +27,7 @@ typedef struct
 typedef struct
 {
   int   id;
+  char  intitule[50];
   float prix;
   int   quantite;  
 } ARTICLEPANIER;
@@ -36,6 +37,7 @@ int stockglob;
 ARTICLEPANIER tabPanier[20];
 
 void Echange(char* requete, char* reponse);
+
 
 //void Echange(char* requete, char* reponse) ; 
 
@@ -571,7 +573,6 @@ void WindowClient::on_pushButtonAcheter_clicked()
   {
     strcpy(tampon,strtok(NULL,"#"));
     prix = atof(strtok(NULL,"#"));
-    ajouteArticleTablePanier(tampon, prix, quantite);
 
     stockglob = stockglob - quantite;
     sprintf(Stock,"%d",stockglob);
@@ -581,13 +582,15 @@ void WindowClient::on_pushButtonAcheter_clicked()
     {
       if(tabPanier[j].id == 0 || tabPanier[j].id == numarticle)
       {
-        ok = false;
         tabPanier[j].id = numarticle;
+        strcpy(tabPanier[j].intitule,  tampon  );
         tabPanier[j].prix = prix;
         tabPanier[j].quantite = tabPanier[j].quantite + quantite;
-        printf("id = %d  -  prix = %f - qt = %d\n",tabPanier[j].id,tabPanier[j].prix,tabPanier[j].quantite);
+        printf("id = %d  -  prix = %f - qt = %d\n",tabPanier[j].id,tabPanier[j].prix,tabPanier[j].quantite);     
+        ok = false;
       }
     }
+    majCaddie();
 
     for (j = 0 ; j< 20; j++)
     {
@@ -658,4 +661,14 @@ void Echange(char* requete, char* reponse)
     exit(1);
   }
   reponse[nbLus] = 0;
+}
+
+void WindowClient::majCaddie()
+{
+  videTablePanier();
+  for (int j = 0 ; j<20;j++)
+  {
+    if(tabPanier[j].id !=0)
+      ajouteArticleTablePanier(tabPanier[j].intitule, tabPanier[j].prix, tabPanier[j].quantite);
+  }
 }

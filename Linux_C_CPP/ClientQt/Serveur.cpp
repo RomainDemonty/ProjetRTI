@@ -143,9 +143,9 @@ void*FctCaddie(void * )
         continuer = true;
         while(continuer == true)
         {
-
+            printf("[THREAD %ld] - juste avant la malloc \n",pthread_self());
             charReceive = (char *)malloc(60 * sizeof(char));
-
+            printf("[THREAD %ld] - juste avant le receive \n",pthread_self());
             if((result = Socket::Receive(sService, charReceive)) <= 0)
             {
                 printf("\t[THREAD %ld] - Receive mal passe\n",pthread_self());
@@ -168,7 +168,11 @@ void*FctCaddie(void * )
                     printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),reponse);
                 }
             }
-            free(charReceive);
+            printf("[THREAD %ld] - juste avant le free \n",pthread_self());
+           
+           free(charReceive);
+
+            printf("[THREAD %ld] - juste apres le free \n",pthread_self());
         }
     }
     return 0;

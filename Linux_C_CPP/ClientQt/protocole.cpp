@@ -194,7 +194,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
 
                 // TO DO
 
-                // Acces BD , comme en php l'annee passee 
+                // Acces BD 
                 sprintf(requete,"select * from articles where id = %d", id);
                 if (mysql_query(con, requete) != 0)
                 {
