@@ -535,11 +535,9 @@ void WindowClient::on_pushButtonPrecedent_clicked()
   articletampon.id = atof(strtok(NULL,"#"));
   strcpy(articletampon.intitule,strtok(NULL,"#"));
   articletampon.stock = atoi(strtok(NULL,"#"));
-  //
   stockglob = articletampon.stock;
   articletampon.prix = atof(strtok(NULL,"."));
   articletampon.prix =  articletampon.prix + atof(strtok(NULL,"#"))/1000000;
-  //
   strcpy(articletampon.image,strtok(NULL,"#"));
 
   if(strcmp(tampon,"ok") == 0 )
@@ -564,7 +562,7 @@ void WindowClient::on_pushButtonAcheter_clicked()
   char messageRecu[1400];
   char messageEnvoye[1400];
   char tampon[50];
-  float prix, total;
+  float prix;
   int quantite = getQuantite(), j;
   bool ok;
   char Stock[20];
@@ -599,13 +597,6 @@ void WindowClient::on_pushButtonAcheter_clicked()
       }
     }
     majCaddie();
-
-    for (j = 0 ; j< 20; j++)
-    {
-       total = total + tabPanier[j].prix*tabPanier[j].quantite;
-    }
-
-    setTotal(total);
   }
   else
   {
@@ -620,11 +611,41 @@ void WindowClient::on_pushButtonAcheter_clicked()
 void WindowClient::on_pushButtonSupprimer_clicked()
 {
   // verif si indice existe 
-    // communiquer avec le caddie/panier  , 
-    // communiquer avce le serveur 
-    
+  // communiquer avce le serveur  
   // rajouter dans la base de donnee les elts du caddie 
+  char messageRecu[1400];
+  char messageEnvoye[1400];
+  char tampon[50];
+
+  int select = getIndiceArticleSelectionne() ;
+  if(select != -1)
+  {
+    printf("Je tente de supprimer le %d\n", select);
+    sprintf(messageEnvoye, "CANCEL#%d",tabPanier[select].id);
+    Echange(messageEnvoye, messageRecu);
+    strcpy(tampon,strtok(messageRecu,"#"));
+    strcpy(tampon,strtok(NULL,"#"));
+
+    if(strcmp(tampon,"ok") == 0 )
+    {
+      if(numarticle == tabPanier[select].id)
+      {
+        stockglob = stockglob + tabPanier[select].quantite;
+        printf("Nouvelle quantité : %d\n",stockglob);
+        sprintf(tampon,"%d",stockglob);
+        ui->lineEditStock->setText(tampon);
+      }
+
+      tabPanier[select].id = 0;
+      tabPanier[select].prix = 0;
+      tabPanier[select].quantite = 0;
+
+      majCaddie();
+
     }
+  }
+
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonViderPanier_clicked()
@@ -673,10 +694,16 @@ void Echange(char* requete, char* reponse)
 
 void WindowClient::majCaddie()
 {
+  float total = 0;
   videTablePanier();
   for (int j = 0 ; j<20;j++)
   {
     if(tabPanier[j].id !=0)
+    {
       ajouteArticleTablePanier(tabPanier[j].intitule, tabPanier[j].prix, tabPanier[j].quantite);
+      total = total + tabPanier[j].prix*tabPanier[j].quantite;
+    }
+
   }
+  setTotal(total);
 }

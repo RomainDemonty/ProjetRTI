@@ -247,15 +247,55 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                     }
                 }
             }
+            /*
             if(strcmp(cas,"CADDIE") == 0)//Ne pas faire car discuté avec le prof et inutile de demander tout le cadis a chaque fois juste s'occuper de un tuple à la fois
             {                
                 id = atoi(strtok(NULL,"#"));
                 //Retourne l’entièreté du contenu du caddie au client
             }
+            */
             if(strcmp(cas,"CANCEL") == 0)
             {                
                 id = atoi(strtok(NULL,"#"));
                 //Supprime un article du caddie et met à jour à la BD
+
+                    //vider le caddy et mettre a jour dans la bd
+                    sprintf(requete,"select * from articles where id = %d", id);
+                    if (mysql_query(con, requete) != 0)
+                    {
+                        strcpy(reponse,"CANCEL#ko#ERREUR_SQL#-1");
+                    }
+                    if((resultat = mysql_store_result(con)) == NULL)
+                    {
+                        strcpy(reponse,"CANCEL#ko#ERREUR_SQL#-1");
+                    }
+                    if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+                    {
+                        qtedispo = atoi(Tuple[3]);
+            
+                        //maj dans la bd
+                        newqte = qtedispo + tabPanier[j].quantite;
+                        printf("Nouveau stock :%d\n", newqte);
+                        sprintf(requete,"UPDATE articles  SET stock = %d where id = %d", newqte,id);
+                        if (mysql_query(con, requete) != 0) //requete de mise a jour
+                        {
+                            strcpy(reponse,"CANCEL#ko#ERREUR_SQL#-1");
+                        }
+                        else
+                        {
+                            for(j = 0 , ok = true; j < 20 && ok == true ; j++)
+                            {
+                                if(tabPanier[j].id == id)
+                                {
+                                    ok = false;
+                                    tabPanier[j].id = 0;
+                                    tabPanier[j].prix = 0;
+                                    tabPanier[j].quantite = 0;
+                                    sprintf(reponse,"CANCEL#ok");
+                                }
+                            }
+                        }
+                    }
             }
             if(strcmp(cas,"CANCELALL") == 0)
             {                
