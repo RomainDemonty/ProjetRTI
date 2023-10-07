@@ -28,7 +28,7 @@ typedef struct
 {
   int   id;
   char  intitule[50];
-  float prix;
+  double prix;
   int   quantite;  
 } ARTICLEPANIER;
 
@@ -404,7 +404,8 @@ void WindowClient::on_pushButtonLogin_clicked()
       articletampon.id = atof(strtok(NULL,"#"));
       strcpy(articletampon.intitule,strtok(NULL,"#"));
       articletampon.stock = atoi(strtok(NULL,"#"));
-      articletampon.prix = atof(strtok(NULL,"#"));
+      articletampon.prix = atof(strtok(NULL,"."));
+      articletampon.prix =  articletampon.prix + atof(strtok(NULL,"#"))/1000000;
       strcpy(articletampon.image,strtok(NULL,"#"));
 
       if(strcmp(tampon,"ok") == 0 )
@@ -494,7 +495,8 @@ void WindowClient::on_pushButtonSuivant_clicked()
   strcpy(articletampon.intitule,strtok(NULL,"#"));
   articletampon.stock = atoi(strtok(NULL,"#"));
   stockglob = articletampon.stock;
-  articletampon.prix = atof(strtok(NULL,"#"));
+  articletampon.prix = atof(strtok(NULL,"."));
+  articletampon.prix =  articletampon.prix + atof(strtok(NULL,"#"))/1000000;
   strcpy(articletampon.image,strtok(NULL,"#"));
 
   if(strcmp(tampon,"ok") == 0 )
@@ -533,6 +535,9 @@ void WindowClient::on_pushButtonPrecedent_clicked()
   articletampon.id = atof(strtok(NULL,"#"));
   strcpy(articletampon.intitule,strtok(NULL,"#"));
   articletampon.stock = atoi(strtok(NULL,"#"));
+  stockglob = articletampon.stock;
+  articletampon.prix = atof(strtok(NULL,"."));
+  articletampon.prix =  articletampon.prix + atof(strtok(NULL,"#"))/1000000;
   articletampon.prix = atof(strtok(NULL,"#"));
   strcpy(articletampon.image,strtok(NULL,"#"));
 
@@ -572,7 +577,8 @@ void WindowClient::on_pushButtonAcheter_clicked()
   if(strcmp(tampon,"ok") == 0 )
   {
     strcpy(tampon,strtok(NULL,"#"));
-    prix = atof(strtok(NULL,"#"));
+    prix = atof(strtok(NULL,"."));
+    prix = prix + atof(strtok(NULL,"#"))/1000000;
 
     stockglob = stockglob - quantite;
     sprintf(Stock,"%d",stockglob);
