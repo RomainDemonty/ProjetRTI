@@ -535,10 +535,11 @@ void WindowClient::on_pushButtonPrecedent_clicked()
   articletampon.id = atof(strtok(NULL,"#"));
   strcpy(articletampon.intitule,strtok(NULL,"#"));
   articletampon.stock = atoi(strtok(NULL,"#"));
+  //
   stockglob = articletampon.stock;
   articletampon.prix = atof(strtok(NULL,"."));
   articletampon.prix =  articletampon.prix + atof(strtok(NULL,"#"))/1000000;
-  articletampon.prix = atof(strtok(NULL,"#"));
+  //
   strcpy(articletampon.image,strtok(NULL,"#"));
 
   if(strcmp(tampon,"ok") == 0 )
@@ -581,6 +582,7 @@ void WindowClient::on_pushButtonAcheter_clicked()
     prix = prix + atof(strtok(NULL,"#"))/1000000;
 
     stockglob = stockglob - quantite;
+    printf("Nouvelle quantité : %d\n",stockglob);
     sprintf(Stock,"%d",stockglob);
     ui->lineEditStock->setText(Stock);
 
