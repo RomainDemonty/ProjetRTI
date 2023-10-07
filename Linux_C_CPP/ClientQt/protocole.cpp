@@ -52,10 +52,17 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
     
                 //maj dans la bd
                 newqte = qtedispo + tabPanier[j].quantite;
+                printf("Nouveau stock :%d\n", newqte);
                 sprintf(requete,"UPDATE articles  SET stock = %d where id = %d", newqte, tabPanier[j].id);
                 if (mysql_query(con, requete) != 0) //requete de mise a jour
                 {
                     strcpy(reponse,"LOGOUT#ko#ERREUR_SQL#-1");
+                }
+                else
+                {
+                    tabPanier[j].id = 0;
+                    tabPanier[j].prix = 0;
+                    tabPanier[j].quantite = 0;
                 }
             }
         }
@@ -216,6 +223,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                     {
                         //maj dans la bd
                         newqte = qtedispo - quantitedem;
+                        printf("Nouvelle quantite: %d\n",newqte);
                         sprintf(requete,"UPDATE articles  SET stock = %d where id = %d", newqte, id);
                         if (mysql_query(con, requete) != 0) //requete de mise a jour
                         {
@@ -223,14 +231,14 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                         }
                         else
                         {
-                            for (j = 0 ,ok = true; j< 20 || ok == true; j++)
+                            for (j = 0 ,ok = true; j< 20 && ok == true; j++)
                             {
-                                if(tabPanier[j].id == 0)
+                                if(tabPanier[j].id == 0 || tabPanier[j].id == id)
                                 {
                                     ok = false;
                                     tabPanier[j].id = id;
                                     tabPanier[j].prix = atof(Tuple[2]);
-                                    tabPanier[j].quantite = quantitedem;
+                                    tabPanier[j].quantite = tabPanier[j].quantite + quantitedem;
                                 }
                             }
                             

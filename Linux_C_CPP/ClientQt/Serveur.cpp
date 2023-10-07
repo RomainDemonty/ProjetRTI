@@ -168,6 +168,14 @@ void*FctCaddie(void * )
                     printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),reponse);
                 }
             }
+
+            printf("\n\n");
+            for(int k = 0 ; k < 20 ; k++)
+            {
+                printf("id : %d  - qt :  %d\n",tabPanier[k].id, tabPanier[k].quantite);
+            }
+            printf("\n\n");
+
             printf("[THREAD %ld] - juste avant le free \n",pthread_self());
            
            free(charReceive);
