@@ -18,6 +18,23 @@ typedef struct
   char  username[30];
   char password[30];
 } Client;
+typedef struct
+{
+  int   id;
+  char  intitule[20];
+  float prix;
+  int   stock;  
+  int idfacture;
+} ARTICLEACHETE;
+typedef struct
+{
+  int   id;
+  int idclient;
+  char date[20];
+  float montant;
+  bool paye ;  
+  
+} FACTURE;
 
 ARTICLE Elm[] = 
 {
@@ -61,10 +78,19 @@ int main(int argc,char *argv[])
   mysql_query(connexion,"drop table articles;"); // au cas ou elle existerait deja
   mysql_query(connexion,"create table articles (id INT(4) auto_increment primary key, intitule varchar(20),prix FLOAT(4),stock INT(4),image varchar(20));");
 
+ // Creation d'une table articleschete
+  printf("Creation de la table articlesachete...\n");
+  mysql_query(connexion,"drop table articlesachetes;"); // au cas ou elle existerait deja
+  mysql_query(connexion,"create table articlesachetes (id INT(4) auto_increment primary key, intitule varchar(20),prix FLOAT(4),stock INT(4),idfacture INT);");
+
 //Creation de la table clients 
  printf("Creation de la table clients...\n");
   mysql_query(connexion,"drop table clients;"); // au cas ou elle existerait deja
   mysql_query(connexion,"create table clients (id INT(4) auto_increment primary key, username varchar(30),password varchar(30));");
+  //Creation de la table clients 
+ printf("Creation de la table factures...\n");
+  mysql_query(connexion,"drop table factures;"); // au cas ou elle existerait deja
+  mysql_query(connexion,"create table factures (idfacture INT(4) auto_increment primary key, idclient INT,date varchar(30), montant FLOAT , paye BOOLEAN);");
 
   // Ajout de tuples dans la table UNIX_FINAL
   printf("Ajout de 21 articles la table articles...\n");
