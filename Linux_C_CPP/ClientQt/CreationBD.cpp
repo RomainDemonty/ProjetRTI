@@ -21,7 +21,7 @@ typedef struct
 typedef struct
 {
   int   id;
-  char  intitule[20];
+  int  idarticle;
   float prix;
   int   stock;  
   int idfacture;
@@ -31,7 +31,6 @@ typedef struct
   int   id;
   int idclient;
   char date[20];
-  float montant;
   bool paye ;  
   
 } FACTURE;
@@ -81,7 +80,7 @@ int main(int argc,char *argv[])
  // Creation d'une table articleschete
   printf("Creation de la table articlesachete...\n");
   mysql_query(connexion,"drop table articlesachetes;"); // au cas ou elle existerait deja
-  mysql_query(connexion,"create table articlesachetes (id INT(4) auto_increment primary key, intitule varchar(20),prix FLOAT(4),stock INT(4),idfacture INT);");
+  mysql_query(connexion,"create table articlesachetes (id INT(4) auto_increment primary key, idarticle INT(4),prix FLOAT(4),stock INT(4),idfacture INT);");
 
 //Creation de la table clients 
  printf("Creation de la table clients...\n");
@@ -90,7 +89,7 @@ int main(int argc,char *argv[])
   //Creation de la table clients 
  printf("Creation de la table factures...\n");
   mysql_query(connexion,"drop table factures;"); // au cas ou elle existerait deja
-  mysql_query(connexion,"create table factures (idfacture INT(4) auto_increment primary key, idclient INT,date varchar(30), montant FLOAT , paye BOOLEAN);");
+  mysql_query(connexion,"create table factures (idfacture INT(4) auto_increment primary key, idclient INT,date varchar(30), paye BOOLEAN);");
 
   // Ajout de tuples dans la table UNIX_FINAL
   printf("Ajout de 21 articles la table articles...\n");
@@ -101,7 +100,7 @@ int main(int argc,char *argv[])
 	  mysql_query(connexion,requete);
   }
   // Ajout dans la tab
-  for (int i=0 ; i<21 ; i++)
+  for (int i=0 ; i<2 ; i++)
   {
 	  sprintf(requete,"insert into clients values (NULL,'%s','%s');",insertClients[i].username,insertClients[i].password);
 	  mysql_query(connexion,requete);

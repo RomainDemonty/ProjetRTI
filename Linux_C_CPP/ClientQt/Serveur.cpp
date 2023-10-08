@@ -123,7 +123,7 @@ void*FctCaddie(void * )
         }
         
         // Attente d'une tâche
-        printf("Thread %ld - Je suis libre\n",pthread_self());
+        printf("\t[Thread %ld] - Je suis libre\n",pthread_self());
         pthread_mutex_lock(&mutexSocketsAcceptees);
         while (indiceEcriture == indiceLecture)
         {
@@ -143,9 +143,8 @@ void*FctCaddie(void * )
         continuer = true;
         while(continuer == true)
         {
-            printf("[THREAD %ld] - juste avant la malloc \n",pthread_self());
             charReceive = (char *)malloc(60 * sizeof(char));
-            printf("[THREAD %ld] - juste avant le receive \n",pthread_self());
+            //printf("[THREAD %ld] - juste avant le receive \n",pthread_self());
             if((result = Socket::Receive(sService, charReceive)) <= 0)
             {
                 printf("\t[THREAD %ld] - Receive mal passe\n",pthread_self());
@@ -157,7 +156,7 @@ void*FctCaddie(void * )
                 strcpy(charReceiveCopy,charReceive);
 
                 strcpy(requeteS,strtok(charReceiveCopy,"#"));
-                printf("\t[THREAD %ld] - Requete a effectuer : %s\n",pthread_self(),requeteS);
+                //printf("\t[THREAD %ld] - Requete a effectuer : %s\n",pthread_self(),requeteS);
 
                 pthread_mutex_lock(&mutexBd);
                 continuer = SMOP(charReceive,reponse, sService, connexion,tabPanier);
@@ -169,18 +168,14 @@ void*FctCaddie(void * )
                 }
             }
 
-            printf("\n\n");
+            printf("\t[THREAD %ld] - Mon panier :\n",pthread_self());
             for(int k = 0 ; k < 20 ; k++)
             {
-                printf("id : %d  - qt :  %d\n",tabPanier[k].id, tabPanier[k].quantite);
+                printf("\tid : %d  - qt :  %d\n",tabPanier[k].id, tabPanier[k].quantite);
             }
-            printf("\n\n");
-
-            printf("[THREAD %ld] - juste avant le free \n",pthread_self());
+            printf("\n");
            
            free(charReceive);
-
-            printf("[THREAD %ld] - juste apres le free \n",pthread_self());
         }
     }
     return 0;

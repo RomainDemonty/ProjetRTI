@@ -14,6 +14,7 @@ int sService, numarticle = 1;
 bool logged=0;
 char nomutilisateur[30];
 char mdp[30];
+int numClient;
 
 typedef struct
 {
@@ -391,6 +392,9 @@ void WindowClient::on_pushButtonLogin_clicked()
       {
         setPublicite("Vous êtes bien connecté ;)");
       }
+      strcpy(tampon,strtok(NULL,"#"));
+      numClient = atoi(strtok(NULL,"#"));
+      printf("Num Client : %d\n",numClient);
 
       //Afficher le premier article
       strcpy(messageEnvoye,"");
@@ -686,6 +690,27 @@ void WindowClient::on_pushButtonPayer_clicked()
 {
     // vide le panier 
     //reset le prix a 0 
+      // rajouter dans la base de donnee les elts du caddie 
+  char messageRecu[1400];
+  char messageEnvoye[1400];
+  char tampon[50];
+
+    sprintf(messageEnvoye, "CONFIRMER#%d",numClient);
+    Echange(messageEnvoye, messageRecu);
+    strcpy(tampon,strtok(messageRecu,"#"));
+    strcpy(tampon,strtok(NULL,"#"));
+
+
+    if(strcmp(tampon,"ok") == 0 )
+    {
+      for(int j = 0 ; j < 20 ; j++)
+      {
+        tabPanier[j].id = 0;
+        tabPanier[j].prix = 0;
+        tabPanier[j].quantite = 0;
+      }
+      majCaddie();
+    }
 }
 
 

@@ -28,6 +28,8 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
     char cas[30];
     bool newuser;
     bool ok;
+    int idClient = 0;
+    char date[20];
     // ***** Récupération nom de la requete *****************
    // char *cas = strtok(requete,"#");
     strcpy(cas,strtok(requete,"#"));
@@ -120,7 +122,20 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                             strcpy(reponse,"LOGIN#ko#ERREUR SQL INSERTION#-1");
                             return true;
                         }
-                        strcpy(reponse,"LOGIN#ok#Inscription reussie");
+                        sprintf(chaine,"SELECT * FROM clients WHERE username = '%s';",usern);//Recherche de l'identifiant du client enregistré
+                        if (mysql_query(con, chaine) != 0)
+                        {
+                            strcpy(reponse,"LOGIN#ko#ERREUR SQL0#-1");
+                            return true;
+                        }
+                        if((resultat = mysql_store_result(con)) == NULL)
+                        {
+                            strcpy(reponse,"LOGIN#ko#ERREUR_SQL#-1");
+                        }
+                        if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+                        {
+                            sprintf(reponse,"LOGIN#ok#Inscription reussie#%d",atoi(Tuple[0]));
+                        }
                         ajoute(socket);
                         return true;
                     }
@@ -136,7 +151,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                     {
                         if(strcmp(Tuple[2],password)==0)
                         {
-                            strcpy(reponse,"LOGIN#ok#Connexion reussie");
+                            sprintf(reponse,"LOGIN#ok#Connection reussie#%d",atoi(Tuple[0]));
                             ajoute(socket);
                             return true;
                         }
@@ -337,8 +352,59 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                 }
             }
             if(strcmp(cas,"CONFIRMER") == 0)
-            {                
-                //Création d’une facture et BD et ajout des éléments du caddie dans la BD
+            {         
+                idClient = atoi(strtok(NULL,"#"));  
+                strcpy(date,"2023-10-08"); // Date
+                bool paye= false; // Montant
+                int idFact = 0;
+
+                ok = true;
+                sprintf(requete,"INSERT INTO factures ( idclient, date , paye) VALUES ( %d, '%s', %d);",idClient,date,paye );
+                if (mysql_query(con, requete) != 0) 
+                {
+                    strcpy(reponse,"CONFIRMER#ko#ERREUR_SQL#-1#1");
+                    ok = false;
+                }  
+                else
+                {
+                    sprintf(chaine, "SELECT MAX(idfacture) FROM factures;");
+                    if (mysql_query(con, chaine) != 0)
+                    {
+                        strcpy(reponse,"CONFIRMER#ko#ERREUR_SQL#-1#2");
+                        ok = false;
+                    }
+                    else
+                    {
+                        if((resultat = mysql_store_result(con)) == NULL)
+                        {
+                            strcpy(reponse,"CONFIRMER#ko#ERREUR_SQL#-1");
+                        }
+                        if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+                        {
+                            idFact = atoi(Tuple[0]);
+                        }
+                    }
+                }
+
+                for(j = 0 ; j < 20 && ok == true ; j++)
+                {
+                    if(tabPanier[j].id != 0)
+                    {
+                        sprintf(requete,"INSERT INTO articlesachetes ( idarticle, prix, stock , idfacture) VALUES (%d, '%.2f', %d, %d);",tabPanier[j].id,tabPanier[j].prix,tabPanier[j].quantite,idFact);
+                        if (mysql_query(con, requete) != 0) 
+                        {
+                            strcpy(reponse,"CONFIRMER#ko#ERREUR_SQL#-1#3");
+                            ok = false;
+                        }
+                        else
+                        {
+                            tabPanier[j].id = 0;
+                            tabPanier[j].prix = 0;
+                            tabPanier[j].quantite = 0;
+                            sprintf(reponse,"CONFIRMER#ok");
+                        }
+                    }
+                }
             }
         }
     }
