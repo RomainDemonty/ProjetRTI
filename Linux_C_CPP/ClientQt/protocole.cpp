@@ -259,15 +259,59 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                 id = atoi(strtok(NULL,"#"));
                 //Supprime un article du caddie et met à jour à la BD
 
-                    //vider le caddy et mettre a jour dans la bd
-                    sprintf(requete,"select * from articles where id = %d", id);
-                    if (mysql_query(con, requete) != 0)
+                //vider le caddy et mettre a jour dans la bd
+                sprintf(requete,"select * from articles where id = %d", id);
+                if (mysql_query(con, requete) != 0)
+                {
+                    strcpy(reponse,"CANCEL#ko#ERREUR_SQL#-1");
+                }
+                if((resultat = mysql_store_result(con)) == NULL)
+                {
+                    strcpy(reponse,"CANCEL#ko#ERREUR_SQL#-1");
+                }
+                if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+                {
+                    qtedispo = atoi(Tuple[3]);
+            
+                    //maj dans la bd
+                    newqte = qtedispo + tabPanier[j].quantite;
+                    printf("Nouveau stock :%d\n", newqte);
+                    sprintf(requete,"UPDATE articles  SET stock = %d where id = %d", newqte,id);
+                    if (mysql_query(con, requete) != 0) //requete de mise a jour
                     {
                         strcpy(reponse,"CANCEL#ko#ERREUR_SQL#-1");
                     }
+                    else
+                    {
+                        for(j = 0 , ok = true; j < 20 && ok == true ; j++)
+                        {
+                            if(tabPanier[j].id == id)
+                            {
+                                ok = false;
+                                tabPanier[j].id = 0;
+                                tabPanier[j].prix = 0;
+                                tabPanier[j].quantite = 0;
+                                sprintf(reponse,"CANCEL#ok");
+                            }
+                        }
+                    }
+                }
+            }
+            if(strcmp(cas,"CANCELALL") == 0)
+            {                
+                //Supprime tous les articles du caddie et met à jour la BD
+                                //Supprime un article du caddie et met à jour à la BD
+                for(j = 0 , ok = true; j < 20 && ok == true ; j++)
+                {
+                    //vider le caddy et mettre a jour dans la bd
+                    sprintf(requete,"select * from articles where id = %d", tabPanier[j].id);
+                    if (mysql_query(con, requete) != 0)
+                    {
+                        strcpy(reponse,"CANCELALL#ko#ERREUR_SQL#-1");
+                    }
                     if((resultat = mysql_store_result(con)) == NULL)
                     {
-                        strcpy(reponse,"CANCEL#ko#ERREUR_SQL#-1");
+                        strcpy(reponse,"CANCELALL#ko#ERREUR_SQL#-1");
                     }
                     if ((Tuple = mysql_fetch_row(resultat)) != NULL)
                     {
@@ -276,30 +320,21 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                         //maj dans la bd
                         newqte = qtedispo + tabPanier[j].quantite;
                         printf("Nouveau stock :%d\n", newqte);
-                        sprintf(requete,"UPDATE articles  SET stock = %d where id = %d", newqte,id);
+                        sprintf(requete,"UPDATE articles  SET stock = %d where id = %d", newqte,tabPanier[j].id);
                         if (mysql_query(con, requete) != 0) //requete de mise a jour
                         {
-                            strcpy(reponse,"CANCEL#ko#ERREUR_SQL#-1");
+                            strcpy(reponse,"CANCELALL#ko#ERREUR_SQL#-1");
+                            ok = false;
                         }
                         else
                         {
-                            for(j = 0 , ok = true; j < 20 && ok == true ; j++)
-                            {
-                                if(tabPanier[j].id == id)
-                                {
-                                    ok = false;
-                                    tabPanier[j].id = 0;
-                                    tabPanier[j].prix = 0;
-                                    tabPanier[j].quantite = 0;
-                                    sprintf(reponse,"CANCEL#ok");
-                                }
-                            }
+                            tabPanier[j].id = 0;
+                            tabPanier[j].prix = 0;
+                            tabPanier[j].quantite = 0;
+                            sprintf(reponse,"CANCELALL#ok");
                         }
                     }
-            }
-            if(strcmp(cas,"CANCELALL") == 0)
-            {                
-                //Supprime tous les articles du caddie et met à jour la BD
+                }
             }
             if(strcmp(cas,"CONFIRMER") == 0)
             {                

@@ -651,6 +651,34 @@ void WindowClient::on_pushButtonSupprimer_clicked()
 void WindowClient::on_pushButtonViderPanier_clicked()
 {
   // rajouter dans la base de donnee les elts du caddie 
+  char messageRecu[1400];
+  char messageEnvoye[1400];
+  char tampon[50];
+
+    sprintf(messageEnvoye, "CANCELALL");
+    Echange(messageEnvoye, messageRecu);
+    strcpy(tampon,strtok(messageRecu,"#"));
+    strcpy(tampon,strtok(NULL,"#"));
+
+
+    if(strcmp(tampon,"ok") == 0 )
+    {
+      for(int j = 0 ; j < 20 ; j++)
+      {
+        if(numarticle == tabPanier[j].id)
+        {
+          stockglob = stockglob + tabPanier[j].quantite;
+          printf("Nouvelle quantité : %d\n",stockglob);
+          sprintf(tampon,"%d",stockglob);
+          ui->lineEditStock->setText(tampon);
+        }
+
+        tabPanier[j].id = 0;
+        tabPanier[j].prix = 0;
+        tabPanier[j].quantite = 0;
+      }
+      majCaddie();
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
