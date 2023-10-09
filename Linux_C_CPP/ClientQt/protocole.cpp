@@ -298,15 +298,33 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                     }
                     else
                     {
-                        for(j = 0 , ok = true; j < 20 && ok == true ; j++)
+                        for(j = 0 , ok = true; j < 20 && ok == true; j++)
                         {
                             if(tabPanier[j].id == id)
                             {
-                                ok = false;
-                                tabPanier[j].id = 0;
-                                tabPanier[j].prix = 0;
-                                tabPanier[j].quantite = 0;
+                                tabPanier[j].id = tabPanier[j+1].id;
+                                tabPanier[j].prix = tabPanier[j+1].prix;
+                                tabPanier[j].quantite = tabPanier[j+1].quantite;
+                                tabPanier[j+1].id = 0;
+                                tabPanier[j+1].prix = 0;
+                                tabPanier[j+1].quantite = 0;
                                 sprintf(reponse,"CANCEL#ok");
+                            }
+                            else
+                            {
+                                if(tabPanier[j+1].id == 0)
+                                {
+                                    ok = false;
+                                }
+                                else
+                                {
+                                    tabPanier[j].id = tabPanier[j+1].id;
+                                    tabPanier[j].prix = tabPanier[j+1].prix;
+                                    tabPanier[j].quantite = tabPanier[j+1].quantite;
+                                    tabPanier[j+1].id = 0;
+                                    tabPanier[j+1].prix = 0;
+                                    tabPanier[j+1].quantite = 0;
+                                }
                             }
                         }
                     }

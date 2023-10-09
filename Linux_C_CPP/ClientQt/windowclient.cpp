@@ -620,6 +620,8 @@ void WindowClient::on_pushButtonSupprimer_clicked()
   char messageRecu[1400];
   char messageEnvoye[1400];
   char tampon[50];
+  int j ;
+  bool ok;
 
   int select = getIndiceArticleSelectionne() ;
   if(select != -1)
@@ -644,8 +646,23 @@ void WindowClient::on_pushButtonSupprimer_clicked()
       tabPanier[select].prix = 0;
       tabPanier[select].quantite = 0;
 
+      for(j = select , ok = true; j < 20 && ok == true; j++)
+      {
+        if(tabPanier[j+1].id == 0)
+        {
+          ok = false;
+        }
+        else
+        {
+          tabPanier[j].id = tabPanier[j+1].id;
+          tabPanier[j].prix = tabPanier[j+1].prix;
+          tabPanier[j].quantite = tabPanier[j+1].quantite;
+          tabPanier[j+1].id = 0;
+          tabPanier[j+1].prix = 0;
+          tabPanier[j+1].quantite = 0;
+        }
+      }      
       majCaddie();
-
     }
   }
 
