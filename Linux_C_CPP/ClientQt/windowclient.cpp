@@ -408,6 +408,7 @@ void WindowClient::on_pushButtonLogin_clicked()
       articletampon.id = atof(strtok(NULL,"#"));
       strcpy(articletampon.intitule,strtok(NULL,"#"));
       articletampon.stock = atoi(strtok(NULL,"#"));
+      stockglob = articletampon.stock;
       articletampon.prix = atof(strtok(NULL,"."));
       articletampon.prix =  articletampon.prix + atof(strtok(NULL,"#"))/1000000;
       strcpy(articletampon.image,strtok(NULL,"#"));
