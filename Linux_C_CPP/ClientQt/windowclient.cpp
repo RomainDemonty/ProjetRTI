@@ -10,6 +10,8 @@ extern WindowClient *w;
 
 #define REPERTOIRE_IMAGES "images/"
 
+#define NBART 21
+
 int sService, numarticle = 1;
 bool logged=0;
 char nomutilisateur[30];
@@ -35,7 +37,7 @@ typedef struct
 
 int stockglob;
 
-ARTICLEPANIER tabPanier[20];
+ARTICLEPANIER tabPanier[NBART];
 
 void Echange(char* requete, char* reponse);
 
@@ -70,7 +72,7 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
     // doit se connecter a la socket pour permetre d'echanger
     sService = Socket::ClientSocket(NULL , 1600); 
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < NBART; i++)
     {
       tabPanier[i].id = 0;
       tabPanier[i].prix = 0;
@@ -313,43 +315,10 @@ void WindowClient::dialogueErreur(const char* titre,const char* message)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::closeEvent(QCloseEvent *event)
 {
-  char messageRecu[1400];
-  char messageEnvoye[1400];
-  char tampon[50];
   if (logged==1)
   {
     on_pushButtonLogout_clicked();
   }
-
-  
-    strcpy(messageEnvoye, "");
-    strcpy(messageEnvoye, "LOGOUT#test");
-    Echange(messageEnvoye, messageRecu);
-
-    strcpy(tampon,strtok(messageRecu,"#"));
-    strcpy(tampon,strtok(NULL,"#"));
-    if(strcmp(tampon,"ok")==0)
-    {
-      videTablePanier();
-      logoutOK();
-      logged = false;
-      numarticle = 1;
-
-      for (int i = 0; i < 20; i++)
-      {
-        tabPanier[i].id = 0;
-        tabPanier[i].prix = 0;
-        tabPanier[i].quantite = 0;
-      }
-      setTotal(0);
-    }
-    else
-    {
-      printf("Aie erreur logout\n");
-    }
-
-  
-  
   exit(0);
 }
 
@@ -367,68 +336,76 @@ void WindowClient::on_pushButtonLogin_clicked()
     // appel a loginok  
     /*To do - envoyer une requète de login aprés avoir vérifié si logged*/
     ARTICLE articletampon;
-    sprintf(messageEnvoye, "LOGIN#%s#%s#", getNom(), getMotDePasse());
-
-    if (isNouveauClientChecked())
+    //printf("Le mot de passe est de %s\n",getMotDePasse());
+    if(strlen(getMotDePasse()) != 0 && strlen(getNom()) != 0)
     {
-      strcat(messageEnvoye,"1");
-    }
-    else{
-      strcat(messageEnvoye,"0");
-    }
+      sprintf(messageEnvoye, "LOGIN#%s#%s#", getNom(), getMotDePasse());
 
-    Echange(messageEnvoye, messageRecu);
-
-    strcpy(tampon,strtok(messageRecu,"#"));
-    strcpy(tampon,strtok(NULL,"#"));
-    if(strcmp(tampon,"ok") == 0)
-    {
-      logged =1;
-      if(strcmp(tampon,"Inscription_reussie") == 0)
+      if (isNouveauClientChecked())
       {
-          setPublicite("Inscription reussie bienvenue;)");
+        strcat(messageEnvoye,"1");
       }
-      else
-      {
-        setPublicite("Vous êtes bien connecté ;)");
+      else{
+        strcat(messageEnvoye,"0");
       }
-      strcpy(tampon,strtok(NULL,"#"));
-      numClient = atoi(strtok(NULL,"#"));
-      printf("Num Client : %d\n",numClient);
-
-      //Afficher le premier article
-      strcpy(messageEnvoye,"");
-      sprintf(messageEnvoye, "CONSULT#%d",numarticle);
 
       Echange(messageEnvoye, messageRecu);
 
       strcpy(tampon,strtok(messageRecu,"#"));
       strcpy(tampon,strtok(NULL,"#"));
-      
-      articletampon.id = atof(strtok(NULL,"#"));
-      strcpy(articletampon.intitule,strtok(NULL,"#"));
-      articletampon.stock = atoi(strtok(NULL,"#"));
-      stockglob = articletampon.stock;
-      articletampon.prix = atof(strtok(NULL,"."));
-      articletampon.prix =  articletampon.prix + atof(strtok(NULL,"#"))/1000000;
-      strcpy(articletampon.image,strtok(NULL,"#"));
-
-      if(strcmp(tampon,"ok") == 0 )
+      if(strcmp(tampon,"ok") == 0)
       {
-        setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
+        logged =1;
+        if(strcmp(tampon,"Inscription_reussie") == 0)
+        {
+            setPublicite("Inscription reussie bienvenue;)");
+        }
+        else
+        {
+          setPublicite("Vous êtes bien connecté ;)");
+        }
+        strcpy(tampon,strtok(NULL,"#"));
+        numClient = atoi(strtok(NULL,"#"));
+        printf("Num Client : %d\n",numClient);
+
+        //Afficher le premier article
+        strcpy(messageEnvoye,"");
+        sprintf(messageEnvoye, "CONSULT#%d",numarticle);
+
+        Echange(messageEnvoye, messageRecu);
+
+        strcpy(tampon,strtok(messageRecu,"#"));
+        strcpy(tampon,strtok(NULL,"#"));
+        
+        articletampon.id = atof(strtok(NULL,"#"));
+        strcpy(articletampon.intitule,strtok(NULL,"#"));
+        articletampon.stock = atoi(strtok(NULL,"#"));
+        stockglob = articletampon.stock;
+        articletampon.prix = atof(strtok(NULL,"."));
+        articletampon.prix =  articletampon.prix + atof(strtok(NULL,"#"))/1000000;
+        strcpy(articletampon.image,strtok(NULL,"#"));
+
+        if(strcmp(tampon,"ok") == 0 )
+        {
+          setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
+        }
+        else
+        {
+          setPublicite("Problème suivant :(");
+        }
+        loginOK();
       }
       else
       {
-        setPublicite("Problème suivant :(");
+        strcpy(tampon,strtok(NULL,"#"));
+        setPublicite(tampon);
       }
-      loginOK();
+      return ;
     }
     else
     {
-      strcpy(tampon,strtok(NULL,"#"));
-      setPublicite(tampon);
+      setPublicite("Nom et mot de passe ne peuvent pas etre nul :(");
     }
-    return ;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -454,7 +431,7 @@ void WindowClient::on_pushButtonLogout_clicked()
       logged = false;
       numarticle = 1;
 
-      for (int i = 0; i < 20; i++)
+      for (int i = 0; i < NBART; i++)
       {
         tabPanier[i].id = 0;
         tabPanier[i].prix = 0;
@@ -507,6 +484,7 @@ void WindowClient::on_pushButtonSuivant_clicked()
   if(strcmp(tampon,"ok") == 0 )
   {
     setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
+    setPublicite("");
   }
   else
   {
@@ -548,6 +526,7 @@ void WindowClient::on_pushButtonPrecedent_clicked()
   if(strcmp(tampon,"ok") == 0 )
   {
     setArticle(articletampon.intitule,articletampon.stock,articletampon.prix ,articletampon.image);//(const char* intitule,int stock,float prix,const char* image
+    setPublicite("");
   }
   else
   {
@@ -572,44 +551,50 @@ void WindowClient::on_pushButtonAcheter_clicked()
   bool ok;
   char Stock[20];
 
-  sprintf(messageEnvoye, "ACHAT#%d#%d",numarticle,quantite);
-  Echange(messageEnvoye, messageRecu);
-
-  strcpy(tampon,strtok(messageRecu,"#"));
-  strcpy(tampon,strtok(NULL,"#"));
-
-  if(strcmp(tampon,"ok") == 0 )
+  if(quantite > 0)
   {
+    sprintf(messageEnvoye, "ACHAT#%d#%d",numarticle,quantite);
+    Echange(messageEnvoye, messageRecu);
+
+    strcpy(tampon,strtok(messageRecu,"#"));
     strcpy(tampon,strtok(NULL,"#"));
-    prix = atof(strtok(NULL,"."));
-    prix = prix + atof(strtok(NULL,"#"))/1000000;
 
-    stockglob = stockglob - quantite;
-    printf("Nouvelle quantité : %d\n",stockglob);
-    sprintf(Stock,"%d",stockglob);
-    ui->lineEditStock->setText(Stock);
-
-    for (j = 0 ,ok = true; j< 20 && ok == true; j++)
+    if(strcmp(tampon,"ok") == 0 )
     {
-      if(tabPanier[j].id == 0 || tabPanier[j].id == numarticle)
+      strcpy(tampon,strtok(NULL,"#"));
+      prix = atof(strtok(NULL,"."));
+      prix = prix + atof(strtok(NULL,"#"))/1000000;
+
+      stockglob = stockglob - quantite;
+      printf("Nouvelle quantité : %d\n",stockglob);
+      sprintf(Stock,"%d",stockglob);
+      ui->lineEditStock->setText(Stock);
+
+      for (j = 0 ,ok = true; j< NBART && ok == true; j++)
       {
-        tabPanier[j].id = numarticle;
-        strcpy(tabPanier[j].intitule,  tampon  );
-        tabPanier[j].prix = prix;
-        tabPanier[j].quantite = tabPanier[j].quantite + quantite;
-        printf("id = %d  -  prix = %f - qt = %d\n",tabPanier[j].id,tabPanier[j].prix,tabPanier[j].quantite);     
-        ok = false;
+        if(tabPanier[j].id == 0 || tabPanier[j].id == numarticle)
+        {
+          tabPanier[j].id = numarticle;
+          strcpy(tabPanier[j].intitule,  tampon  );
+          tabPanier[j].prix = prix;
+          tabPanier[j].quantite = tabPanier[j].quantite + quantite;
+          printf("id = %d  -  prix = %f - qt = %d\n",tabPanier[j].id,tabPanier[j].prix,tabPanier[j].quantite);     
+          ok = false;
+        }
       }
+      majCaddie();
+      setPublicite("Ajouté à votre panier");
     }
-    majCaddie();
+    else
+    {
+      strcpy(tampon,strtok(NULL,"#"));
+      setPublicite(tampon);
+    }
   }
   else
   {
-    strcpy(tampon,strtok(NULL,"#"));
-    setPublicite(tampon);
+    setPublicite("Vous avez essayé d'ajouter 0 éléments !");
   }
-  
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -647,7 +632,7 @@ void WindowClient::on_pushButtonSupprimer_clicked()
       tabPanier[select].prix = 0;
       tabPanier[select].quantite = 0;
 
-      for(j = select , ok = true; j < 20 && ok == true; j++)
+      for(j = select , ok = true; j < NBART && ok == true; j++)
       {
         if(tabPanier[j+1].id == 0)
         {
@@ -664,6 +649,7 @@ void WindowClient::on_pushButtonSupprimer_clicked()
         }
       }      
       majCaddie();
+      setPublicite("Elément bien supprimé de votre panier");
     }
   }
 
@@ -672,46 +658,60 @@ void WindowClient::on_pushButtonSupprimer_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonViderPanier_clicked()
 {
-  // rajouter dans la base de donnee les elts du caddie 
-  char messageRecu[1400];
-  char messageEnvoye[1400];
-  char tampon[50];
+  if(tabPanier[0].id != 0)
+  {
+    // rajouter dans la base de donnee les elts du caddie 
+    char messageRecu[1400];
+    char messageEnvoye[1400];
+    char tampon[50];
 
-    sprintf(messageEnvoye, "CANCELALL");
-    Echange(messageEnvoye, messageRecu);
-    strcpy(tampon,strtok(messageRecu,"#"));
-    strcpy(tampon,strtok(NULL,"#"));
+      sprintf(messageEnvoye, "CANCELALL");
+      Echange(messageEnvoye, messageRecu);
+      strcpy(tampon,strtok(messageRecu,"#"));
+      strcpy(tampon,strtok(NULL,"#"));
 
 
-    if(strcmp(tampon,"ok") == 0 )
-    {
-      for(int j = 0 ; j < 20 ; j++)
+      if(strcmp(tampon,"ok") == 0 )
       {
-        if(numarticle == tabPanier[j].id)
+        for(int j = 0 ; j < NBART ; j++)
         {
-          stockglob = stockglob + tabPanier[j].quantite;
-          printf("Nouvelle quantité : %d\n",stockglob);
-          sprintf(tampon,"%d",stockglob);
-          ui->lineEditStock->setText(tampon);
-        }
+          if(numarticle == tabPanier[j].id)
+          {
+            stockglob = stockglob + tabPanier[j].quantite;
+            printf("Nouvelle quantité : %d\n",stockglob);
+            sprintf(tampon,"%d",stockglob);
+            ui->lineEditStock->setText(tampon);
+          }
 
-        tabPanier[j].id = 0;
-        tabPanier[j].prix = 0;
-        tabPanier[j].quantite = 0;
+          tabPanier[j].id = 0;
+          tabPanier[j].prix = 0;
+          tabPanier[j].quantite = 0;
+        }
+        majCaddie();
+        setPublicite("Votre panier est vidé ;)");
       }
-      majCaddie();
-    }
+      else
+      {
+        setPublicite("Erreur lors du vidage du panier :(");
+      }
+  }
+  else
+  {
+    setPublicite("Votre panier était déjà vide ;)");
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonPayer_clicked()
 {
-    // vide le panier 
-    //reset le prix a 0 
-      // rajouter dans la base de donnee les elts du caddie 
-  char messageRecu[1400];
-  char messageEnvoye[1400];
-  char tampon[50];
+  // vide le panier 
+  //reset le prix a 0 
+  // rajouter dans la base de donnee les elts du caddie 
+  if(tabPanier[0].id != 0)
+  {
+    char messageRecu[1400];
+    char messageEnvoye[1400];
+    char tampon[50];
 
     sprintf(messageEnvoye, "CONFIRMER#%d",numClient);
     Echange(messageEnvoye, messageRecu);
@@ -721,14 +721,24 @@ void WindowClient::on_pushButtonPayer_clicked()
 
     if(strcmp(tampon,"ok") == 0 )
     {
-      for(int j = 0 ; j < 20 ; j++)
+      for(int j = 0 ; j < NBART ; j++)
       {
         tabPanier[j].id = 0;
         tabPanier[j].prix = 0;
         tabPanier[j].quantite = 0;
       }
       majCaddie();
+      setPublicite("Achat effectué !");
     }
+    else
+    {
+      setPublicite("Erreur lors de l'achat !");
+    }
+  }
+  else
+  {
+    setPublicite("Votre panier est vide !");
+  }
 }
 
 
@@ -739,7 +749,7 @@ void Echange(char* requete, char* reponse)
 {
   int nbEcrits, nbLus;
   // ***** Envoi de la requete ****************************
-  printf("Envoye : %s\n",requete);
+  printf("\n\tEnvoye : %s\n",requete);
   if ((nbEcrits = Socket::Send(sService,requete,strlen(requete))) == -1)
   {
     perror("Erreur de Send");
@@ -753,10 +763,10 @@ void Echange(char* requete, char* reponse)
     close(sService);
     exit(1);
   }
-  printf("Reçu : %s\n",reponse);
+  printf("\tReçu : %s\n\n",reponse);
   if (nbLus == 0)
   {
-    printf("Serveur arrete, pas de reponse reçue...\n");
+    printf("\tServeur arrete, pas de reponse reçue...\n");
     close(sService);
     exit(1);
   }
@@ -767,7 +777,7 @@ void WindowClient::majCaddie()
 {
   float total = 0;
   videTablePanier();
-  for (int j = 0 ; j<20;j++)
+  for (int j = 0 ; j<NBART;j++)
   {
     if(tabPanier[j].id !=0)
     {

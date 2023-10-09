@@ -7,6 +7,8 @@
 #include <iostream>
 #include <mysql.h>
 
+#define NBART 21
+
 //***** Etat du protocole : liste des clients loggés ****************
 int clients[NB_MAX_CLIENTS];
 int nbClients = 0;
@@ -36,7 +38,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
     // ***** LOGIN ******************************************
     if(strcmp(cas,"LOGOUT") == 0)
     {
-        for (j = 0; j < 20; j++)
+        for (j = 0; j < NBART; j++)
         {
             //vider le caddy et mettre a jour dans la bd
             sprintf(requete,"select * from articles where id = %d", tabPanier[j].id);
@@ -246,7 +248,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                         }
                         else
                         {
-                            for (j = 0 ,ok = true; j< 20 && ok == true; j++)
+                            for (j = 0 ,ok = true; j< NBART && ok == true; j++)
                             {
                                 if(tabPanier[j].id == 0 || tabPanier[j].id == id)
                                 {
@@ -298,7 +300,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                     }
                     else
                     {
-                        for(j = 0 , ok = true; j < 20 && ok == true; j++)
+                        for(j = 0 , ok = true; j < NBART && ok == true; j++)
                         {
                             if(tabPanier[j].id == id)
                             {
@@ -334,7 +336,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
             {                
                 //Supprime tous les articles du caddie et met à jour la BD
                                 //Supprime un article du caddie et met à jour à la BD
-                for(j = 0 , ok = true; j < 20 && ok == true ; j++)
+                for(j = 0 , ok = true; j < NBART && ok == true ; j++)
                 {
                     //vider le caddy et mettre a jour dans la bd
                     sprintf(requete,"select * from articles where id = %d", tabPanier[j].id);
@@ -404,7 +406,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                     }
                 }
 
-                for(j = 0 ; j < 20 && ok == true ; j++)
+                for(j = 0 ; j < NBART && ok == true ; j++)
                 {
                     if(tabPanier[j].id != 0)
                     {

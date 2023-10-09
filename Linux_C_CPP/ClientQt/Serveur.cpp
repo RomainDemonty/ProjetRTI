@@ -167,14 +167,17 @@ void*FctCaddie(void * )
                     printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),reponse);
                 }
             }
-
-            printf("\t[THREAD %ld] - Mon panier :\n",pthread_self());
-            for(int k = 0 ; k < 20 ; k++)
+            
+            if(tabPanier[0].id != 0)
             {
-                printf("\tid : %d  - qt :  %d\n",tabPanier[k].id, tabPanier[k].quantite);
+                printf("\t[THREAD %ld] - Mon panier :\n",pthread_self());
+                for(int k = 0 ; k < 20 ; k++)
+                {
+                    if(tabPanier[k].id != 0)
+                    printf("\t[THREAD %ld] - NbArticle : %d - id: %d  - qt :  %d\n",pthread_self(),k+1,tabPanier[k].id, tabPanier[k].quantite);
+                }
+                printf("\n");
             }
-            printf("\n");
-           
            free(charReceive);
         }
     }
