@@ -10,6 +10,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #define TAILLE_MAX_DATA 1500
+#include "properties.h"
 
 using namespace std; 
 class Socket {

@@ -3,7 +3,7 @@
 #include <QMessageBox>
 #include <string>
 #include "SocketLib.h" //Rajouter la librérie car aussi non on peut pas se connecter aux socket
-
+#include "properties.h"
 using namespace std;
 
 extern WindowClient *w;
@@ -70,7 +70,10 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
     //ajouteArticleTablePanier("cerises",8.96,2);
 
     // doit se connecter a la socket pour permetre d'echanger
-    sService = Socket::ClientSocket(NULL , 1600); 
+   // sService = Socket::ClientSocket(NULL , 1600);  // en local 
+   printf("%s \n",addIP);
+    sService = Socket::ClientSocket(addIP , 1600); // en ip 
+
 
     for (int i = 0; i < NBART; i++)
     {

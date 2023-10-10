@@ -7,8 +7,6 @@ int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la p
     // fait un appel a socket() , 
     // cosntruit l'adresse reseua grace a getaddrinfo()
     // bind() pour lier les 2 
-
-
     int sServeur;
     printf("Serveur- id = %d\n",getpid());
 
@@ -29,7 +27,7 @@ int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la p
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE | AI_NUMERICSERV; // pour une connexion passive
 
-    if (getaddrinfo(NULL,"1500",&hints,&results) != 0)
+    if (getaddrinfo(NULL,NumeroSocket,&hints,&results) != 0)
     {
         close(sServeur);
         exit(1);
@@ -105,7 +103,13 @@ int Socket::ClientSocket(char * ipServeur , int portServeur)
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_NUMERICSERV;
-    if (getaddrinfo(ipServeur,"1500",&hints,&results) != 0)
+
+    /*if (ipServeur !=NULL && strcmp(ipServeur,"localhost")==0)
+    {
+        ipServeur=NULL ;
+    }*/
+             
+    if (getaddrinfo(ipServeur,NumeroSocket,&hints,&results) != 0)
             exit(1);
     // Demande de connexion
     printf("Client - dmd de connect()\n");
