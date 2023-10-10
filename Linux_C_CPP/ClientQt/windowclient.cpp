@@ -610,6 +610,8 @@ void WindowClient::on_pushButtonSupprimer_clicked()
   bool ok;
 
   int select = getIndiceArticleSelectionne() ;
+  
+  
   if(select != -1)
   {
     printf("Je tente de supprimer le %d\n", select);
@@ -628,14 +630,16 @@ void WindowClient::on_pushButtonSupprimer_clicked()
         ui->lineEditStock->setText(tampon);
       }
 
-      tabPanier[select].id = 0;
-      tabPanier[select].prix = 0;
-      tabPanier[select].quantite = 0;
+      
 
       for(j = select , ok = true; j < NBART && ok == true; j++)
       {
         if(tabPanier[j+1].id == 0)
         {
+          tabPanier[j].id = 0;
+          tabPanier[j].prix = 0;
+          tabPanier[j].quantite = 0;
+           strcpy( tabPanier[j].intitule, " ");
           ok = false;
         }
         else
@@ -643,9 +647,7 @@ void WindowClient::on_pushButtonSupprimer_clicked()
           tabPanier[j].id = tabPanier[j+1].id;
           tabPanier[j].prix = tabPanier[j+1].prix;
           tabPanier[j].quantite = tabPanier[j+1].quantite;
-          tabPanier[j+1].id = 0;
-          tabPanier[j+1].prix = 0;
-          tabPanier[j+1].quantite = 0;
+          strcpy( tabPanier[j].intitule, tabPanier[j+1].intitule);
         }
       }      
       majCaddie();
@@ -682,10 +684,11 @@ void WindowClient::on_pushButtonViderPanier_clicked()
             sprintf(tampon,"%d",stockglob);
             ui->lineEditStock->setText(tampon);
           }
-
+          
           tabPanier[j].id = 0;
           tabPanier[j].prix = 0;
           tabPanier[j].quantite = 0;
+          
         }
         majCaddie();
         setPublicite("Votre panier est vidé ;)");
