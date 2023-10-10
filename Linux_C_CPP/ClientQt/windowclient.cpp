@@ -633,7 +633,14 @@ void WindowClient::on_pushButtonSupprimer_clicked()
         ui->lineEditStock->setText(tampon);
       }
 
+<<<<<<< HEAD
+      tabPanier[select].id = 0;
+      strcpy(tabPanier[select].intitule,"");
+      tabPanier[select].prix = 0;
+      tabPanier[select].quantite = 0;
+=======
       
+>>>>>>> a031c4681a82fdf84c58b95e0e0bab303a985d21
 
       for(j = select , ok = true; j < NBART && ok == true; j++)
       {
@@ -650,7 +657,16 @@ void WindowClient::on_pushButtonSupprimer_clicked()
           tabPanier[j].id = tabPanier[j+1].id;
           tabPanier[j].prix = tabPanier[j+1].prix;
           tabPanier[j].quantite = tabPanier[j+1].quantite;
+<<<<<<< HEAD
+          strcpy(tabPanier[j].intitule,tabPanier[j+1].intitule);
+          
+          tabPanier[j+1].id = 0;
+          strcpy(tabPanier[j+1].intitule,"");
+          tabPanier[j+1].prix = 0;
+          tabPanier[j+1].quantite = 0;
+=======
           strcpy( tabPanier[j].intitule, tabPanier[j+1].intitule);
+>>>>>>> a031c4681a82fdf84c58b95e0e0bab303a985d21
         }
       }      
       majCaddie();
@@ -689,6 +705,7 @@ void WindowClient::on_pushButtonViderPanier_clicked()
           }
           
           tabPanier[j].id = 0;
+          strcpy(tabPanier[j].intitule,"");
           tabPanier[j].prix = 0;
           tabPanier[j].quantite = 0;
           
@@ -730,6 +747,7 @@ void WindowClient::on_pushButtonPayer_clicked()
       for(int j = 0 ; j < NBART ; j++)
       {
         tabPanier[j].id = 0;
+        strcpy(tabPanier[j].intitule,"");
         tabPanier[j].prix = 0;
         tabPanier[j].quantite = 0;
       }

@@ -250,8 +250,10 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                         {
                             for (j = 0 ,ok = true; j< NBART && ok == true; j++)
                             {
+                                printf("Je compare %d et %d Achat\n",tabPanier[j].id , id);
                                 if(tabPanier[j].id == 0 || tabPanier[j].id == id)
                                 {
+                                    printf("Jai trouvé une place en %d\n",j);
                                     ok = false;
                                     tabPanier[j].id = id;
                                     tabPanier[j].prix = atof(Tuple[2]);
@@ -275,6 +277,15 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
             {                
                 id = atoi(strtok(NULL,"#"));
                 //Supprime un article du caddie et met à jour à la BD
+                printf("id supprime : %d\n",id);
+                for(j = 0, ok =  true ; j < NBART && ok == true ; j++)
+                {
+                    if(tabPanier[j].id == id)
+                    {
+                        ok = false;
+                        j--;
+                    }
+                }
 
                 //vider le caddy et mettre a jour dans la bd
                 sprintf(requete,"select * from articles where id = %d", id);
@@ -300,35 +311,39 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                     }
                     else
                     {
-                        for(j = 0 , ok = true; j < NBART && ok == true; j++)
+                        for(ok = true; j < NBART && ok == true; j++)
                         {
                             if(tabPanier[j].id == id)
                             {
+                                printf("Je compare %d et %d\n",tabPanier[j].id , id);
                                 tabPanier[j].id = tabPanier[j+1].id;
                                 tabPanier[j].prix = tabPanier[j+1].prix;
                                 tabPanier[j].quantite = tabPanier[j+1].quantite;
                                 tabPanier[j+1].id = 0;
                                 tabPanier[j+1].prix = 0;
                                 tabPanier[j+1].quantite = 0;
-                                sprintf(reponse,"CANCEL#ok");
                             }
                             else
                             {
                                 if(tabPanier[j+1].id == 0)
                                 {
+                                    printf("Je compare %d et %d\n",tabPanier[j].id , id);
                                     ok = false;
                                 }
                                 else
                                 {
+                                    printf("Je compare %d et %d\n",tabPanier[j].id , id);
                                     tabPanier[j].id = tabPanier[j+1].id;
                                     tabPanier[j].prix = tabPanier[j+1].prix;
                                     tabPanier[j].quantite = tabPanier[j+1].quantite;
                                     tabPanier[j+1].id = 0;
                                     tabPanier[j+1].prix = 0;
                                     tabPanier[j+1].quantite = 0;
+                                    
                                 }
                             }
                         }
+                        sprintf(reponse,"CANCEL#ok");
                     }
                 }
             }
