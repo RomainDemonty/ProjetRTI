@@ -439,6 +439,10 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                             sprintf(reponse,"CONFIRMER#ok");
                         }
                     }
+                    else
+                    {
+                        ok = false;
+                    }
                 }
             }
         }
