@@ -1,0 +1,2 @@
+NumeroSocket 1600
+addIP localhost

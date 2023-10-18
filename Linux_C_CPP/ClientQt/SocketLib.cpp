@@ -3,6 +3,30 @@
 
 int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la place de int
 {
+    FILE *fichier = fopen("properties.txt", "r");
+    if (fichier == NULL) {
+        printf("Impossible d'ouvrir le fichier.\n");
+        exit(1);
+    }
+
+    char ligne[100];
+    char numeroSocket [100] = "";
+    char addIP[100] = ""; 
+
+    while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
+        char cle[50]; 
+        char valeur[50]; 
+        if (sscanf(ligne, "%49s %49s", cle, valeur) == 2) {
+            if (strcmp(cle, "NumeroSocket") == 0) {
+                strcpy(numeroSocket,valeur);
+            } else if (strcmp(cle, "addIP") == 0) {
+                strcpy(addIP, valeur);
+            }
+        }
+    }
+
+    fclose(fichier);
+
     // appelé par le serveur 
     // fait un appel a socket() , 
     // cosntruit l'adresse reseua grace a getaddrinfo()
@@ -27,7 +51,7 @@ int Socket::ServerSocket ( int sock)//Demander si on peut faire un string a la p
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE | AI_NUMERICSERV; // pour une connexion passive
 
-    if (getaddrinfo(NULL,NumeroSocket,&hints,&results) != 0)
+    if (getaddrinfo(NULL,numeroSocket,&hints,&results) != 0)
     {
         close(sServeur);
         exit(1);
@@ -81,6 +105,29 @@ int Socket::Accept(int ecoute ,char * ipclient )
 }
 int Socket::ClientSocket(char * ipServeur , int portServeur) 
 {
+    FILE *fichier = fopen("properties.txt", "r");
+    if (fichier == NULL) {
+        printf("Impossible d'ouvrir le fichier.\n");
+        exit(1);
+    }
+
+    char ligne[100]; 
+    char numeroSocket [100] = "";
+    char addIP[100] = ""; 
+
+    while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
+        char cle[50];
+        char valeur[50]; 
+        if (sscanf(ligne, "%49s %49s", cle, valeur) == 2) {
+            if (strcmp(cle, "NumeroSocket") == 0) {
+                strcpy(numeroSocket,valeur);
+            } else if (strcmp(cle, "addIP") == 0) {
+                strcpy(addIP, valeur);
+            }
+        }
+    }
+
+    fclose(fichier);
     // appele par le processus client  
     // socket() 
     // construit l'addr reseau grace a getaddrinfo 
@@ -109,7 +156,7 @@ int Socket::ClientSocket(char * ipServeur , int portServeur)
         ipServeur=NULL ;
     }*/
              
-    if (getaddrinfo(ipServeur,NumeroSocket,&hints,&results) != 0)
+    if (getaddrinfo(addIP,numeroSocket,&hints,&results) != 0)
             exit(1);
     // Demande de connexion
     printf("Client - dmd de connect()\n");

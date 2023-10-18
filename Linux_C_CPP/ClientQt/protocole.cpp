@@ -389,7 +389,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
             if(strcmp(cas,"CONFIRMER") == 0)
             {         
                 idClient = atoi(strtok(NULL,"#"));  
-                strcpy(date,"2023-10-08"); // Date
+                strcpy(date,"18-10-2023"); // Date
                 bool paye= false; // Montant
                 int idFact = 0;
 
