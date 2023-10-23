@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67071f21-d120-4d93-8552-2737670f726d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ClientJava.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Swing/Home.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Swing/Home.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Swing/Connexion.form" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Swing/Connexion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Swing/Home.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Home.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Swing/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Home.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,18 +39,42 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW": "true",
     "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW": "true",
-    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "39",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "399",
     "WebServerToolWindowFactoryState": "false",
     "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "C:/Users/Autre/Desktop/ProjetRTI/Java/ClientJava/src/Swing",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "show.migrate.to.gradle.popup": "false",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Autre\Desktop\ProjetRTI\Java\ClientJava\src\Swing" />
+      <recent name="C:\Users\Autre\Desktop\ProjetRTI\Java\ClientJava\src\Swing\Connexion" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="ClientJava" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -62,6 +84,7 @@
       <option name="presentableId" value="Default" />
       <updated>1697293524615</updated>
       <workItem from="1697293525667" duration="1964000" />
+      <workItem from="1698077738199" duration="3022000" />
     </task>
     <servers />
   </component>
