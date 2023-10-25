@@ -1,4 +1,4 @@
-package Article;
+package Modele;
 
 public class Article {
 

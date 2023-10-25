@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="67071f21-d120-4d93-8552-2737670f726d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Article/Article.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Article/Article.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Article/Article.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modele/Article.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Singleton/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Singleton/Utilisateur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Swing/Home.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Home.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Swing/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Home.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Singleton/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modele/Utilisateur.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +59,9 @@
       <recent name="C:\Users\Autre\Desktop\ProjetRTI\Java\ClientJava\src\Swing" />
       <recent name="C:\Users\Autre\Desktop\ProjetRTI\Java\ClientJava\src\Swing\Connexion" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="Singleton" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -86,7 +87,7 @@
       <updated>1697293524615</updated>
       <workItem from="1697293525667" duration="1964000" />
       <workItem from="1698077738199" duration="3022000" />
-      <workItem from="1698215762074" duration="8019000" />
+      <workItem from="1698215762074" duration="12541000" />
     </task>
     <servers />
   </component>

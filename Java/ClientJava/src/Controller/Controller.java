@@ -1,10 +1,9 @@
 package Controller;
 
-import Singleton.Utilisateur;
+import Modele.Utilisateur;
 import Swing.Connexion;
 import Swing.Home;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -27,13 +26,13 @@ public class Controller implements ActionListener {
         }
         if(e.getSource()==home.getLeftButton())
         {
-            System.out.println(" Bouton précédent !!" + "numArticle: " + Utilisateur.getInstance().getNumArticle());
             Utilisateur.getInstance().precedent();
+            System.out.println(" Bouton précédent !!" + "numArticle: " + Utilisateur.getInstance().getNumArticle());
         }
         if(e.getSource()==home.getRightButton())
         {
-            System.out.println(" Bouton suivant !!" + "numArticle: " + Utilisateur.getInstance().getNumArticle());
             Utilisateur.getInstance().suivant();
+            System.out.println(" Bouton suivant !!" + "numArticle: " + Utilisateur.getInstance().getNumArticle());
         }
        
     }

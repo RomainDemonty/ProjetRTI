@@ -1,6 +1,4 @@
-package Singleton;
-
-import Article.Article;
+package Modele;
 
 import java.util.ArrayList;
 
@@ -40,51 +38,49 @@ public class Utilisateur {
     ///////////////////////////////////////////////////
     private void consult(){
         requete = "CONSULT#" + numArticle;
-        send();
-        receive();
+        echange();
     }
 
     private void achat(){
         requete = "ACHAT#" ;
-        send();
-        receive();
+        echange();
     }
 
     private void cancell(){
         requete = "CANCELL#";
-        send();
-        receive();
+        echange();
     }
 
     private void cancellall(){
         requete = "CANCELLALL#";
-        send();
-        receive();
+        echange();
     }
 
     private void confirm(){
         requete = "CONFIRM#";
-        send();
-        receive();
+        echange();
     }
 
     private void login(){
         requete = "LOGIN#";
-        send();
-        receive();
+        echange();
     }
 
     private void logout(){
         requete = "LOGOUT#";
-        send();
-        receive();
+        echange();
     }
 
     /////////////////////////////////////////////////////
     ///////////////////Send et receive//////////////////
     ///////////////////////////////////////////////////
     private void connect(){
-        
+
+    }
+
+    private void echange(){
+        send();
+        receive();
     }
 
     private void send(){
