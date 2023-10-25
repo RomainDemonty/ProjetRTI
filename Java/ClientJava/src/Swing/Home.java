@@ -25,10 +25,14 @@ public class Home extends JFrame {
     private JButton deleteBagButton;
     private JList list1;
     private JLabel namelabel;
+    private JLabel Total;
 
     public JButton getLogoutButton() {
         return logoutButton;
     }
+    public JButton getLeftButton() {return leftButton;}
+
+    public JButton getRightButton(){return rightButton;}
 
     public  Home(Controller controller) {
 
@@ -48,6 +52,8 @@ public class Home extends JFrame {
 
 
         logoutButton.addActionListener(controller);
+        leftButton.addActionListener(controller);
+        rightButton.addActionListener(controller);
         // fin du code
         setVisible(true);
     }

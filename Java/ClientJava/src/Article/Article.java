@@ -12,7 +12,7 @@ public class Article {
         setidAliment(-1);
         setintitule("Vide");
         setprix(0);
-        setquantite(0)
+        setquantite(0);
     }
 
     public Article(int Al , String inti , float p , int q)
@@ -20,7 +20,7 @@ public class Article {
         setidAliment(Al);
         setintitule(inti);
         setprix(p);
-        setquantite(q)
+        setquantite(q);
     }
 
     public void setidAliment(int idAliment){

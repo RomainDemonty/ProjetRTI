@@ -1,5 +1,6 @@
 package Controller;
 
+import Singleton.Utilisateur;
 import Swing.Connexion;
 import Swing.Home;
 
@@ -22,7 +23,17 @@ public class Controller implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==home.getLogoutButton())
         {
-            System.out.println(" actionlistener marche !!");
+            System.out.println(" Bouton Logout !!");
+        }
+        if(e.getSource()==home.getLeftButton())
+        {
+            System.out.println(" Bouton précédent !!" + "numArticle: " + Utilisateur.getInstance().getNumArticle());
+            Utilisateur.getInstance().precedent();
+        }
+        if(e.getSource()==home.getRightButton())
+        {
+            System.out.println(" Bouton suivant !!" + "numArticle: " + Utilisateur.getInstance().getNumArticle());
+            Utilisateur.getInstance().suivant();
         }
        
     }
