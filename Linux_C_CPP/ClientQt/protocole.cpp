@@ -82,7 +82,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
         newuser = atoi(strtok(NULL,"#"));
         if (estPresentServeur(socket) >= 0) // client déjà loggé
         {
-            sprintf(reponse,"LOGIN#ko#Client déjà loggé !");
+            sprintf(reponse,"LOGIN#ko#Client_deja_logge!");
             return true;
         }
         else
@@ -93,7 +93,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
 
             if (mysql_query(con, chaine) != 0)
             {
-                strcpy(reponse,"LOGIN#ko#ERREUR SQL0#-1");
+                strcpy(reponse,"LOGIN#ko#ERREUR_SQL0#-1");
                 return true;
             }
             else
@@ -121,13 +121,13 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                         sprintf(chaine, "INSERT INTO clients (username, password) VALUES ('%s', '%s')", usern, password);
                         if (mysql_query(con, chaine) != 0)
                         {
-                            strcpy(reponse,"LOGIN#ko#ERREUR SQL INSERTION#-1");
+                            strcpy(reponse,"LOGIN#ko#ERREUR_SQL_INSERTION#-1");
                             return true;
                         }
                         sprintf(chaine,"SELECT * FROM clients WHERE username = '%s';",usern);//Recherche de l'identifiant du client enregistré
                         if (mysql_query(con, chaine) != 0)
                         {
-                            strcpy(reponse,"LOGIN#ko#ERREUR SQL0#-1");
+                            strcpy(reponse,"LOGIN#ko#ERREUR_SQL0#-1");
                             return true;
                         }
                         if((resultat = mysql_store_result(con)) == NULL)
@@ -136,7 +136,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                         }
                         if ((Tuple = mysql_fetch_row(resultat)) != NULL)
                         {
-                            sprintf(reponse,"LOGIN#ok#Inscription reussie#%d",atoi(Tuple[0]));
+                            sprintf(reponse,"LOGIN#ok#Inscription_reussie#%d",atoi(Tuple[0]));
                         }
                         ajoute(socket);
                         return true;
@@ -146,20 +146,20 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
                 {
                     if(Tuple == NULL || strcmp(Tuple[1],usern)!=0)
                     {
-                        strcpy(reponse,"LOGIN#ko#Client Inconnu");
+                        strcpy(reponse,"LOGIN#ko#Client_Inconnu");
                         return true;
                     }
                     else
                     {
                         if(strcmp(Tuple[2],password)==0)
                         {
-                            sprintf(reponse,"LOGIN#ok#Connection reussie#%d",atoi(Tuple[0]));
+                            sprintf(reponse,"LOGIN#ok#Connection_reussie#%d",atoi(Tuple[0]));
                             ajoute(socket);
                             return true;
                         }
                         else
                         {
-                            strcpy(reponse,"LOGIN#ko#Mot de passe incorect");
+                            strcpy(reponse,"LOGIN#ko#Mot_de_passe_incorect");
                             return true;
                         }
                     }
@@ -173,7 +173,7 @@ bool SMOP(char* requete, char* reponse,int socket, MYSQL * con , ARTICLEPANIER *
 
         if (estPresentServeur(socket) == -1)
         {
-            strcpy(reponse,"OPER#ko#Client non loggé !");
+            strcpy(reponse,"OPER#ko#Client_non_logge!");
         } 
         else
         {
