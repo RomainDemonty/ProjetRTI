@@ -6,6 +6,8 @@ import Swing.Home;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
 
 public class Controller implements ActionListener {
 
@@ -23,16 +25,31 @@ public class Controller implements ActionListener {
         if(e.getSource()==home.getLogoutButton())
         {
             System.out.println(" Bouton Logout !!");
+            try {
+                Utilisateur.getInstance().logout();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         if(e.getSource()==home.getLeftButton())
         {
-            Utilisateur.getInstance().precedent();
-            System.out.println(" Bouton précédent !!" + "numArticle: " + Utilisateur.getInstance().getNumArticle());
+            try {
+                Utilisateur.getInstance().precedent();
+                home.setArticle(Utilisateur.getInstance().articleSelect);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            System.out.println(" Bouton précédent !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
         }
         if(e.getSource()==home.getRightButton())
         {
-            Utilisateur.getInstance().suivant();
-            System.out.println(" Bouton suivant !!" + "numArticle: " + Utilisateur.getInstance().getNumArticle());
+            try {
+                Utilisateur.getInstance().suivant();
+                home.setArticle(Utilisateur.getInstance().articleSelect);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            System.out.println(" Bouton suivant !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
         }
        
     }

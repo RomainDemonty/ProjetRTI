@@ -1,9 +1,14 @@
 package Swing;
 
 import Controller.Controller;
+import Modele.Article;
+import Modele.Utilisateur;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Home extends JFrame {
     private JPanel mainPanel;
@@ -12,13 +17,10 @@ public class Home extends JFrame {
     private JButton logoutButton;
     private JPanel BagPannel;
     private JPanel imagePannel;
-    private JTextField articleTextField;
-    private JTextField priceTextField;
-    private JTextField stockTextField;
     private JSpinner quantitySpinner;
     private JButton leftButton;
     private JButton rightButton;
-    private JButton chooseButton;
+    private JButton addBagButton;
     private JScrollPane bagScrollPane;
     private JButton deleteArticleButton;
     private JButton buyButton;
@@ -26,6 +28,10 @@ public class Home extends JFrame {
     private JList list1;
     private JLabel namelabel;
     private JLabel Total;
+    private JLabel caseNom;
+    private JLabel casePrix;
+    private JLabel caseStock;
+    private JLabel image;
 
     public JButton getLogoutButton() {
         return logoutButton;
@@ -54,7 +60,26 @@ public class Home extends JFrame {
         logoutButton.addActionListener(controller);
         leftButton.addActionListener(controller);
         rightButton.addActionListener(controller);
-        // fin du code
-        setVisible(true);
+
+        //Connection au serveur
+        try {
+            Utilisateur.getInstance().connect();
+            Utilisateur.getInstance().login();
+            Utilisateur.getInstance().consult();
+            setArticle(Utilisateur.getInstance().articleSelect);
+            setVisible(true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setArticle(Article art) throws IOException {
+        caseNom.setText(art.getIntitule());
+        casePrix.setText(String.valueOf(art.getPrix()));
+        caseStock.setText(String.valueOf(art.getQuantite()));
+
+        String nouvelImagePath = "Java/ClientJava/image/" + art.getIntitule() +".jpg";
+        ImageIcon nouvelleImageIcon = new ImageIcon(nouvelImagePath);
+        image.setIcon(nouvelleImageIcon);
     }
 }

@@ -7,20 +7,24 @@ public class Article {
     private float prix;
     private int quantite;
 
+    private String adrImage;
+
     public Article()
     {
         setidAliment(-1);
         setintitule("Vide");
         setprix(0);
         setquantite(0);
+        setAdrImage("Vide");
     }
 
-    public Article(int Al , String inti , float p , int q)
+    public Article(int Al , String inti , float p , int q, String ad)
     {
         setidAliment(Al);
         setintitule(inti);
         setprix(p);
         setquantite(q);
+        setAdrImage(ad);
     }
 
     public void setidAliment(int idAliment){
@@ -39,6 +43,10 @@ public class Article {
         this.quantite = quantite;
     }
 
+    public void setAdrImage(String adrImage){
+        this.adrImage = adrImage;
+    }
+
     public int getIdAliment() {
         return idAliment;
     }
@@ -55,8 +63,12 @@ public class Article {
         return quantite;
     }
 
+    public String getAdrImage(){
+        return adrImage;
+    }
+
     @Override
     public String toString() {
-        return  getIdAliment() + " " + getIntitule() + " " + getQuantite() + " " + getPrix();
+        return  getIdAliment() + " " + getIntitule() + " " + getQuantite() + " " + getPrix() + " " + getAdrImage();
     }
 }
