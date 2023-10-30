@@ -13,6 +13,8 @@ public class Utilisateur {
 
     private String resultat;
 
+    private ReadProperties prop ;
+
     private int idUtilisateur = 0;
     public void setIdUtilisateur(int idUtil){this.idUtilisateur = idUtil;}
     public int getIdUtilisateur(){return idUtilisateur;}
@@ -105,8 +107,11 @@ public class Utilisateur {
     ///////////////////////////////////////////////////
     public void connect() throws IOException {
         //ipServeur = getcongfig()
-        String ipServeur = "192.168.1.122";
-        int socket = 1500;
+
+        prop   = new ReadProperties();
+
+        String ipServeur = prop.getServerAddress();
+        int socket = prop.getServerPort();
         cSocket = new Socket(ipServeur,socket);
 
         //Création des flux d'entrée et de sortie
