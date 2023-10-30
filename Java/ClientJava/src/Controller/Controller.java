@@ -51,6 +51,17 @@ public class Controller implements ActionListener {
             }
             System.out.println(" Bouton suivant !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
         }
+        if (e.getSource() == home.getAddBagButton())
+        {
+            try {
+                Utilisateur.getInstance().achat(home.quantitySpinner.getValue());
+                Utilisateur.getInstance().consult();
+                home.setArticle(Utilisateur.getInstance().articleSelect);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            System.out.println(" Bouton achat !" );
+        }
        
     }
 }

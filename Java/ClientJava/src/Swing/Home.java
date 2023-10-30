@@ -17,7 +17,7 @@ public class Home extends JFrame {
     private JButton logoutButton;
     private JPanel BagPannel;
     private JPanel imagePannel;
-    private JSpinner quantitySpinner;
+    public JSpinner quantitySpinner;
     private JButton leftButton;
     private JButton rightButton;
     private JButton addBagButton;
@@ -40,6 +40,8 @@ public class Home extends JFrame {
 
     public JButton getRightButton(){return rightButton;}
 
+    public JButton getAddBagButton(){return addBagButton;}
+
     public  Home(Controller controller) {
 
         setContentPane(mainPanel);
@@ -60,6 +62,7 @@ public class Home extends JFrame {
         logoutButton.addActionListener(controller);
         leftButton.addActionListener(controller);
         rightButton.addActionListener(controller);
+        addBagButton.addActionListener(controller);
 
         //Connection au serveur
         try {
@@ -78,7 +81,7 @@ public class Home extends JFrame {
         casePrix.setText(String.valueOf(art.getPrix()));
         caseStock.setText(String.valueOf(art.getQuantite()));
 
-        String nouvelImagePath = "image/" + art.getIntitule() +".jpg";
+        String nouvelImagePath = "image/" + art.getAdrImage();
         ImageIcon nouvelleImageIcon = new ImageIcon(nouvelImagePath);
         image.setIcon(nouvelleImageIcon);
         System.out.println("Test " + art.getIntitule());

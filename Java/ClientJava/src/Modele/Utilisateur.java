@@ -11,7 +11,7 @@ public class Utilisateur {
     private DataOutputStream dos;
     private DataInputStream dis;
 
-    private String resultat;
+    private String resultat = "";
 
     private ReadProperties prop ;
 
@@ -29,13 +29,34 @@ public class Utilisateur {
 
     private static Utilisateur instance = new Utilisateur() ;
 
-    private ArrayList<Article> monPanier;
+    private ArrayList<Article> monPanier = new ArrayList<>();
 
     public ArrayList<Article> getMonPanier(){
         return monPanier;
     }
+
     public void addArticlePanier(Article A){
         monPanier.add(A);
+    }
+    public void addArt(Article A){
+        Article addTemp = new Article();
+        boolean continuer = true;
+        for (int i = 0;( getMonPanier() != null && monPanier.size() > i ) && continuer == true; i++) {
+            if(monPanier.get(i).equals(A))
+            {
+                System.out.println("Egual");
+                addTemp = monPanier.get(i);
+                addTemp.setquantite(addTemp.getQuantite()+ A.getQuantite());
+                continuer = false;
+            }
+            System.out.println("Article " + i + ":" +monPanier.get(i));
+        }
+
+
+        if (continuer == true)
+        {
+            addArticlePanier(A);
+        }
     }
     public void removeArticlePanier(Article A){
         monPanier.remove(A);
@@ -69,9 +90,29 @@ public class Utilisateur {
         }
     }
 
-    private void achat() throws IOException {
-        requete = "ACHAT#" ;
+    public void achat(Object quantite) throws IOException {
+        requete = "ACHAT#" + articleSelect.getIdAliment() + "#" + quantite;
         echange(requete);
+
+        String[] mots = resultat.split("#");
+        System.out.println(mots[1]);
+        if(mots[1].equals("ok"))
+        {
+            Article tampon;
+            tampon = new Article();
+            tampon.setidAliment(articleSelect.getIdAliment());
+            tampon.setintitule(mots[2]);
+            tampon.setquantite((Integer) quantite);
+            tampon.setprix(Float.parseFloat(mots[3]));
+            System.out.println( "Ajout bag : " + tampon);
+
+            addArt(tampon);
+        }
+        else
+        {
+            System.out.println("Erreur de consult");
+        }
+
     }
 
     private void cancell() throws IOException {
@@ -147,6 +188,8 @@ public class Utilisateur {
                 if(b2 == (byte)')')
                 {
                     EOT = true;
+                    buffer.append((char)b1);
+                    buffer.append((char)b2);
                 }
                 else
                 {
