@@ -14,5 +14,6 @@ typedef struct
 bool SMOP(char* requete, char* reponse,int socket, MYSQL * con, ARTICLEPANIER *tabPanier);
 bool SMOP_Logout(char* reponse,int socket);
 void SMOP_Close();
+bool cancelError( MYSQL * con,ARTICLEPANIER *tabPanier);
 
 #endif

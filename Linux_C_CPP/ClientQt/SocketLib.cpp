@@ -196,6 +196,7 @@ int Socket::Send (int sSocket, char* data, int taille)
     // Preparation de la charge utile
     char trame[TAILLE_MAX_DATA+2];
     memcpy(trame,data,taille);
+    taille= strlen(data);
     trame[taille] = '#';
     trame[taille+1] = ')';
 

@@ -105,8 +105,8 @@ void*FctCaddie(void * )
 
     int sService;//socket
     int result;//receive
-    bool continuer;//Si le client ferme la fêtre graphique le serveur n'attends plus de requete de lui
-    char * charReceive ,charReceiveCopy[60];//Requete reçue et ca copie pour afficher le type de requete
+    bool continuer ,malPasse;//Si le client ferme la fêtre graphique le serveur n'attends plus de requete de lui
+    char * charReceive ,charReceiveCopy[60] , * charReponse;//Requete reçue et ca copie pour afficher le type de requete
     char reponse[60];//réponse au client
     char requeteS[15];//affichage apres strtok de charcopy
     ARTICLEPANIER tabPanier[20];
@@ -141,14 +141,26 @@ void*FctCaddie(void * )
         printf("\t[THREAD %ld] Je m'occupe de la socket %d\n", pthread_self(),sService);
 
         continuer = true;
+        malPasse = true;
         while(continuer == true)
         {
             charReceive = (char *)malloc(60 * sizeof(char));
+            //
+            charReponse = (char *)malloc(80 * sizeof(char));
+            //
             //printf("[THREAD %ld] - juste avant le receive \n",pthread_self());
-            if((result = Socket::Receive(sService, charReceive)) <= 0)
+            if(((result = Socket::Receive(sService, charReceive)) <= 0 ) && malPasse == true)
             {
                 printf("\t[THREAD %ld] - Receive mal passe\n",pthread_self());
                 continuer = false ;
+                malPasse = false;
+                strcpy(charReceive,"CANCELALL");
+                pthread_mutex_lock(&mutexBd);
+                if(cancelError(connexion,tabPanier) == true)
+                {
+                    printf("\t[THREAD %ld] - Suppression du panier erreur communication\n",pthread_self());
+                }
+                pthread_mutex_unlock(&mutexBd);
             }
             else
             {
@@ -159,10 +171,10 @@ void*FctCaddie(void * )
                 //printf("\t[THREAD %ld] - Requete a effectuer : %s\n",pthread_self(),requeteS);
 
                 pthread_mutex_lock(&mutexBd);
-                continuer = SMOP(charReceive,reponse, sService, connexion,tabPanier);
+                continuer = SMOP(charReceive,/*reponse*/charReponse, sService, connexion,tabPanier);
                 pthread_mutex_unlock(&mutexBd);
 
-                if((Socket::Send(sService, reponse, sizeof(reponse))) != -1)
+                if((Socket::Send(sService, /*reponse*/charReponse, sizeof(reponse))) != -1)
                 {
                     printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),reponse);
                 }

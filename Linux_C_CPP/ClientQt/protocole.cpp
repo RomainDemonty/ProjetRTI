@@ -502,3 +502,48 @@ void SMOP_Close()
     }
     pthread_mutex_unlock(&mutexClients);
 }
+
+bool cancelError(MYSQL * con , ARTICLEPANIER *tabPanier){      
+                //Supprime tous les articles du caddie et met à jour la BD
+                                //Supprime un article du caddie et met à jour à la BD
+                int j;
+                bool ok; 
+                char requete [200];
+                MYSQL_RES *resultat;
+                MYSQL_ROW  Tuple;
+                int qtedispo,newqte ;
+                for(j = 0 , ok = true; j < NBART && ok == true ; j++)
+                {
+                    //vider le caddy et mettre a jour dans la bd
+                    sprintf(requete,"select * from articles where id = %d", tabPanier[j].id);
+                    if (mysql_query(con, requete) != 0)
+                    {
+                       return 0;
+                    }
+                    if((resultat = mysql_store_result(con)) == NULL)
+                    {
+                        return 0;
+                    }
+                    if ((Tuple = mysql_fetch_row(resultat)) != NULL)
+                    {
+                        qtedispo = atoi(Tuple[3]);
+            
+                        //maj dans la bd
+                        newqte = qtedispo + tabPanier[j].quantite;
+                        printf("Nouveau stock :%d\n", newqte);
+                        sprintf(requete,"UPDATE articles  SET stock = %d where id = %d", newqte,tabPanier[j].id);
+                        if (mysql_query(con, requete) != 0) //requete de mise a jour
+                        {
+                            ok = false;
+                            return 0;
+                        }
+                        else
+                        {
+                            tabPanier[j].id = 0;
+                            tabPanier[j].prix = 0;
+                            tabPanier[j].quantite = 0;
+                        }
+                    }
+                }
+                return 1;
+}
