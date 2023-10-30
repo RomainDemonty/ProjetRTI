@@ -48,13 +48,13 @@ public class Home extends JFrame {
         setSize(800,600);
         // debut du code
         // Chargez une image à partir d'un fichier
-        ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir")+ "\\image\\"+"ail"+".jpg");
-        System.out.println(System.getProperty("user.dir")+ "/image"+"ail"+".jpg");
+        //ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir")+ "\\image\\"+"ail"+".jpg");
+        //System.out.println(System.getProperty("user.dir")+ "/image"+"ail"+".jpg");
 
         // Créez un composant JLabel pour afficher l'image
-        JLabel imageLabel = new JLabel(imageIcon);
-        imagePannel.setLayout(new GridLayout(1, 1));
-        imagePannel.add(imageLabel);
+        //JLabel imageLabel = new JLabel(/*imageIcon*/);
+        //imagePannel.setLayout(new GridLayout(1, 1));
+        //imagePannel.add(imageLabel);
 
 
         logoutButton.addActionListener(controller);
@@ -78,8 +78,9 @@ public class Home extends JFrame {
         casePrix.setText(String.valueOf(art.getPrix()));
         caseStock.setText(String.valueOf(art.getQuantite()));
 
-        String nouvelImagePath = "Java/ClientJava/image/" + art.getIntitule() +".jpg";
+        String nouvelImagePath = "image/" + art.getIntitule() +".jpg";
         ImageIcon nouvelleImageIcon = new ImageIcon(nouvelImagePath);
         image.setIcon(nouvelleImageIcon);
+        System.out.println("Test " + art.getIntitule());
     }
 }
