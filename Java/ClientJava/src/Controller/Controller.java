@@ -57,6 +57,7 @@ public class Controller implements ActionListener {
                 Utilisateur.getInstance().achat(home.quantitySpinner.getValue());
                 Utilisateur.getInstance().consult();
                 home.setArticle(Utilisateur.getInstance().articleSelect);
+                home.setBagPannel();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

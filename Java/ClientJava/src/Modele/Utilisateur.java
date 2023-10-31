@@ -35,6 +35,14 @@ public class Utilisateur {
         return monPanier;
     }
 
+    public float getTotal(){
+        float total =0;
+        for (int i = 0; getMonPanier() != null && monPanier.size() > i ; i++) {
+            total = total + monPanier.get(i).getPrix()*monPanier.get(i).getQuantite();
+        }
+        return total;
+    }
+
     public void addArticlePanier(Article A){
         monPanier.add(A);
     }

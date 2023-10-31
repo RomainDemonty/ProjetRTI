@@ -4,10 +4,8 @@ import Controller.Controller;
 import Modele.Article;
 import Modele.Utilisateur;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 
 public class Home extends JFrame {
@@ -21,17 +19,16 @@ public class Home extends JFrame {
     private JButton leftButton;
     private JButton rightButton;
     private JButton addBagButton;
-    private JScrollPane bagScrollPane;
     private JButton deleteArticleButton;
     private JButton buyButton;
     private JButton deleteBagButton;
-    private JList list1;
     private JLabel namelabel;
     private JLabel Total;
     private JLabel caseNom;
     private JLabel casePrix;
     private JLabel caseStock;
     private JLabel image;
+    private JScrollPane scrollPanebag;
 
     public JButton getLogoutButton() {
         return logoutButton;
@@ -86,4 +83,17 @@ public class Home extends JFrame {
         image.setIcon(nouvelleImageIcon);
         //System.out.println("Test " + art.getIntitule());
     }
+
+    public void setBagPannel(){
+        JPanel bagPanel = new JPanel();
+        bagPanel.setLayout(new GridLayout(0, 1));
+        for (int i = 0 ; i<Utilisateur.getInstance().getMonPanier().size();i++)
+        {
+            bagPanel.add(new JCheckBox(Utilisateur.getInstance().getMonPanier().get(i).toStringBag()));
+        }
+        scrollPanebag.setViewportView(bagPanel);
+        Total.setText("Total : "+ String.valueOf(Utilisateur.getInstance().getTotal()) + "€");
+    }
+
+
 }

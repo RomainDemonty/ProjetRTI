@@ -71,4 +71,7 @@ public class Article {
     public String toString() {
         return  getIdAliment() + " " + getIntitule() + " " + getQuantite() + " " + getPrix() + " " + getAdrImage();
     }
+    public String toStringBag() {
+        return  getIntitule() + "       " + getQuantite() + "pcs      " + getPrix()*getQuantite() +"€     =>  " +  getPrix() + "€/pcs";
+    }
 }
