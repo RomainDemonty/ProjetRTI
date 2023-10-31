@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="67071f21-d120-4d93-8552-2737670f726d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Modele/Article.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modele/Article.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Swing/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Home.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prop.properties" beforeDir="false" afterPath="$PROJECT_DIR$/prop.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +39,7 @@
     "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "487",
     "WebServerToolWindowFactoryState": "false",
     "dart.analysis.tool.window.visible": "false",
-    "last_opened_file_path": "C:/Users/romai/Desktop/ProjetRTI/Java/ClientJava",
+    "last_opened_file_path": "C:/Users/user/Desktop/ProjetRTI/Java/ClientJava",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -95,6 +94,7 @@
       <workItem from="1698673426264" duration="771000" />
       <workItem from="1698674332956" duration="18687000" />
       <workItem from="1698751640542" duration="9216000" />
+      <workItem from="1698770906308" duration="60000" />
     </task>
     <servers />
   </component>
