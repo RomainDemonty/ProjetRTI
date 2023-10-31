@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Modele/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modele/Utilisateur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Swing/Home.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Home.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Swing/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Home.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +94,8 @@
       <workItem from="1698662708262" duration="144000" />
       <workItem from="1698662999602" duration="710000" />
       <workItem from="1698673426264" duration="771000" />
-      <workItem from="1698674332956" duration="18088000" />
+      <workItem from="1698674332956" duration="18687000" />
+      <workItem from="1698751640542" duration="1436000" />
     </task>
     <servers />
   </component>

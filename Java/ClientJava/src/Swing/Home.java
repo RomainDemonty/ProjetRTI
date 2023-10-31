@@ -84,6 +84,6 @@ public class Home extends JFrame {
         String nouvelImagePath = "image/" + art.getAdrImage();
         ImageIcon nouvelleImageIcon = new ImageIcon(nouvelImagePath);
         image.setIcon(nouvelleImageIcon);
-        System.out.println("Test " + art.getIntitule());
+        //System.out.println("Test " + art.getIntitule());
     }
 }

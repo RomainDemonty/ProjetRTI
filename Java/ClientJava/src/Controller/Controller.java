@@ -39,7 +39,7 @@ public class Controller implements ActionListener {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            System.out.println(" Bouton précédent !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
+            //System.out.println(" Bouton précédent !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
         }
         if(e.getSource()==home.getRightButton())
         {
@@ -49,7 +49,7 @@ public class Controller implements ActionListener {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            System.out.println(" Bouton suivant !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
+            //System.out.println(" Bouton suivant !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
         }
         if (e.getSource() == home.getAddBagButton())
         {
@@ -60,7 +60,7 @@ public class Controller implements ActionListener {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            System.out.println(" Bouton achat !" );
+            //System.out.println(" Bouton achat !" );
         }
        
     }

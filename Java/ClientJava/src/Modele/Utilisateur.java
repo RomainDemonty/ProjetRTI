@@ -40,22 +40,23 @@ public class Utilisateur {
     }
     public void addArt(Article A){
         Article addTemp = new Article();
-        boolean continuer = true;
-        for (int i = 0;( getMonPanier() != null && monPanier.size() > i ) && continuer == true; i++) {
-            if(monPanier.get(i).equals(A))
+        boolean trouve = false;
+        for (int i = 0;( getMonPanier() != null && monPanier.size() > i ) && trouve == false; i++) {
+            if(monPanier.get(i).getIdAliment() == A.getIdAliment())
             {
-                System.out.println("Egual");
                 addTemp = monPanier.get(i);
                 addTemp.setquantite(addTemp.getQuantite()+ A.getQuantite());
-                continuer = false;
+                trouve = true;
             }
-            System.out.println("Article " + i + ":" +monPanier.get(i));
         }
 
-
-        if (continuer == true)
+        if (trouve == false)
         {
             addArticlePanier(A);
+        }
+
+        for (int i = 0; getMonPanier() != null && monPanier.size() > i ; i++) {
+            System.out.println("Panier client " + i + ":" + monPanier.get(i));
         }
     }
     public void removeArticlePanier(Article A){
@@ -74,7 +75,6 @@ public class Utilisateur {
         echange(requete);
 
         String[] mots = resultat.split("#");
-        System.out.println(mots[1]);
         if(mots[1].equals("ok"))
         {
             articleSelect.setidAliment(Integer.parseInt(mots[2]));
@@ -82,7 +82,7 @@ public class Utilisateur {
             articleSelect.setquantite(Integer.parseInt(mots[4]));
             articleSelect.setprix(Float.parseFloat(mots[5]));
             articleSelect.setAdrImage(mots[6]);
-            System.out.println( articleSelect);
+            //System.out.println( articleSelect);
         }
         else
         {
@@ -91,27 +91,36 @@ public class Utilisateur {
     }
 
     public void achat(Object quantite) throws IOException {
-        requete = "ACHAT#" + articleSelect.getIdAliment() + "#" + quantite;
-        echange(requete);
-
-        String[] mots = resultat.split("#");
-        System.out.println(mots[1]);
-        if(mots[1].equals("ok"))
+        if((Integer)quantite >0)
         {
-            Article tampon;
-            tampon = new Article();
-            tampon.setidAliment(articleSelect.getIdAliment());
-            tampon.setintitule(mots[2]);
-            tampon.setquantite((Integer) quantite);
-            tampon.setprix(Float.parseFloat(mots[3]));
-            System.out.println( "Ajout bag : " + tampon);
+            requete = "ACHAT#" + articleSelect.getIdAliment() + "#" + quantite;
+            echange(requete);
 
-            addArt(tampon);
+            String[] mots = resultat.split("#");
+            //System.out.println(mots[1]);
+            if(mots[1].equals("ok"))
+            {
+                Article tampon;
+                tampon = new Article();
+                tampon.setidAliment(articleSelect.getIdAliment());
+                tampon.setintitule(mots[2]);
+                tampon.setquantite((Integer) quantite);
+                tampon.setprix(Float.parseFloat(mots[3]));
+                //System.out.println( "Ajout bag : " + tampon);
+
+                addArt(tampon);
+            }
+            else
+            {
+                System.out.println("Erreur de consult");
+            }
         }
         else
         {
-            System.out.println("Erreur de consult");
+            System.out.println("Quanite pas valide");
         }
+
+
 
     }
 
