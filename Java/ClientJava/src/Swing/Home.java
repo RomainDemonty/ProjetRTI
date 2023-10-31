@@ -85,11 +85,16 @@ public class Home extends JFrame {
     }
 
     public void setBagPannel(){
+        ButtonGroup buttonGroup = new ButtonGroup();
+        JRadioButton temp;
+
         JPanel bagPanel = new JPanel();
         bagPanel.setLayout(new GridLayout(0, 1));
         for (int i = 0 ; i<Utilisateur.getInstance().getMonPanier().size();i++)
         {
-            bagPanel.add(new JCheckBox(Utilisateur.getInstance().getMonPanier().get(i).toStringBag()));
+            temp = new JRadioButton(Utilisateur.getInstance().getMonPanier().get(i).toStringBag());
+            bagPanel.add(temp);
+            buttonGroup.add(temp);
         }
         scrollPanebag.setViewportView(bagPanel);
         Total.setText("Total : "+ String.valueOf(Utilisateur.getInstance().getTotal()) + "€");

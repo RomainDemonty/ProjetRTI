@@ -72,6 +72,8 @@ public class Article {
         return  getIdAliment() + " " + getIntitule() + " " + getQuantite() + " " + getPrix() + " " + getAdrImage();
     }
     public String toStringBag() {
-        return  getIntitule() + "       " + getQuantite() + "pcs      " + getPrix()*getQuantite() +"€     =>  " +  getPrix() + "€/pcs";
+        int espaceRestant = 20 - getIntitule().length(); // 25 est la largeur totale souhaitée
+        System.out.println(espaceRestant);
+        return String.format("%" + espaceRestant + "s %s %3d pcs %7.2f€ => %6.2f€/pcs", "", getIntitule(), getQuantite(), getPrix() * getQuantite(), getPrix());
     }
 }
