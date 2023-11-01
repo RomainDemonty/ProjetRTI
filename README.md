@@ -1,18 +1,13 @@
 # ProjetRTI
+
 Site de marecher qui est accessible de pleins de manière différentes
 
-## 1  - 15/09/23 ##
+#commande a executer pour ouvrir les ports sur la machine linux
 
--Debut du frontend web
+pour ouvrir le port mysql
+sudo firewall-cmd --permanent --zone=public --add-port=3306/tcp
 
--Test SSH
-
--ce que il reste a faire
-
-1)  Acheter
-2)  Supprimer
-3)  Vider panier
-4)  Confirmer Achat
-5)  nombre flotant
-6)  properties
-7)  entre différentes machines
+pour ouvrir n'importe quel socket que on va utiliser (XXXX = numero de socket)
+sudo firewall-cmd --permanent --zone=public --add-port=XXXX/tcp
+pour relancer le firewall
+sudo firewall-cmd --reload
