@@ -29,10 +29,16 @@ public class SqlBean
         System.out.println("Obtention de connection OK...");
     }
 
-    public synchronized ResultSet executeQuery(String sql) throws SQLException
+    public  synchronized ResultSet executeQuery(String sql) throws SQLException
     {
         Statement statement = connection.createStatement();
         return statement.executeQuery(sql);
+    }
+
+    public synchronized int executeUpdate(String sql) throws SQLException
+    {
+        Statement statement = connection.createStatement();
+        return statement.executeUpdate(sql);
     }
 
     public synchronized void close() throws SQLException
