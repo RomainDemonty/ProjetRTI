@@ -63,6 +63,17 @@ public class Controller implements ActionListener {
             }
             //System.out.println(" Bouton achat !" );
         }
+        if(e.getSource() == home.getDeleteBagButton())
+        {
+            try {
+                Utilisateur.getInstance().cancellall();
+                Utilisateur.getInstance().consult();
+                home.setArticle(Utilisateur.getInstance().articleSelect);
+                home.setBagPannel();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
        
     }
 }

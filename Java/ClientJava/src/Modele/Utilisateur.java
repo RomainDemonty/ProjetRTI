@@ -125,11 +125,8 @@ public class Utilisateur {
         }
         else
         {
-            System.out.println("Quanite pas valide");
+            System.out.println("Quantite pas valide");
         }
-
-
-
     }
 
     private void cancell() throws IOException {
@@ -137,9 +134,20 @@ public class Utilisateur {
         echange(requete);
     }
 
-    private void cancellall() throws IOException {
-        requete = "CANCELLALL#";
+    public void cancellall() throws IOException {
+        requete = "CANCELALL";
         echange(requete);
+
+        String[] mots = resultat.split("#");
+        if(mots[1].equals("ok"))
+        {
+            monPanier.clear();
+            System.out.println("CANCELALL_OK");
+        }
+        else
+        {
+            System.out.println("CANCELALL_ERROR");
+        }
     }
 
     private void confirm() throws IOException {

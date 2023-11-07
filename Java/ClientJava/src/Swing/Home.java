@@ -39,27 +39,21 @@ public class Home extends JFrame {
 
     public JButton getAddBagButton(){return addBagButton;}
 
+    public JButton getDeleteBagButton() {return deleteBagButton;}
+
     public  Home(Controller controller) {
 
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Client");
         setSize(800,600);
-        // debut du code
-        // Chargez une image à partir d'un fichier
-        //ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir")+ "\\image\\"+"ail"+".jpg");
-        //System.out.println(System.getProperty("user.dir")+ "/image"+"ail"+".jpg");
-
-        // Créez un composant JLabel pour afficher l'image
-        //JLabel imageLabel = new JLabel(/*imageIcon*/);
-        //imagePannel.setLayout(new GridLayout(1, 1));
-        //imagePannel.add(imageLabel);
 
 
         logoutButton.addActionListener(controller);
         leftButton.addActionListener(controller);
         rightButton.addActionListener(controller);
         addBagButton.addActionListener(controller);
+        deleteBagButton.addActionListener(controller);
 
         //Connection au serveur
         try {
