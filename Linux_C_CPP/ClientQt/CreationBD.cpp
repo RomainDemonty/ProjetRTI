@@ -21,6 +21,12 @@ typedef struct
 typedef struct
 {
   int   id;
+  char  username[30];
+  char password[30];
+} Employe;
+typedef struct
+{
+  int   id;
   int  idarticle;
   float prix;
   int   stock;  
@@ -64,7 +70,10 @@ Client insertClients[] =
   {-1,"cedric","ced123"},
   {-1,"romain","romain123"},
 };
-
+Employe insertEmployes[] = 
+{
+  {-1,"admin","admin"},
+};
 int main(int argc,char *argv[])
 {
   // Connection a MySql
@@ -86,10 +95,13 @@ int main(int argc,char *argv[])
  printf("Creation de la table clients...\n");
   mysql_query(connexion,"drop table clients;"); // au cas ou elle existerait deja
   mysql_query(connexion,"create table clients (id INT(4) auto_increment primary key, username varchar(30),password varchar(30));");
-  //Creation de la table clients 
+  //Creation de la table factures 
  printf("Creation de la table factures...\n");
   mysql_query(connexion,"drop table factures;"); // au cas ou elle existerait deja
   mysql_query(connexion,"create table factures (idfacture INT(4) auto_increment primary key, idclient INT,date varchar(30), paye BOOLEAN);");
+  printf("Creation de la table employes...\n");
+  mysql_query(connexion,"drop table employes;"); // au cas ou elle existerait deja
+  mysql_query(connexion,"create table employes (id INT(4) auto_increment primary key, username varchar(30),password varchar(30));");
 
   // Ajout de tuples dans la table UNIX_FINAL
   printf("Ajout de 21 articles la table articles...\n");
@@ -103,6 +115,11 @@ int main(int argc,char *argv[])
   for (int i=0 ; i<2 ; i++)
   {
 	  sprintf(requete,"insert into clients values (NULL,'%s','%s');",insertClients[i].username,insertClients[i].password);
+	  mysql_query(connexion,requete);
+  }
+   for (int i=0 ; i<1 ; i++)
+  {
+	  sprintf(requete,"insert into employes values (NULL,'%s','%s');",insertEmployes[i].username,insertEmployes[i].password);
 	  mysql_query(connexion,requete);
   }
   // Deconnection de la BD
