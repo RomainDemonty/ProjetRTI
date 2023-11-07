@@ -41,6 +41,8 @@ public class Home extends JFrame {
 
     public JButton getDeleteBagButton() {return deleteBagButton;}
 
+    public JButton getDeleteArticleButton() {return deleteArticleButton;}
+
     public  Home(Controller controller) {
 
         setContentPane(mainPanel);
@@ -54,6 +56,7 @@ public class Home extends JFrame {
         rightButton.addActionListener(controller);
         addBagButton.addActionListener(controller);
         deleteBagButton.addActionListener(controller);
+        deleteArticleButton.addActionListener(controller);
 
         //Connection au serveur
         try {
@@ -92,6 +95,29 @@ public class Home extends JFrame {
         }
         scrollPanebag.setViewportView(bagPanel);
         Total.setText("Total : "+ String.valueOf(Utilisateur.getInstance().getTotal()) + "€");
+    }
+
+    public int getArtSelect(){
+        int numArt = -1;
+
+        JPanel tmpPanel = (JPanel) scrollPanebag.getViewport().getView();
+        for (Component c : tmpPanel.getComponents()) {
+            if (c instanceof JRadioButton) {
+                JRadioButton checkRadio = (JRadioButton) c;
+                if (checkRadio.isSelected()) {
+
+                    for (int i = 0; i < Utilisateur.getInstance().getMonPanier().size(); i++) {
+                        if (checkRadio.getText().equals(Utilisateur.getInstance().getMonPanier().get(i).toStringBag())) {
+                           numArt = Utilisateur.getInstance().getMonPanier().get(i).getIdAliment();
+                           return numArt;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        return numArt;
     }
 
 

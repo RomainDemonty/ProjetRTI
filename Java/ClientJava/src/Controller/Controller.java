@@ -74,6 +74,16 @@ public class Controller implements ActionListener {
                 throw new RuntimeException(ex);
             }
         }
-       
+        if (e.getSource() == home.getDeleteArticleButton())
+        {
+            try {
+                Utilisateur.getInstance().cancell(home.getArtSelect());
+                Utilisateur.getInstance().consult();
+                home.setArticle(Utilisateur.getInstance().articleSelect);
+                home.setBagPannel();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 }

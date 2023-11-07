@@ -129,9 +129,34 @@ public class Utilisateur {
         }
     }
 
-    private void cancell() throws IOException {
-        requete = "CANCELL#";
-        echange(requete);
+    public void cancell(int numArt) throws IOException {
+        if(numArt != -1 )
+        {
+            requete = "CANCEL#" + numArt;
+            echange(requete);
+
+            String[] mots = resultat.split("#");
+            if(mots[1].equals("ok"))
+            {
+                for (Article artPass : monPanier) {
+                    if(artPass.getIdAliment() == numArt)
+                    {
+                        removeArticlePanier(artPass);
+                        System.out.println("CANCELL_OK");
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                System.out.println("Erreur_CANCELL");
+            }
+        }
+        else
+        {
+            System.out.println("CANCEL_NO_SELECT");
+        }
+
     }
 
     public void cancellall() throws IOException {

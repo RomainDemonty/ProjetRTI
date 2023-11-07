@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67071f21-d120-4d93-8552-2737670f726d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prop.properties" beforeDir="false" afterPath="$PROJECT_DIR$/prop.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Modele/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modele/Utilisateur.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Swing/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Home.java" afterDir="false" />
@@ -103,7 +100,7 @@
       <workItem from="1698854888057" duration="1398000" />
       <workItem from="1699377536415" duration="68000" />
       <workItem from="1699377689725" duration="2000" />
-      <workItem from="1699377700315" duration="3726000" />
+      <workItem from="1699377700315" duration="7939000" />
     </task>
     <servers />
   </component>
