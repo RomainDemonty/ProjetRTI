@@ -1,4 +1,4 @@
-import Modele.AccesBD;
+import Modele.BD.AccesBD;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

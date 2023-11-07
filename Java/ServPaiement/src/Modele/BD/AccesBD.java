@@ -1,8 +1,7 @@
-package Modele;
+package Modele.BD;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 public class AccesBD  {
 
