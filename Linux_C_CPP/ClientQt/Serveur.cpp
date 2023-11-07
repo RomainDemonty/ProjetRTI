@@ -107,7 +107,7 @@ void*FctCaddie(void * )
     int result;//receive
     bool continuer ,malPasse;//Si le client ferme la fêtre graphique le serveur n'attends plus de requete de lui
     char * charReceive ,charReceiveCopy[60] , * charReponse;//Requete reçue et ca copie pour afficher le type de requete
-    char reponse[60];//réponse au client
+    //char reponse[60];//réponse au client
     char requeteS[15];//affichage apres strtok de charcopy
     ARTICLEPANIER tabPanier[20];
 
@@ -174,9 +174,9 @@ void*FctCaddie(void * )
                 continuer = SMOP(charReceive,/*reponse*/charReponse, sService, connexion,tabPanier);
                 pthread_mutex_unlock(&mutexBd);
 
-                if((Socket::Send(sService, /*reponse*/charReponse, sizeof(reponse))) != -1)
+                if((Socket::Send(sService, /*reponse*/charReponse, 80*sizeof(char))) != -1)
                 {
-                    printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),reponse);
+                    printf("\t[THREAD %ld] - Renvoyé au client %s\n\n\n",pthread_self(),charReponse);
                 }
             }
             
