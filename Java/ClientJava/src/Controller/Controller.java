@@ -17,12 +17,48 @@ public class Controller implements ActionListener {
 
     public Controller()
     {
-        home = new Home(this);
+        connexion = new Connexion(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==home.getLogoutButton())
+        if (connexion.getLoginButton() == e.getSource())
+        {
+            try {
+                String er = Utilisateur.getInstance().login(connexion.Name.getText(),connexion.password.getText(),false);
+                if(er != "OK")
+                {
+                    connexion.Error.setText(er);
+                }
+                else
+                {
+                    home = new Home(this);
+                    connexion.dispose();
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        if (e.getSource()==connexion.getSubscribeButton())
+        {
+            try {
+                String er = Utilisateur.getInstance().login(connexion.Name.getText(),connexion.password.getText(),true);
+                if(er != "OK")
+                {
+                    connexion.Error.setText(er);
+                }
+                else
+                {
+                    home = new Home(this);
+                    connexion.dispose();
+
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        if(home != null && e.getSource()==home.getLogoutButton())
         {
             System.out.println(" Bouton Logout !!");
             try {
@@ -31,7 +67,7 @@ public class Controller implements ActionListener {
                 throw new RuntimeException(ex);
             }
         }
-        if(e.getSource()==home.getLeftButton())
+        if(home != null && e.getSource()==home.getLeftButton())
         {
             try {
                 Utilisateur.getInstance().precedent();
@@ -41,7 +77,7 @@ public class Controller implements ActionListener {
             }
             //System.out.println(" Bouton précédent !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
         }
-        if(e.getSource()==home.getRightButton())
+        if(home != null && e.getSource()==home.getRightButton())
         {
             try {
                 Utilisateur.getInstance().suivant();
@@ -51,7 +87,7 @@ public class Controller implements ActionListener {
             }
             //System.out.println(" Bouton suivant !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
         }
-        if (e.getSource() == home.getAddBagButton())
+        if (home != null && e.getSource() == home.getAddBagButton())
         {
             try {
                 Utilisateur.getInstance().achat(home.quantitySpinner.getValue());
@@ -63,7 +99,7 @@ public class Controller implements ActionListener {
             }
             //System.out.println(" Bouton achat !" );
         }
-        if(e.getSource() == home.getDeleteBagButton())
+        if(home != null && e.getSource() == home.getDeleteBagButton())
         {
             try {
                 Utilisateur.getInstance().cancellall();
@@ -74,12 +110,21 @@ public class Controller implements ActionListener {
                 throw new RuntimeException(ex);
             }
         }
-        if (e.getSource() == home.getDeleteArticleButton())
+        if (home != null && e.getSource() == home.getDeleteArticleButton())
         {
             try {
                 Utilisateur.getInstance().cancell(home.getArtSelect());
                 Utilisateur.getInstance().consult();
                 home.setArticle(Utilisateur.getInstance().articleSelect);
+                home.setBagPannel();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        if (home != null && e.getSource() == home.getBuyButton())
+        {
+            try {
+                Utilisateur.getInstance().confirm();
                 home.setBagPannel();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);

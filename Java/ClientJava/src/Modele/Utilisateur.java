@@ -175,19 +175,50 @@ public class Utilisateur {
         }
     }
 
-    private void confirm() throws IOException {
-        requete = "CONFIRM#";
+    public void confirm() throws IOException {
+        requete = "CONFIRMER#" + idUtilisateur;
         echange(requete);
+
+        String[] mots = resultat.split("#");
+        if(mots[1].equals("ok"))
+        {
+            monPanier.clear();
+            System.out.println("Confirm_OK");
+        }
+        else
+        {
+            System.out.println("Confirm_ERROR");
+        }
     }
 
-    public void login() throws IOException {
-        requete = "LOGIN#romain#romain123#0";
+    public String login(String nom , String mdp, Boolean newuser) throws IOException {
+        if(newuser == true)
+        {
+            requete = "LOGIN#" + nom + "#" + mdp + "#1";
+        }
+        else
+        {
+            requete = "LOGIN#" + nom + "#" + mdp + "#0";
+        }
         echange(requete);
+
+        String[] mots = resultat.split("#");
+        if(mots[1].equals("ok"))
+        {
+            System.out.println("Connect_OK");
+            idUtilisateur = Integer.parseInt(mots[3]);
+            return "OK";
+        }
+        else
+        {
+            System.out.println("Connect_error");
+            return mots[2];
+        }
     }
 
     public void logout() throws IOException {
-        //requete = "LOGOUT#";
-        //echange(requete);
+        requete = "LOGOUT#";
+        echange(requete);
         dos.close();
         dis.close();
         cSocket.close();

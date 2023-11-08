@@ -43,6 +43,8 @@ public class Home extends JFrame {
 
     public JButton getDeleteArticleButton() {return deleteArticleButton;}
 
+    public JButton getBuyButton() {return buyButton;}
+
     public  Home(Controller controller) {
 
         setContentPane(mainPanel);
@@ -57,11 +59,12 @@ public class Home extends JFrame {
         addBagButton.addActionListener(controller);
         deleteBagButton.addActionListener(controller);
         deleteArticleButton.addActionListener(controller);
+        buyButton.addActionListener(controller);
 
         //Connection au serveur
         try {
-            Utilisateur.getInstance().connect();
-            Utilisateur.getInstance().login();
+            //Utilisateur.getInstance().connect();
+            //Utilisateur.getInstance().login();
             Utilisateur.getInstance().consult();
             setArticle(Utilisateur.getInstance().articleSelect);
             setVisible(true);
@@ -101,6 +104,11 @@ public class Home extends JFrame {
         int numArt = -1;
 
         JPanel tmpPanel = (JPanel) scrollPanebag.getViewport().getView();
+        if(tmpPanel == null)
+        {
+            return numArt;
+        }
+
         for (Component c : tmpPanel.getComponents()) {
             if (c instanceof JRadioButton) {
                 JRadioButton checkRadio = (JRadioButton) c;
@@ -119,6 +127,4 @@ public class Home extends JFrame {
 
         return numArt;
     }
-
-
 }
