@@ -22,9 +22,9 @@ public class ServeurVue extends JFrame {
 
         arreterLeServeurButton.setEnabled(false);
         port.setText("50000");
-        threadS = new ThreadServeur(Integer.parseInt(port.getText()),new Protocole());
+        threadS = new ThreadServeur(50000,new Protocole(),1);
         setSize(400,300);
-        setVisible(true );
+        setVisible(true);
 
         buttonLancer.addActionListener(c) ;
         arreterLeServeurButton.addActionListener(c) ;

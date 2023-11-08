@@ -19,7 +19,7 @@ public  class ThreadServeur extends Thread
     protected Protocole protocole;
     protected ServerSocket ssocket;
 
-    public ThreadServeur(int port, Protocole protocole) throws
+    public ThreadServeur(int port, Protocole protocole,int taillePool) throws
             IOException
     {
         super("TH Serveur (port=" + port + ",protocole=" + protocole.getNom() + ")");
@@ -53,9 +53,11 @@ public  class ThreadServeur extends Thread
             Socket csocket;
             try
             {
-                ssocket.setSoTimeout(2000);
+               // ssocket.setSoTimeout(2000);
+                System.out.println(ssocket.getInetAddress().getHostAddress());
                 csocket = ssocket.accept();
                 connexionsEnAttente.addConnexion(csocket);
+
             }
             catch (SocketTimeoutException ex)
             {

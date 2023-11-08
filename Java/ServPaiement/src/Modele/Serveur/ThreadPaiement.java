@@ -5,9 +5,7 @@ import Modele.Protocole.Protocole;
 import Modele.Protocole.Reponse;
 import Modele.Protocole.Requete;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class ThreadPaiement extends Thread {
@@ -57,25 +55,35 @@ public class ThreadPaiement extends Thread {
                 ObjectInputStream ois = null;
 
                 try {
-                    ois = new ObjectInputStream(csocket.getInputStream());
-                    oos = new ObjectOutputStream(csocket.getOutputStream());
 
+
+                    OutputStreamWriter osr = new OutputStreamWriter(csocket.getOutputStream());
+                    InputStreamReader isr = new InputStreamReader(csocket.getInputStream());
+
+                    BufferedWriter bw = new BufferedWriter(osr);
+                    BufferedReader br = new BufferedReader(isr);
+
+                    // Echanges de textes
+                    String requete;
+                    requete= br.readLine();
+                    System.out.println(requete);
+
+                    //TODO
+                    //RECEPTION ET AFFICHAGE D'UN OBJET LOGIN
+
+                   /*  avec objket
+                     ois = new ObjectInputStream(csocket.getInputStream());
+                    oos = new ObjectOutputStream(csocket.getOutputStream());
                     while (true) {
                         Requete requete = (Requete) ois.readObject();
                         Reponse reponse = protocole.TraiteRequete(requete, csocket);
                         oos.writeObject(reponse);
-                    }
-                } catch (FinConnexionException ex) {
-
-                    if (oos != null && ex.getReponse() != null)
-                        oos.writeObject(ex.getReponse());
+                    }*/
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
             }
-            catch (InterruptedException | IOException ex)
+            catch (InterruptedException ex)
             {
                 System.out.println("Demande d'interruption...");
                 interrompu = true;
