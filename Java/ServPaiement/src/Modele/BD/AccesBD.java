@@ -11,7 +11,7 @@ public class AccesBD  {
     public AccesBD() throws SQLException, ClassNotFoundException {
 
         sql = new SqlBean("MySql",
-                "192.168.0.55",
+                "172.20.10.4",
                 "PourStudent",
                 "Student",
                 "PassStudent1_");
