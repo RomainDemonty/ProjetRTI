@@ -7,6 +7,7 @@ import Vue.Connexion;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.function.ToDoubleBiFunction;
 
 public class Controller implements ActionListener {
 
@@ -17,7 +18,10 @@ public class Controller implements ActionListener {
    private Application app ;
     public Controller()
     {
+        //TODO faire en sorte que si le serveur soir pas connecte que on pervienne
         c = new Connexion(this) ;
+        app=new Application(this);
+        app.setVisible(false);
         Singleton.getInstance();
 
     }
@@ -29,15 +33,12 @@ public class Controller implements ActionListener {
         if(e.getSource()==c.getSeConnecterButton())
         {
             System.out.println("bouton connexion ");
-            //TODO
-            // faire un dmd au serveur et voir si on est bien connecte
             try {
-                Singleton.getInstance().envoyerRequeteLOGIN();
 
-            if(true)
+            if(Singleton.getInstance().envoyerRequeteLOGIN(c.getLogin(), c.getPassword()))
             {
-                app = new Application(this);
-                c.dispose();
+                app.setVisible(true);
+                c.setVisible(false);
             }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -56,8 +57,6 @@ public class Controller implements ActionListener {
         {
 
             System.out.println("bouton deconnexion ");
-            //TODO
-            // PREVENIR SERVEUR QUE ON SE DECO
             try {
                 Singleton.getInstance().envoyerRequeteLOGOUT();
             } catch (IOException ex) {
@@ -66,8 +65,8 @@ public class Controller implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-                c = new Connexion(this);
-                app.dispose();
+            app.setVisible(false);
+            c.setVisible(true);
 
 
         }

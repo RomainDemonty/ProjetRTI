@@ -55,6 +55,7 @@ public  class ThreadServeur extends Thread
             {
                // ssocket.setSoTimeout(2000);
                 System.out.println(ssocket.getInetAddress().getHostAddress());
+                System.out.println(ssocket.getLocalPort());
                 csocket = ssocket.accept();
                 connexionsEnAttente.addConnexion(csocket);
 

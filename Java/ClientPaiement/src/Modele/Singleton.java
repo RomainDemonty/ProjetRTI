@@ -44,9 +44,11 @@ public class Singleton {
         oos =null ;
         ois = null  ;
         System.out.println("avant csocket ");
-        csocket = new Socket("192.168.0.12",50000);
+        csocket = new Socket("localhost",50000);
         System.out.println("apres csocket  -> valeur : " +csocket);
 
+        oos = new ObjectOutputStream(csocket.getOutputStream());
+        ois = new ObjectInputStream(csocket.getInputStream());
         //TODO
         //ENVOI D'UN OBJET LOGIN
 
@@ -60,14 +62,13 @@ public class Singleton {
 
     }
 
-    public boolean envoyerRequeteLOGIN() throws IOException, ClassNotFoundException {
+    public boolean envoyerRequeteLOGIN(String u , String mdp) throws IOException, ClassNotFoundException {
 
-        RequeteLOGIN requete = new RequeteLOGIN("admin","admin");
-        ObjectOutputStream oos = new ObjectOutputStream(csocket.getOutputStream());
-        ois = new ObjectInputStream(csocket.getInputStream());
+        RequeteLOGIN requete = new RequeteLOGIN(u,mdp);
 
         oos.writeObject(requete);
         ReponseLOGIN reponse = (ReponseLOGIN) ois.readObject();
+        System.out.println("reponse du serveur pour login : " + reponse.isValide());
         if (reponse.isValide())
         {
             System.out.println("connexion confirmée");
@@ -81,8 +82,6 @@ public class Singleton {
     public void envoyerRequeteLOGOUT() throws IOException, ClassNotFoundException {
 
         RequeteLOGOUT requete = new RequeteLOGOUT("admin");
-        ObjectOutputStream oos = new ObjectOutputStream(csocket.getOutputStream());
-        ois = new ObjectInputStream(csocket.getInputStream());
         oos.writeObject(requete);
 
 

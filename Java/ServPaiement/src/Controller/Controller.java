@@ -18,6 +18,11 @@ public class Controller implements ActionListener{
             System.out.println("Serveur lancé");
             svue.getLancerButton().setEnabled(false);
             svue.getArreterButton().setEnabled(true);
+            try {
+                svue.setThreadS();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             svue.getThreadS().start();
         }
         if(e.getSource()==svue.getArreterButton())

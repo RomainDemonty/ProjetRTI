@@ -5,6 +5,8 @@ import Modele.Protocole.Login.ReponseLOGIN;
 import Modele.Protocole.Login.RequeteLOGIN;
 import Modele.BD.* ;
 import java.net.Socket;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Protocole {
@@ -25,8 +27,7 @@ public class Protocole {
 
 
     public synchronized Reponse TraiteRequete(Requete requete, Socket socket) throws
-            FinConnexionException
-    {
+            FinConnexionException, SQLException, ClassNotFoundException {
         if (requete instanceof RequeteLOGIN)
         {
             return TraiteRequeteLOGIN((RequeteLOGIN) requete, socket);
@@ -36,14 +37,39 @@ public class Protocole {
         return null;
     }
 
-    private synchronized ReponseLOGIN TraiteRequeteLOGIN(RequeteLOGIN requete, Socket socket) throws FinConnexionException {
+    private synchronized ReponseLOGIN TraiteRequeteLOGIN(RequeteLOGIN requete, Socket socket) throws FinConnexionException, SQLException, ClassNotFoundException {
 
-        System.out.println("dans ReponseLOGIN");
+        System.out.println(" [protocole] dans ReponseLOGIN  avec user = "+requete.getLogin()+ " et mdp = "+requete.getPassword() );
 
-        //TODO verif de passwords dans la bd
-        clientsConnectes.put(requete.getLogin(), socket);
+          donnees  = new AccesBD();
+          boolean trouve = false  ;
 
-        return new ReponseLOGIN(true);
+        ResultSet rs = donnees.selection(null, "employes", null);
+        while(rs.next())
+        {
+            System.out.println(rs.getString("username")+"   " +rs.getString("password"));
+            if(rs.getString("username").equals(requete.getLogin()) && rs.getString("password").equals(requete.getPassword()))
+            {
+                System.out.println("connexion etablie protocole serveur");
+                trouve = true ;
+                break ;
+            }
+
+        }
+
+        if(trouve==true)
+        {
+            clientsConnectes.put(requete.getLogin(), socket);
+            return new ReponseLOGIN(true);
+        }
+        else
+        {
+
+            throw new FinConnexionException(new ReponseLOGIN(false));
+        }
+
+
+
 
 
     }
@@ -52,6 +78,7 @@ public class Protocole {
     {
         System.out.println("dans ReponseLOGOUT");
         clientsConnectes.remove(requete.getLogin());
+        System.out.println("apres retirer clientconnecte");
         throw new FinConnexionException(null);
     }
 

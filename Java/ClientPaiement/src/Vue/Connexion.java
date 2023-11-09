@@ -16,7 +16,6 @@ public class Connexion extends JFrame {
        passwordField.setText("admin");
 
        seConnecterButton.addActionListener(c);
-
        setSize(800, 300);
        setVisible(true);
    }
@@ -24,4 +23,12 @@ public class Connexion extends JFrame {
    {
        return seConnecterButton ;
    }
+
+    public String getLogin() {
+        return login.getText();
+    }
+
+    public String getPassword() {
+        return passwordField.getText();
+    }
 }

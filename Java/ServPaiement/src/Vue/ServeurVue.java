@@ -10,7 +10,7 @@ import java.io.IOException;
 public class ServeurVue extends JFrame {
 
 
-    ThreadServeur threadS ;
+    private ThreadServeur threadS ;
     private JPanel contentPane;
     private JButton buttonLancer;
     private JTextField port;
@@ -18,13 +18,12 @@ public class ServeurVue extends JFrame {
 
     public ServeurVue(Controller c ) throws IOException {
         setContentPane(contentPane);
-
+        threadS = null ;
 
         arreterLeServeurButton.setEnabled(false);
         port.setText("50000");
-        Protocole p = new Protocole() ;
-        System.out.println(p);
-        threadS = new ThreadServeur(50000,p,1);
+
+
         setSize(400,300);
         setVisible(true);
 
@@ -42,6 +41,11 @@ public class ServeurVue extends JFrame {
         return arreterLeServeurButton ;
     }
 
+    public void setThreadS() throws IOException {
+        Protocole p = new Protocole() ;
+        System.out.println(p);
+        threadS = new ThreadServeur(Integer.parseInt(port.getText()),p,1);
+    }
     public static void main(String[] args) {
 
     }
