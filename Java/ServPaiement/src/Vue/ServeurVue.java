@@ -15,6 +15,8 @@ public class ServeurVue extends JFrame {
     private JButton buttonLancer;
     private JTextField port;
     private JButton arreterLeServeurButton;
+    private JTextField nbthread;
+
 
     public ServeurVue(Controller c ) throws IOException {
         setContentPane(contentPane);
@@ -44,9 +46,19 @@ public class ServeurVue extends JFrame {
     public void setThreadS() throws IOException {
         Protocole p = new Protocole() ;
         System.out.println(p);
-        threadS = new ThreadServeur(Integer.parseInt(port.getText()),p,1);
+        threadS = new ThreadServeur(Integer.parseInt(port.getText()),p,getNbthread());
     }
     public static void main(String[] args) {
 
     }
+
+    public JTextField getPort() {
+        return port;
+    }
+
+    public int getNbthread() {
+        return Integer.parseInt(nbthread.getText());
+    }
+
+    
 }

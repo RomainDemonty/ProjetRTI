@@ -25,7 +25,6 @@ public class Protocole {
         donnees = null ;
     }
 
-
     public synchronized Reponse TraiteRequete(Requete requete, Socket socket) throws
             FinConnexionException, SQLException, ClassNotFoundException {
         if (requete instanceof RequeteLOGIN)
@@ -40,14 +39,12 @@ public class Protocole {
     private synchronized ReponseLOGIN TraiteRequeteLOGIN(RequeteLOGIN requete, Socket socket) throws FinConnexionException, SQLException, ClassNotFoundException {
 
         System.out.println(" [protocole] dans ReponseLOGIN  avec user = "+requete.getLogin()+ " et mdp = "+requete.getPassword() );
-
-          donnees  = new AccesBD();
-          boolean trouve = false  ;
+        donnees  = new AccesBD();
+        boolean trouve = false  ;
 
         ResultSet rs = donnees.selection(null, "employes", null);
         while(rs.next())
         {
-            System.out.println(rs.getString("username")+"   " +rs.getString("password"));
             if(rs.getString("username").equals(requete.getLogin()) && rs.getString("password").equals(requete.getPassword()))
             {
                 System.out.println("connexion etablie protocole serveur");
@@ -64,13 +61,8 @@ public class Protocole {
         }
         else
         {
-
             throw new FinConnexionException(new ReponseLOGIN(false));
         }
-
-
-
-
 
     }
     private synchronized void TraiteRequeteLOGOUT(RequeteLOGOUT requete) throws
