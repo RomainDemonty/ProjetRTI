@@ -6,6 +6,7 @@ import Vue.Connexion;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Controller implements ActionListener {
 
@@ -30,10 +31,18 @@ public class Controller implements ActionListener {
             System.out.println("bouton connexion ");
             //TODO
             // faire un dmd au serveur et voir si on est bien connecte
+            try {
+                Singleton.getInstance().envoyerRequeteLOGIN();
+
             if(true)
             {
                 app = new Application(this);
                 c.dispose();
+            }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
             }
         }
         if(e.getSource()==app.getConfirmer())
@@ -49,12 +58,18 @@ public class Controller implements ActionListener {
             System.out.println("bouton deconnexion ");
             //TODO
             // PREVENIR SERVEUR QUE ON SE DECO
-            if(true)
-            {
+            try {
+                Singleton.getInstance().envoyerRequeteLOGOUT();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+
                 c = new Connexion(this);
                 app.dispose();
 
-            }
+
         }
         if(e.getSource()==app.getVoirFacturesButton())
         {

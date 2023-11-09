@@ -11,7 +11,7 @@ import java.sql.SQLException;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-        AccesBD a = new AccesBD();
+        /*AccesBD a = new AccesBD();
         System.out.println("creation de l'objet accesBD ok ... ");
         String att[] = new String[5] ;
         att[0]="intitule" ;
@@ -24,7 +24,7 @@ public class Main {
         {
             System.out.println(rs.getString("intitule")+rs.getString("stock"));
         }
-
+*/
         Controller c = new Controller();
     }
 }

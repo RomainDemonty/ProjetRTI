@@ -1,5 +1,9 @@
 package Modele;
 
+import Modele.Protocole.LOGOUT.RequeteLOGOUT;
+import Modele.Protocole.Login.ReponseLOGIN;
+import Modele.Protocole.Login.RequeteLOGIN;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -30,9 +34,15 @@ public class Singleton {
     // Création de la socket et connexion sur le serveur
 
 
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
+
 
     private Singleton() throws IOException {
 
+
+        oos =null ;
+        ois = null  ;
         System.out.println("avant csocket ");
         csocket = new Socket("192.168.0.12",50000);
         System.out.println("apres csocket  -> valeur : " +csocket);
@@ -40,20 +50,41 @@ public class Singleton {
         //TODO
         //ENVOI D'UN OBJET LOGIN
 
-        OutputStreamWriter osr = new OutputStreamWriter(csocket.getOutputStream());
-        InputStreamReader isr = new InputStreamReader(csocket.getInputStream());
 
-        BufferedWriter bw = new BufferedWriter(osr);
-        BufferedReader br = new BufferedReader(isr);
-
-        // Echanges de textes
-        bw.write("[Client] Bonjour !");
-        bw.newLine();
-
-        bw.flush();
+        //dois encore le lire apres
 
 
-        csocket.close();
+    }
+    public void seConnecter()
+    {
+
+    }
+
+    public boolean envoyerRequeteLOGIN() throws IOException, ClassNotFoundException {
+
+        RequeteLOGIN requete = new RequeteLOGIN("admin","admin");
+        ObjectOutputStream oos = new ObjectOutputStream(csocket.getOutputStream());
+        ois = new ObjectInputStream(csocket.getInputStream());
+
+        oos.writeObject(requete);
+        ReponseLOGIN reponse = (ReponseLOGIN) ois.readObject();
+        if (reponse.isValide())
+        {
+            System.out.println("connexion confirmée");
+            return true  ;
+        }
+        else {
+            return false  ;
+        }
+
+    }
+    public void envoyerRequeteLOGOUT() throws IOException, ClassNotFoundException {
+
+        RequeteLOGOUT requete = new RequeteLOGOUT("admin");
+        ObjectOutputStream oos = new ObjectOutputStream(csocket.getOutputStream());
+        ois = new ObjectInputStream(csocket.getInputStream());
+        oos.writeObject(requete);
+
 
     }
 

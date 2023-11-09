@@ -1,6 +1,7 @@
 package Modele.Serveur;
 
 import Modele.Protocole.FinConnexionException;
+import Modele.Protocole.Login.RequeteLOGIN;
 import Modele.Protocole.Protocole;
 import Modele.Protocole.Reponse;
 import Modele.Protocole.Requete;
@@ -54,32 +55,25 @@ public class ThreadPaiement extends Thread {
                 ObjectOutputStream oos = null;
                 ObjectInputStream ois = null;
 
+
                 try {
 
 
-                    OutputStreamWriter osr = new OutputStreamWriter(csocket.getOutputStream());
-                    InputStreamReader isr = new InputStreamReader(csocket.getInputStream());
-
-                    BufferedWriter bw = new BufferedWriter(osr);
-                    BufferedReader br = new BufferedReader(isr);
+                    ois = new ObjectInputStream(csocket.getInputStream());
+                    oos = new ObjectOutputStream(csocket.getOutputStream());
 
                     // Echanges de textes
-                    String requete;
-                    requete= br.readLine();
-                    System.out.println(requete);
+                    Requete requete = (Requete) ois.readObject();
+                    Reponse reponse = protocole.TraiteRequete(requete,csocket);
+                    System.out.println("test  : "+ reponse  );
+                    oos.writeObject(reponse);
 
-                    //TODO
-                    //RECEPTION ET AFFICHAGE D'UN OBJET LOGIN
 
-                   /*  avec objket
-                     ois = new ObjectInputStream(csocket.getInputStream());
-                    oos = new ObjectOutputStream(csocket.getOutputStream());
-                    while (true) {
-                        Requete requete = (Requete) ois.readObject();
-                        Reponse reponse = protocole.TraiteRequete(requete, csocket);
-                        oos.writeObject(reponse);
-                    }*/
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (FinConnexionException e) {
                     throw new RuntimeException(e);
                 }
             }
