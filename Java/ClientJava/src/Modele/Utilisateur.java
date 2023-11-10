@@ -216,12 +216,26 @@ public class Utilisateur {
         }
     }
 
-    public void logout() throws IOException {
-        requete = "LOGOUT#";
+    public Boolean logout() throws IOException {
+        requete = "LOGOUT";
         echange(requete);
-        dos.close();
-        dis.close();
-        cSocket.close();
+
+        String[] mots = resultat.split("#");
+        if(mots[1].equals("ok"))
+        {
+            System.out.println("Deconnect_OK");
+            idUtilisateur = 0;
+            numArticle = 1;
+            return true;
+        }
+        else
+        {
+            System.out.println("Deconnect_error");
+            return false;
+        }
+        //dos.close();
+        //dis.close();
+        //cSocket.close();
     }
 
     /////////////////////////////////////////////////////

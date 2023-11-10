@@ -51,7 +51,6 @@ public class Controller implements ActionListener {
                 {
                     home = new Home(this);
                     connexion.dispose();
-
                 }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -62,7 +61,16 @@ public class Controller implements ActionListener {
         {
             System.out.println(" Bouton Logout !!");
             try {
-                Utilisateur.getInstance().logout();
+                if((Utilisateur.getInstance().logout())==true)
+                {
+                    Utilisateur.getInstance().cancellall();
+                    connexion= new Connexion(this);
+                    home.dispose();
+                }
+                else
+                {
+                    System.out.println("Error_logout");
+                }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
