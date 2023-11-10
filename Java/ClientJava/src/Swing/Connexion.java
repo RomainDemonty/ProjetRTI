@@ -13,10 +13,13 @@ public class Connexion extends JFrame {
     private JButton subscribeButton;
     public JPasswordField password;
     public JLabel Error;
+    private JButton Reconnect;
 
     public JButton getLoginButton(){return loginButton;}
 
     public JButton getSubscribeButton(){return subscribeButton;}
+
+    public JButton getReconnect(){return Reconnect;}
 
     public Connexion(Controller controller) {
         setContentPane(connectionPanel);
@@ -26,14 +29,22 @@ public class Connexion extends JFrame {
 
         subscribeButton.addActionListener(controller);
         loginButton.addActionListener(controller);
+        Reconnect.addActionListener(controller);
 
         //Connection au serveur
         try {
             Utilisateur.getInstance().connect();
             setVisible(true);
+            Utilisateur.getInstance().conect = true;
+            Reconnect.setVisible(false);
         } catch (IOException e) {
-            //Error.setText("Connection au serveur impossible !");
+
             setVisible(true);
+            if(Utilisateur.getInstance().conect == false)
+            {
+                Reconnect.setVisible(true);
+                Error.setText("Connexion au serveur ratee !");
+            }
             //throw new RuntimeException(e);
         }
     }

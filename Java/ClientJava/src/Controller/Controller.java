@@ -1,4 +1,6 @@
 package Controller;
+import javax.swing.*;
+import java.awt.*;
 
 import Modele.Utilisateur;
 import Swing.Connexion;
@@ -22,7 +24,21 @@ public class Controller implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (connexion.getLoginButton() == e.getSource())
+        if(connexion.getReconnect() == e.getSource())
+        {
+            try {
+                Utilisateur.getInstance().connect();
+                Utilisateur.getInstance().conect = true;
+                connexion.getReconnect().setVisible(false);
+                connexion.Error.setText("Reconnexion réussie!");
+                Color col = Color.green;
+                connexion.Error.setForeground(col);
+            } catch (IOException ex) {
+                System.out.println("Reconnexion ratee");
+                connexion.Error.setText("Reconnexion ratée ! Réessayer ultérieurement!");
+            }
+        }
+        if (connexion.getLoginButton() == e.getSource() && Utilisateur.getInstance().conect == true)
         {
             try {
                 String er = Utilisateur.getInstance().login(connexion.Name.getText(),connexion.password.getText(),false);
@@ -39,7 +55,7 @@ public class Controller implements ActionListener {
                 throw new RuntimeException(ex);
             }
         }
-        if (e.getSource()==connexion.getSubscribeButton())
+        if (e.getSource()==connexion.getSubscribeButton() && Utilisateur.getInstance().conect == true)
         {
             try {
                 String er = Utilisateur.getInstance().login(connexion.Name.getText(),connexion.password.getText(),true);

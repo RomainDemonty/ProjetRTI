@@ -6,6 +6,8 @@ import java.net.*;
 
 public class Utilisateur {
 
+    public Boolean conect = false;
+
     public Article articleSelect = new Article();
     private Socket cSocket;
     private DataOutputStream dos;
