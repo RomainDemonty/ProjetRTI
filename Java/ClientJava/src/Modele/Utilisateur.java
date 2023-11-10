@@ -192,6 +192,11 @@ public class Utilisateur {
     }
 
     public String login(String nom , String mdp, Boolean newuser) throws IOException {
+        if(nom.length() == 0 || mdp.length() == 0)
+        {
+            return "Les champs ne peuvent pas etre vide !";
+        }
+
         if(newuser == true)
         {
             requete = "LOGIN#" + nom + "#" + mdp + "#1";

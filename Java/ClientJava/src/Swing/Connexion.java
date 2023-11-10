@@ -22,7 +22,7 @@ public class Connexion extends JFrame {
         setContentPane(connectionPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Client - Connexion");
-        setSize(400,200);
+        setSize(500,200);
 
         subscribeButton.addActionListener(controller);
         loginButton.addActionListener(controller);
@@ -30,12 +30,11 @@ public class Connexion extends JFrame {
         //Connection au serveur
         try {
             Utilisateur.getInstance().connect();
-            //Utilisateur.getInstance().login();
-            //Utilisateur.getInstance().consult();
-            //setArticle(Utilisateur.getInstance().articleSelect);
             setVisible(true);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            //Error.setText("Connection au serveur impossible !");
+            setVisible(true);
+            //throw new RuntimeException(e);
         }
     }
 }
