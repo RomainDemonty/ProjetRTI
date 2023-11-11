@@ -23,13 +23,7 @@ public class Application extends JFrame {
 
         setContentPane(contentPane);
         // A enlever
-        JPanel PanelFacture = new JPanel();
-        PanelFacture.setLayout(new GridLayout(0, 1));
-        for (int i = 0 ; i<2;i++)
-        {
-            PanelFacture.add(new JCheckBox("aaaa"));
-        }
-        factureScrollPane.setViewportView(PanelFacture);
+
         //jusque ici
 
         // abonnement au controller
@@ -50,6 +44,10 @@ public class Application extends JFrame {
         return confirmer;
     }
 
+    public JScrollPane getFactureScrollPane()
+    {
+        return factureScrollPane ;
+    }
     public JButton getLogoutButton() {
         return logoutButton;
     }

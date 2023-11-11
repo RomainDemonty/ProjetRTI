@@ -4,6 +4,8 @@ import Modele.Singleton;
 import Vue.Application.Application;
 import Vue.Connexion;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -82,6 +84,13 @@ public class Controller implements ActionListener , WindowListener {
                 throw new RuntimeException(ex);
             }
 
+            JPanel PanelFacture = new JPanel();
+            PanelFacture.setLayout(new GridLayout(0, 1));
+            for (int i = 0 ; i<Singleton.getInstance().getFactures().size() ; i++)
+            {
+                    PanelFacture.add(new JCheckBox(Singleton.getInstance().getFactures().get(i))) ; 
+            }
+            app.getFactureScrollPane().setViewportView(PanelFacture);
 
 
 

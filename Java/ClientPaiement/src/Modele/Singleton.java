@@ -12,6 +12,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Singleton {
+
+    ArrayList<String> factures ;
     private static Singleton instance;
 
     static {
@@ -88,18 +90,26 @@ public class Singleton {
     }
     public boolean envoyerRequeteGetFactures(String id) throws IOException, ClassNotFoundException {
 
+        factures=new ArrayList<>() ;
         RequeteGetFacture requete = new RequeteGetFacture(id);
         oos.writeObject(requete);
         ReponseGetFactureTab reponse = (ReponseGetFactureTab) ois.readObject();
 
         for(int i = 0 ; i<reponse.getTabFactures().size();i++)
         {
+            String tmp = "facture n° "+reponse.getTabFactures().get(i).getIdFacture() + " du " + reponse.getTabFactures().get(i).getDate() + " total : " +reponse.getTabFactures().get(i).getMontant()    ;
             System.out.println(reponse.getTabFactures().get(i).getMontant());
+            factures.add(tmp) ;
         }
+        System.out.println(factures);
         return true ;
     }
 
 
+    public ArrayList<String> getFactures()
+    {
+        return factures ;
+    }
     public String getIdClient() {
         return idClient;
     }
