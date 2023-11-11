@@ -29,7 +29,7 @@ typedef struct
   int   id;
   int  idarticle;
   float prix;
-  int   stock;  
+  int   quantite;  
   int idfacture;
 } ARTICLEACHETE;
 typedef struct
@@ -74,6 +74,30 @@ Employe insertEmployes[] =
 {
   {-1,"admin","admin"},
 };
+FACTURE insertFactures[]=
+{
+  {-1,1, "19/12/2001", false },
+  {-1,1, "30/12/2011", false },
+  {-1,2, "19/12/2021", false },
+  {-1,1, "08/11/2019", false },
+};
+ARTICLEACHETE insertArticleAchete[]= 
+{
+  {-1,1,2.16f,9,1},
+  {-1,2,9.75f,8,1},
+  {-1,3,1.62f,15,1},
+  {-1,4,2.6f,8,2},
+  {-1,5,10.25f,4,2},
+  {-1,6,1.17f,5,1},
+  {-1,7,1.17f,14,1},
+  {-1,9,10.82f,7,4},
+  {-1,8,1.62f,10,3},
+  {-1,9,3.78f,23,4},
+  {-1,10,2.12f,4,4},
+  {-1,11,10.38f,6,4},
+};
+
+
 int main(int argc,char *argv[])
 {
   // Connection a MySql
@@ -89,7 +113,7 @@ int main(int argc,char *argv[])
  // Creation d'une table articleschete
   printf("Creation de la table articlesachete...\n");
   mysql_query(connexion,"drop table articlesachetes;"); // au cas ou elle existerait deja
-  mysql_query(connexion,"create table articlesachetes (id INT(4) auto_increment primary key, idarticle INT(4),prix FLOAT(4),stock INT(4),idfacture INT);");
+  mysql_query(connexion,"create table articlesachetes (id INT(4) auto_increment primary key, idarticle INT(4),prix FLOAT(4),quantite INT(4),idfacture INT);");
 
 //Creation de la table clients 
  printf("Creation de la table clients...\n");
@@ -104,7 +128,7 @@ int main(int argc,char *argv[])
   mysql_query(connexion,"create table employes (id INT(4) auto_increment primary key, username varchar(30),password varchar(30));");
 
   // Ajout de tuples dans la table UNIX_FINAL
-  printf("Ajout de 21 articles la table articles...\n");
+  printf("Ajout de d'elements dans la BD ...\n");
   char requete[256];
   for (int i=0 ; i<21 ; i++)
   {
@@ -120,6 +144,11 @@ int main(int argc,char *argv[])
    for (int i=0 ; i<1 ; i++)
   {
 	  sprintf(requete,"insert into employes values (NULL,'%s','%s');",insertEmployes[i].username,insertEmployes[i].password);
+	  mysql_query(connexion,requete);
+  }
+   for (int i=0 ; i<12 ; i++)
+  {
+	  sprintf(requete,"insert into articlesachetes values (NULL,'%d',%f,%d,'%d');",insertArticleAchete[i].idarticle,insertArticleAchete[i].prix,insertArticleAchete[i].quantite,insertArticleAchete[i].idfacture);
 	  mysql_query(connexion,requete);
   }
   // Deconnection de la BD
