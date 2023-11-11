@@ -1,17 +1,25 @@
 package Modele.BD;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class AccesBD  {
 
 
     private SqlBean sql ;
 
-    public AccesBD() throws SQLException, ClassNotFoundException {
+    public AccesBD() throws SQLException, ClassNotFoundException, IOException {
+
+
+        Properties P = new Properties() ;
+        P.load(new FileInputStream(System.getProperty("user.dir")+"\\properties.properties"));
 
         sql = new SqlBean("MySql",
-                "192.168.0.23 ",
+                P.getProperty("serveurBD"),
                 "PourStudent",
                 "Student",
                 "PassStudent1_");
@@ -24,7 +32,7 @@ public class AccesBD  {
             requete+= " * " ;
         else
         {
-            for (int i = 0; attributs[i] != null; i++) {
+            for (int i = 0; i<attributs.length; i++) {
                 if(i!=0)requete+= " , " ;
 
                 requete+= attributs[i] ;
@@ -36,7 +44,7 @@ public class AccesBD  {
        if(conditions!=null)
        {
            requete += " WHERE " ;
-           for (int i = 0; conditions[i] != null; i++) {
+           for (int i = 0; i<conditions.length; i++) {
                if(i!=0)requete+= " AND  " ;
 
                requete+= conditions[i] ;

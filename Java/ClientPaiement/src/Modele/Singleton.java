@@ -1,5 +1,8 @@
 package Modele;
 
+import Modele.Protocole.Facture.ReponseGetFacture;
+import Modele.Protocole.Facture.ReponseGetFactureTab;
+import Modele.Protocole.Facture.RequeteGetFacture;
 import Modele.Protocole.LOGOUT.RequeteLOGOUT;
 import Modele.Protocole.Login.ReponseLOGIN;
 import Modele.Protocole.Login.RequeteLOGIN;
@@ -40,15 +43,9 @@ public class Singleton {
 
     private Singleton() throws IOException {
 
-
         oos =null ;
         ois = null  ;
 
-        //TODO
-        //ENVOI D'UN OBJET LOGIN
-
-
-        //dois encore le lire apres
 
 
     }
@@ -88,6 +85,18 @@ public class Singleton {
         csocket.close();
 
 
+    }
+    public boolean envoyerRequeteGetFactures(String id) throws IOException, ClassNotFoundException {
+
+        RequeteGetFacture requete = new RequeteGetFacture(id);
+        oos.writeObject(requete);
+        ReponseGetFactureTab reponse = (ReponseGetFactureTab) ois.readObject();
+
+        for(int i = 0 ; i<reponse.getTabFactures().size();i++)
+        {
+            System.out.println(reponse.getTabFactures().get(i).getMontant());
+        }
+        return true ;
     }
 
 

@@ -48,6 +48,7 @@ public class Controller implements ActionListener , WindowListener {
                 throw new RuntimeException(ex);
             }
         }
+
         if(e.getSource()==app.getConfirmer())
         {
 
@@ -55,9 +56,9 @@ public class Controller implements ActionListener , WindowListener {
             //TODO
 
         }
+
         if(e.getSource()==app.getLogoutButton())
         {
-
             System.out.println("bouton deconnexion ");
             try {
                 Singleton.getInstance().envoyerRequeteLOGOUT();
@@ -66,19 +67,30 @@ public class Controller implements ActionListener , WindowListener {
             } catch (ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
-
             app.setVisible(false);
             c.setVisible(true);
-
-
         }
+
         if(e.getSource()==app.getVoirFacturesButton())
         {
-
             System.out.println("bouton pour voir les factures ");
-            //TODO
+            try {
+                Singleton.getInstance().envoyerRequeteGetFactures("1");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+
+
+
 
         }
+
+        c.repaint();
+        c.revalidate();
+        app.repaint();
+        app.revalidate();
     }
 
     @Override
