@@ -6,10 +6,12 @@ import Vue.Connexion;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.function.ToDoubleBiFunction;
 
-public class Controller implements ActionListener {
+public class Controller implements ActionListener , WindowListener {
 
    private Connexion c ;
 
@@ -77,5 +79,47 @@ public class Controller implements ActionListener {
             //TODO
 
         }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        System.out.println("bouton deconnexion ");
+        try {
+            Singleton.getInstance().envoyerRequeteLOGOUT();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 }

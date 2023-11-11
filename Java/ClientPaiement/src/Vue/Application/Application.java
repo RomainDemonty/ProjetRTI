@@ -2,6 +2,10 @@ package Vue.Application;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import Controller.Controller ;
 public class Application extends JFrame {
     private JButton confirmer;
@@ -34,7 +38,10 @@ public class Application extends JFrame {
         confirmer.addActionListener(c);
 
 
+        addWindowListener((WindowListener) c);
 
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 300);
         setVisible(true);
     }

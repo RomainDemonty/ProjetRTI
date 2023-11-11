@@ -15,6 +15,8 @@ public class Connexion extends JFrame {
         login.setText("admin");
        passwordField.setText("admin");
 
+       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       setLocationRelativeTo(null);
        seConnecterButton.addActionListener(c);
        setSize(800, 300);
        setVisible(true);

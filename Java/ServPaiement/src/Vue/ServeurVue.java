@@ -24,8 +24,8 @@ public class ServeurVue extends JFrame {
 
         arreterLeServeurButton.setEnabled(false);
         port.setText("50000");
-
-
+        nbthread.setText("1");
+        setLocationRelativeTo(null);
         setSize(400,300);
         setVisible(true);
 
@@ -47,6 +47,8 @@ public class ServeurVue extends JFrame {
         Protocole p = new Protocole() ;
         System.out.println(p);
         threadS = new ThreadServeur(Integer.parseInt(port.getText()),p,getNbthread());
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     public static void main(String[] args) {
 

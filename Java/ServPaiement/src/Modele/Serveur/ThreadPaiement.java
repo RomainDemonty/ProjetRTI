@@ -47,10 +47,12 @@ public class ThreadPaiement extends Thread {
 
         System.out.println("TH Client (Pool) démarre...");
         boolean interrompu = false;
+
         while(!interrompu)
         {
             try
             {
+                boolean deconnecte = true ;
                 //TODO , quand un client ferme son appli le quitter aussi dans le protocole
                 System.out.println("Attente d'une connexion...");
                 csocket = connexionsEnAttente.getConnexion();
@@ -60,7 +62,7 @@ public class ThreadPaiement extends Thread {
                 ois = new ObjectInputStream(csocket.getInputStream());
                 oos = new ObjectOutputStream(csocket.getOutputStream());
 
-                while(true) {
+                while(deconnecte) {
                     try {
                             Requete requete = (Requete) ois.readObject();
                             Reponse reponse = protocole.TraiteRequete(requete, csocket);
@@ -70,6 +72,10 @@ public class ThreadPaiement extends Thread {
 
                         if (oos != null && ex.getReponse() != null)
                             oos.writeObject(ex.getReponse());
+                        else
+                            deconnecte=false ;
+
+
                     }
                     catch (SocketException e){
                         csocket.close();
