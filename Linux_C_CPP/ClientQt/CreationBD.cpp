@@ -151,6 +151,11 @@ int main(int argc,char *argv[])
 	  sprintf(requete,"insert into articlesachetes values (NULL,'%d',%f,%d,'%d');",insertArticleAchete[i].idarticle,insertArticleAchete[i].prix,insertArticleAchete[i].quantite,insertArticleAchete[i].idfacture);
 	  mysql_query(connexion,requete);
   }
+  for (int i=0 ; i<4 ; i++)
+  {
+	  sprintf(requete,"insert into factures values (NULL,%d,'%s',%d);",insertFactures[i].idclient,insertFactures[i].date,insertFactures[i].paye);
+	  mysql_query(connexion,requete);
+  }
   // Deconnection de la BD
   mysql_close(connexion);
   exit(0);
