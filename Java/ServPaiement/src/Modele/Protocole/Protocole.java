@@ -7,6 +7,8 @@ import Modele.Protocole.LOGOUT.RequeteLOGOUT;
 import Modele.Protocole.Login.ReponseLOGIN;
 import Modele.Protocole.Login.RequeteLOGIN;
 import Modele.BD.* ;
+import Modele.Protocole.Paiement.ReponsePaiement;
+import Modele.Protocole.Paiement.RequetePaiement;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -39,7 +41,9 @@ public class Protocole {
         if (requete instanceof RequeteLOGOUT) TraiteRequeteLOGOUT((RequeteLOGOUT)
                 requete);
         if(requete instanceof RequeteGetFacture)
-            return TraiteRequeteGetFacture((RequeteGetFacture) requete, socket);
+            return TraiteRequeteGetFacture((RequeteGetFacture) requete);
+        if(requete instanceof RequetePaiement)
+            return TraiteRequetePAIEMENT((RequetePaiement) requete);
         return null;
     }
 
@@ -81,8 +85,27 @@ public class Protocole {
         throw new FinConnexionException(null);
     }
 
+    private synchronized ReponsePaiement TraiteRequetePAIEMENT(RequetePaiement requete) throws
+            FinConnexionException, SQLException {
+        System.out.println("dans ReponsePaiement");
 
-        private synchronized ReponseGetFactureTab TraiteRequeteGetFacture(RequeteGetFacture requete, Socket socket) throws FinConnexionException, SQLException, ClassNotFoundException, IOException {
+        //TODO verifie la carte , si ok faire une requete qui place le booleen a true pour paye
+        if(isCarteValid(requete.getNumeroVisa()))
+        {
+            String tmp[] = new String[1];
+            tmp[0] = "idfacture = " + requete.getIdfacture();
+            int rs = donnees.update("factures", "paye = true",tmp) ;
+            if(rs!=0)
+            {
+                return new ReponsePaiement(true);
+            }
+        }
+        return new ReponsePaiement(false);
+
+    }
+
+
+        private synchronized ReponseGetFactureTab TraiteRequeteGetFacture(RequeteGetFacture requete) throws FinConnexionException, SQLException, ClassNotFoundException, IOException {
 
 
                 ReponseGetFactureTab reponse = new ReponseGetFactureTab();
@@ -103,7 +126,9 @@ public class Protocole {
                         {
                             total+=( Float.parseFloat(s.getString("prix")) * Float.parseFloat(s.getString("quantite")));
                         }
-                       ReponseGetFacture rep = new ReponseGetFacture( rs.getString("idfacture"), rs.getString("date"),Boolean.parseBoolean(rs.getString("paye")),Float.toString(total));
+                        boolean b = false ;
+                        if(rs.getString("paye").equals("1")) b=true  ;
+                        ReponseGetFacture rep = new ReponseGetFacture( rs.getString("idfacture"), rs.getString("date"),b,Float.toString(total));
                         reponse.addFacture(rep);
                     }
 
@@ -111,6 +136,28 @@ public class Protocole {
                 return reponse ;
             }
 
+
+    public static boolean isCarteValid(String numeroCarte) {
+        int somme = 0;
+        boolean doubleDigit = false;
+
+        for (int i = numeroCarte.length() - 1; i >= 0; i--) {
+            int chiffre = numeroCarte.charAt(i) - '0';
+
+            if (doubleDigit) {
+                chiffre *= 2;
+
+                if (chiffre > 9) {
+                    chiffre -= 9;
+                }
+            }
+
+            somme += chiffre;
+            doubleDigit = !doubleDigit;
+        }
+
+        return somme % 10 == 0;
+    }
 
 
     }

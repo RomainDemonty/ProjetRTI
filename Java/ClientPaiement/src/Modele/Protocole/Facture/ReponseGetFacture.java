@@ -37,4 +37,9 @@ public class ReponseGetFacture implements Reponse {
     public String getMontant() {
         return montant;
     }
+
+    @Override
+    public String toString() {
+        return "facture n° "+getIdFacture() + " du " + getDate() + " total : " + getMontant()   ;
+    }
 }

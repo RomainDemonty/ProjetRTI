@@ -6,6 +6,8 @@ import Modele.Protocole.Facture.RequeteGetFacture;
 import Modele.Protocole.LOGOUT.RequeteLOGOUT;
 import Modele.Protocole.Login.ReponseLOGIN;
 import Modele.Protocole.Login.RequeteLOGIN;
+import Modele.Protocole.Paiement.ReponsePaiement;
+import Modele.Protocole.Paiement.RequetePaiement;
 
 import java.io.*;
 import java.net.Socket;
@@ -13,7 +15,7 @@ import java.util.ArrayList;
 
 public class Singleton {
 
-    ArrayList<String> factures ;
+    ArrayList<ReponseGetFacture> factures ;
     private static Singleton instance;
 
     static {
@@ -97,16 +99,36 @@ public class Singleton {
 
         for(int i = 0 ; i<reponse.getTabFactures().size();i++)
         {
-            String tmp = "facture n° "+reponse.getTabFactures().get(i).getIdFacture() + " du " + reponse.getTabFactures().get(i).getDate() + " total : " +reponse.getTabFactures().get(i).getMontant()    ;
-            System.out.println(reponse.getTabFactures().get(i).getMontant());
-            factures.add(tmp) ;
+            if(reponse.getTabFactures().get(i).isPaye()==false)
+            {
+                System.out.println(reponse.getTabFactures().get(i).getMontant());
+                factures.add(reponse.getTabFactures().get(i)) ;
+            }
+
         }
-        System.out.println(factures);
-        return true ;
+        if(reponse.getTabFactures().size()!=0)
+        {
+            return true ;
+        }
+        else return false ;
+
+    }
+
+    public boolean envoyerRequetePayer(String id , String nom ,String visa ) throws IOException, ClassNotFoundException {
+
+
+        RequetePaiement requete = new RequetePaiement(id , nom , visa);
+        oos.writeObject(requete);
+        ReponsePaiement  reponse = (ReponsePaiement) ois.readObject();
+        System.out.println("reponse du serveur pour la requete de payement de la facture : id " + reponse);
+
+
+
+        return reponse.isOk() ;
     }
 
 
-    public ArrayList<String> getFactures()
+    public ArrayList<ReponseGetFacture> getFactures()
     {
         return factures ;
     }

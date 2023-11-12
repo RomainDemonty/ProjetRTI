@@ -64,7 +64,7 @@ public class AccesBD  {
         if(conditions!=null)
         {
             requete += " WHERE " ;
-            for (int i = 0; conditions[i] != null; i++) {
+            for (int i = 0; i<conditions.length; i++) {
                 if(i!=0)requete+= " AND  " ;
 
                 requete+= conditions[i] ;

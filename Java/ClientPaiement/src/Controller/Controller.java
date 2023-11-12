@@ -38,12 +38,11 @@ public class Controller implements ActionListener , WindowListener {
         {
             System.out.println("bouton connexion ");
             try {
-
-            if(Singleton.getInstance().envoyerRequeteLOGIN(c.getLogin(), c.getPassword()))
-            {
-                app.setVisible(true);
-                c.setVisible(false);
-            }
+                if(Singleton.getInstance().envoyerRequeteLOGIN(c.getLogin(), c.getPassword()))
+                {
+                    app.setVisible(true);
+                    c.setVisible(false);
+                }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (ClassNotFoundException ex) {
@@ -51,12 +50,39 @@ public class Controller implements ActionListener , WindowListener {
             }
         }
 
-        if(e.getSource()==app.getConfirmer())
-        {
+        if(e.getSource()==app.getConfirmer()) {
 
             System.out.println("bouton confirmer ");
-            //TODO
 
+            JPanel tmpPanel = app.getPanelFacture();
+            for (Component c : tmpPanel.getComponents()) {
+                if (c instanceof JCheckBox) {
+                    JCheckBox checkBox = (JCheckBox) c;
+                    if (checkBox.isSelected()) {
+                        for (int i = 0; i < Singleton.getInstance().getFactures().size(); i++) {
+                            if (checkBox.getText().equals(Singleton.getInstance().getFactures().get(i).toString())) {
+
+                                try {
+                                    if(Singleton.getInstance().envoyerRequetePayer(Singleton.getInstance().getFactures().get(i).getIdFacture(), app.getNomVISA(), app.getNumeroVISA()))
+                                    {
+                                        Singleton.getInstance().getFactures().remove(Singleton.getInstance().getFactures().get(i));
+                                        tmpPanel.remove(checkBox);
+                                        app.setErrorVisa("");
+                                    }
+                                    else
+                                    {
+                                        app.setErrorVisa("Numero de visa invalid ! ");
+                                    }
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                } catch (ClassNotFoundException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         if(e.getSource()==app.getLogoutButton())
@@ -77,20 +103,20 @@ public class Controller implements ActionListener , WindowListener {
         {
             System.out.println("bouton pour voir les factures ");
             try {
-                Singleton.getInstance().envoyerRequeteGetFactures("1");
+                Singleton.getInstance().envoyerRequeteGetFactures(app.getIdclient());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
 
-            JPanel PanelFacture = new JPanel();
-            PanelFacture.setLayout(new GridLayout(0, 1));
+            app.resetPanelFacture();
+            app.getPanelFacture().setLayout(new GridLayout(0, 1));
             for (int i = 0 ; i<Singleton.getInstance().getFactures().size() ; i++)
             {
-                    PanelFacture.add(new JCheckBox(Singleton.getInstance().getFactures().get(i))) ; 
+                app.getPanelFacture().add(new JCheckBox(Singleton.getInstance().getFactures().get(i).toString())) ;
             }
-            app.getFactureScrollPane().setViewportView(PanelFacture);
+            app.getFactureScrollPane().setViewportView(app.getPanelFacture());
 
 
 
