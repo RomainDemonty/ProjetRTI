@@ -72,87 +72,90 @@ public class Controller implements ActionListener {
                 throw new RuntimeException(ex);
             }
         }
-
-        if(home != null && e.getSource()==home.getLogoutButton())
+        else
         {
-            System.out.println(" Bouton Logout !!");
-            try {
-                if((Utilisateur.getInstance().logout())==true)
-                {
+            if(e.getSource()==home.getLogoutButton())
+            {
+                System.out.println(" Bouton Logout !!");
+                try {
                     Utilisateur.getInstance().cancellall();
-                    connexion= new Connexion(this);
-                    home.dispose();
+                    if((Utilisateur.getInstance().logout())==true)
+                    {
+                        connexion= new Connexion(this);
+                        home.dispose();
+                    }
+                    else
+                    {
+                        System.out.println("Error_logout");
+                    }
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
-                else
-                {
-                    System.out.println("Error_logout");
+            }
+            if(e.getSource()==home.getLeftButton())
+            {
+                try {
+                    Utilisateur.getInstance().precedent();
+                    home.setArticle(Utilisateur.getInstance().articleSelect);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                //System.out.println(" Bouton précédent !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
             }
-        }
-        if(home != null && e.getSource()==home.getLeftButton())
-        {
-            try {
-                Utilisateur.getInstance().precedent();
-                home.setArticle(Utilisateur.getInstance().articleSelect);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            if(e.getSource()==home.getRightButton())
+            {
+                try {
+                    Utilisateur.getInstance().suivant();
+                    home.setArticle(Utilisateur.getInstance().articleSelect);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                //System.out.println(" Bouton suivant !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
             }
-            //System.out.println(" Bouton précédent !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
-        }
-        if(home != null && e.getSource()==home.getRightButton())
-        {
-            try {
-                Utilisateur.getInstance().suivant();
-                home.setArticle(Utilisateur.getInstance().articleSelect);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            if (e.getSource() == home.getAddBagButton())
+            {
+                try {
+                    Utilisateur.getInstance().achat(home.quantitySpinner.getValue());
+                    Utilisateur.getInstance().consult();
+                    home.setArticle(Utilisateur.getInstance().articleSelect);
+                    home.setBagPannel();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                //System.out.println(" Bouton achat !" );
             }
-            //System.out.println(" Bouton suivant !" + "NumArticle: " + Utilisateur.getInstance().getNumArticle());
-        }
-        if (home != null && e.getSource() == home.getAddBagButton())
-        {
-            try {
-                Utilisateur.getInstance().achat(home.quantitySpinner.getValue());
-                Utilisateur.getInstance().consult();
-                home.setArticle(Utilisateur.getInstance().articleSelect);
-                home.setBagPannel();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            if(e.getSource() == home.getDeleteBagButton())
+            {
+                try {
+                    Utilisateur.getInstance().cancellall();
+                    Utilisateur.getInstance().consult();
+                    home.setArticle(Utilisateur.getInstance().articleSelect);
+                    home.setBagPannel();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
-            //System.out.println(" Bouton achat !" );
-        }
-        if(home != null && e.getSource() == home.getDeleteBagButton())
-        {
-            try {
-                Utilisateur.getInstance().cancellall();
-                Utilisateur.getInstance().consult();
-                home.setArticle(Utilisateur.getInstance().articleSelect);
-                home.setBagPannel();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            if (e.getSource() == home.getDeleteArticleButton())
+            {
+                try {
+                    Utilisateur.getInstance().cancell(home.getArtSelect());
+                    Utilisateur.getInstance().consult();
+                    home.setArticle(Utilisateur.getInstance().articleSelect);
+                    home.setBagPannel();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
-        }
-        if (home != null && e.getSource() == home.getDeleteArticleButton())
-        {
-            try {
-                Utilisateur.getInstance().cancell(home.getArtSelect());
-                Utilisateur.getInstance().consult();
-                home.setArticle(Utilisateur.getInstance().articleSelect);
-                home.setBagPannel();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            if (e.getSource() == home.getBuyButton())
+            {
+                try {
+                    Utilisateur.getInstance().confirm();
+                    home.setBagPannel();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
-        }
-        if (home != null && e.getSource() == home.getBuyButton())
-        {
-            try {
-                Utilisateur.getInstance().confirm();
-                home.setBagPannel();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            home.MessageErreur.setText(Utilisateur.getInstance().MessageErr);
         }
     }
 }

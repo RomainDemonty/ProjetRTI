@@ -22,13 +22,13 @@ public class Home extends JFrame {
     private JButton deleteArticleButton;
     private JButton buyButton;
     private JButton deleteBagButton;
-    private JLabel namelabel;
     private JLabel Total;
     private JLabel caseNom;
     private JLabel casePrix;
     private JLabel caseStock;
     private JLabel image;
     private JScrollPane scrollPanebag;
+    public JLabel MessageErreur;
 
     public JButton getLogoutButton() {
         return logoutButton;

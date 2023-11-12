@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67071f21-d120-4d93-8552-2737670f726d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prop.properties" beforeDir="false" afterPath="$PROJECT_DIR$/prop.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Modele/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modele/Utilisateur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Swing/Connexion.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Connexion.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Swing/Connexion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Swing/Connexion.java" afterDir="false" />
-    </list>
+    <list default="true" id="67071f21-d120-4d93-8552-2737670f726d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,9 +31,9 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW": "true",
-    "UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH": "313",
+    "UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH": "260",
     "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW": "true",
-    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "487",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "340",
     "WebServerToolWindowFactoryState": "false",
     "dart.analysis.tool.window.visible": "false",
     "last_opened_file_path": "C:/Users/Romain/OneDrive/Bureau/ProjetRTI/Java/ClientJava",
@@ -108,6 +101,7 @@
       <workItem from="1699601772144" duration="2217000" />
       <workItem from="1699609092704" duration="6460000" />
       <workItem from="1699642454067" duration="4673000" />
+      <workItem from="1699796298794" duration="3277000" />
     </task>
     <servers />
   </component>

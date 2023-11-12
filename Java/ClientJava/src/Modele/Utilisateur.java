@@ -15,6 +15,8 @@ public class Utilisateur {
 
     private String resultat = "";
 
+    public String MessageErr = "Rien";
+
     private ReadProperties prop ;
 
     private int idUtilisateur = 0;
@@ -97,6 +99,7 @@ public class Utilisateur {
         else
         {
             System.out.println("Erreur de consult");
+            MessageErr = "Erreur de consult";
         }
     }
 
@@ -122,12 +125,14 @@ public class Utilisateur {
             }
             else
             {
-                System.out.println("Erreur de consult");
+                System.out.println("Erreur d achat");
+                MessageErr = "Erreur d achat";
             }
         }
         else
         {
             System.out.println("Quantite pas valide");
+            MessageErr = "Quantite pas valide";
         }
     }
 
@@ -152,11 +157,13 @@ public class Utilisateur {
             else
             {
                 System.out.println("Erreur_CANCELL");
+                MessageErr = "Erreur de cancel";
             }
         }
         else
         {
             System.out.println("CANCEL_NO_SELECT");
+            MessageErr = "Veuillez sélectionner un article a supprimer !";
         }
 
     }
@@ -174,6 +181,7 @@ public class Utilisateur {
         else
         {
             System.out.println("CANCELALL_ERROR");
+            MessageErr = "CancelAll erreur";
         }
     }
 
@@ -186,10 +194,12 @@ public class Utilisateur {
         {
             monPanier.clear();
             System.out.println("Confirm_OK");
+            MessageErr = "Achat bien effectué !";
         }
         else
         {
             System.out.println("Confirm_ERROR");
+            MessageErr = "Erreur de la confirmation d achat";
         }
     }
 
@@ -214,6 +224,7 @@ public class Utilisateur {
         {
             System.out.println("Connect_OK");
             idUtilisateur = Integer.parseInt(mots[3]);
+            MessageErr = "Bienvenue " + nom + " !";
             return "OK";
         }
         else
@@ -238,6 +249,7 @@ public class Utilisateur {
         else
         {
             System.out.println("Deconnect_error");
+            MessageErr = "Erreur lors du logout !";
             return false;
         }
         //dos.close();
