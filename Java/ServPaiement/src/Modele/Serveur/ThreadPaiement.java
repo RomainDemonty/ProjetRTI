@@ -1,6 +1,7 @@
 package Modele.Serveur;
 
 import Modele.Protocole.FinConnexionException;
+import Modele.Protocole.Login.ReponseLOGIN;
 import Modele.Protocole.Login.RequeteLOGIN;
 import Modele.Protocole.Protocole;
 import Modele.Protocole.Reponse;
@@ -9,6 +10,7 @@ import Modele.Protocole.Requete;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.sql.SQLException;
 
 public class ThreadPaiement extends Thread {
@@ -48,7 +50,7 @@ public class ThreadPaiement extends Thread {
         System.out.println("TH Client (Pool) démarre...");
         boolean interrompu = false;
 
-        while(!interrompu)
+        while(!interrompu && !this.isInterrupted())
         {
             try
             {
@@ -62,19 +64,22 @@ public class ThreadPaiement extends Thread {
                 ois = new ObjectInputStream(csocket.getInputStream());
                 oos = new ObjectOutputStream(csocket.getOutputStream());
 
-                while(deconnecte) {
+                while(deconnecte && !this.isInterrupted()) {
                     try {
+                            csocket.setSoTimeout(2000);
                             Requete requete = (Requete) ois.readObject();
                             Reponse reponse = protocole.TraiteRequete(requete, csocket);
                             oos.writeObject(reponse);
 
-                    } catch (FinConnexionException ex) {
+                    }catch (SocketTimeoutException e) {
+                        System.out.println("time out 2 sec");
+                    }
+                    catch (FinConnexionException ex) {
 
                         if (oos != null && ex.getReponse() != null)
                             oos.writeObject(ex.getReponse());
-                        else
-                            deconnecte=false ;
 
+                            deconnecte=false ;
 
                     }
                     catch (SocketException e){
@@ -82,24 +87,37 @@ public class ThreadPaiement extends Thread {
                         break;
                     }
                     catch (IOException e) {
+                        System.out.println("[ThreadPaiement] dans ioexception ");
                         throw new RuntimeException(e);
                     } catch (ClassNotFoundException e) {
+                        System.out.println("[ThreadPaiement] dans classnotfoundexception ");
                         throw new RuntimeException(e);
                     } catch (SQLException e) {
+                        System.out.println("[ThreadPaiement] dans sqlexception ");
+                        oos.writeObject((Reponse) new ReponseLOGIN(false));
                         throw new RuntimeException(e);
                     }
 
                 }
 
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                try {if(csocket!=null)
+                    csocket.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                interrompu=true;
             }
-            catch (InterruptedException | IOException ex)
-            {
-                System.out.println("Demande d'interruption...");
-                interrompu = true;
-            }
-
         }
         System.out.println("TH Client (Pool) se termine.");
+        try {
+            if(csocket!=null)
+            csocket.close();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
 
 
     }

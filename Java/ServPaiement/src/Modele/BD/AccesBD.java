@@ -54,6 +54,7 @@ public class AccesBD  {
         requete+= ";";
         System.out.println(requete );
         ResultSet rs = sql.executeQuery(requete);
+        System.out.println("resultat rs : " + rs);
         return rs ;
     }
     public int update ( String table, String modif, String[] conditions) throws SQLException {
@@ -76,4 +77,10 @@ public class AccesBD  {
         int rs = sql.executeUpdate(requete);
         return rs ;
     }
+
+    public void close() throws SQLException {
+        sql.close();
+    }
+
+
 }

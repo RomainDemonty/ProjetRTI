@@ -8,6 +8,7 @@ public class Connexion extends JFrame {
     private JPasswordField passwordField;
     private JButton seConnecterButton;
     private JPanel contentPane;
+    private JLabel error;
 
     public Connexion(Controller c )
    {
@@ -32,5 +33,9 @@ public class Connexion extends JFrame {
 
     public String getPassword() {
         return passwordField.getText();
+    }
+
+    public void setError(String e) {
+        error.setText(e);
     }
 }

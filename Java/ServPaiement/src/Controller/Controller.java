@@ -28,6 +28,7 @@ public class Controller implements ActionListener{
         if(e.getSource()==svue.getArreterButton())
         {
             System.out.println("Serveur arreté");
+            svue.getThreadS().interrupt();
             svue.getLancerButton().setEnabled(true);
             svue.getArreterButton().setEnabled(false);
         }

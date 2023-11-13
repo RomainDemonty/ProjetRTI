@@ -33,6 +33,7 @@ public  class ThreadServeur extends Thread
     }
 
 
+
     @Override
     public void run()
     {
@@ -53,8 +54,7 @@ public  class ThreadServeur extends Thread
             Socket csocket;
             try
             {
-               // ssocket.setSoTimeout(2000);
-                System.out.println(ssocket.getInetAddress().getHostAddress());
+               ssocket.setSoTimeout(2000);
                 System.out.println(ssocket.getLocalPort());
                 csocket = ssocket.accept();
                 connexionsEnAttente.addConnexion(csocket);
@@ -70,5 +70,12 @@ public  class ThreadServeur extends Thread
             }
         }
         pool.interrupt();
+        try {
+            ssocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("le thread serveur est interompu ");
+
     }
 }

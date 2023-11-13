@@ -11,13 +11,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
-import java.util.function.ToDoubleBiFunction;
+import java.net.ConnectException;
+import java.net.SocketException;
 
 public class Controller implements ActionListener , WindowListener {
 
    private Connexion c ;
-
-   public Singleton  si ;
 
    private Application app ;
     public Controller()
@@ -26,7 +25,6 @@ public class Controller implements ActionListener , WindowListener {
         c = new Connexion(this) ;
         app=new Application(this);
         app.setVisible(false);
-        Singleton.getInstance();
 
     }
 
@@ -43,7 +41,15 @@ public class Controller implements ActionListener , WindowListener {
                     app.setVisible(true);
                     c.setVisible(false);
                 }
-            } catch (IOException ex) {
+                else
+                {
+                    c.setError("erreur de connexion");
+                }
+            }catch (ConnectException ex )
+            {
+                c.setError("error de connexion au seveur");
+            }
+            catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
@@ -55,9 +61,9 @@ public class Controller implements ActionListener , WindowListener {
             System.out.println("bouton confirmer ");
 
             JPanel tmpPanel = app.getPanelFacture();
-            for (Component c : tmpPanel.getComponents()) {
-                if (c instanceof JCheckBox) {
-                    JCheckBox checkBox = (JCheckBox) c;
+            for (Component check : tmpPanel.getComponents()) {
+                if (check instanceof JCheckBox) {
+                    JCheckBox checkBox = (JCheckBox) check;
                     if (checkBox.isSelected()) {
                         for (int i = 0; i < Singleton.getInstance().getFactures().size(); i++) {
                             if (checkBox.getText().equals(Singleton.getInstance().getFactures().get(i).toString())) {
@@ -73,7 +79,18 @@ public class Controller implements ActionListener , WindowListener {
                                     {
                                         app.setErrorVisa("Numero de visa invalid ! ");
                                     }
-                                } catch (IOException ex) {
+                                }catch (SocketException ex )
+                                {
+                                    app.setVisible(false);
+                                    c.setVisible(true);
+                                    try {
+                                        Singleton.getInstance().getCsocket().close();
+                                    } catch (IOException exc) {
+                                        throw new RuntimeException(exc);
+                                    }
+                                    c.setError("error de connexion au seveur");
+                                }
+                                catch (IOException ex) {
                                     throw new RuntimeException(ex);
                                 } catch (ClassNotFoundException ex) {
                                     throw new RuntimeException(ex);
@@ -90,7 +107,19 @@ public class Controller implements ActionListener , WindowListener {
             System.out.println("bouton deconnexion ");
             try {
                 Singleton.getInstance().envoyerRequeteLOGOUT();
-            } catch (IOException ex) {
+            }
+            catch (SocketException ex )
+            {
+                app.setVisible(false);
+                c.setVisible(true);
+                try {
+                    Singleton.getInstance().getCsocket().close();
+                } catch (IOException exc) {
+                    throw new RuntimeException(exc);
+                }
+                c.setError("error de connexion au seveur");
+            }
+            catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
@@ -104,7 +133,19 @@ public class Controller implements ActionListener , WindowListener {
             System.out.println("bouton pour voir les factures ");
             try {
                 Singleton.getInstance().envoyerRequeteGetFactures(app.getIdclient());
-            } catch (IOException ex) {
+            }
+            catch (SocketException ex )
+            {
+                app.setVisible(false);
+                c.setVisible(true);
+                try {
+                    Singleton.getInstance().getCsocket().close();
+                } catch (IOException exc) {
+                    throw new RuntimeException(exc);
+                }
+                c.setError("error de connexion au seveur");
+            }
+            catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
@@ -138,7 +179,18 @@ public class Controller implements ActionListener , WindowListener {
         System.out.println("bouton deconnexion ");
         try {
             Singleton.getInstance().envoyerRequeteLOGOUT();
-        } catch (IOException ex) {
+        }
+        catch (SocketException ex )
+        {
+            app.setVisible(false);
+            c.setVisible(true);
+            try {
+                Singleton.getInstance().getCsocket().close();
+            } catch (IOException exc) {
+                throw new RuntimeException(exc);
+            }
+            c.setError("error de connexion au seveur");
+        }catch (IOException ex) {
             throw new RuntimeException(ex);
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);

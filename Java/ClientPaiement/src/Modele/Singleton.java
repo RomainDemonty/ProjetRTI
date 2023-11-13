@@ -78,7 +78,10 @@ public class Singleton {
             return true  ;
         }
         else {
+
+            csocket.close();
             return false  ;
+
         }
 
     }
@@ -152,5 +155,8 @@ public class Singleton {
         return numVISA;
     }
 
+    public Socket getCsocket() {
+        return csocket;
+    }
 }
 

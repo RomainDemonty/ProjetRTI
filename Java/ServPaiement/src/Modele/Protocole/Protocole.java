@@ -54,6 +54,7 @@ public class Protocole {
         boolean trouve = false  ;
 
         ResultSet rs = donnees.selection(null, "employes", null);
+
         while(rs.next())
         {
             if(rs.getString("username").equals(requete.getLogin()) && rs.getString("password").equals(requete.getPassword()))
@@ -64,7 +65,8 @@ public class Protocole {
             }
 
         }
-
+        System.out.println("je passe apres rs next");
+        donnees.close();
         if(trouve==true)
         {
             clientsConnectes.put(requete.getLogin(), socket);
@@ -86,9 +88,9 @@ public class Protocole {
     }
 
     private synchronized ReponsePaiement TraiteRequetePAIEMENT(RequetePaiement requete) throws
-            FinConnexionException, SQLException {
+            FinConnexionException, SQLException, IOException, ClassNotFoundException {
         System.out.println("dans ReponsePaiement");
-
+        donnees  = new AccesBD();
         //TODO verifie la carte , si ok faire une requete qui place le booleen a true pour paye
         if(isCarteValid(requete.getNumeroVisa()))
         {
@@ -100,6 +102,7 @@ public class Protocole {
                 return new ReponsePaiement(true);
             }
         }
+        donnees.close();
         return new ReponsePaiement(false);
 
     }
@@ -133,6 +136,7 @@ public class Protocole {
                     }
 
                 }
+                donnees.close();
                 return reponse ;
             }
 
