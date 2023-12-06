@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67071f21-d120-4d93-8552-2737670f726d" name="Changes" comment="" />
+    <list default="true" id="67071f21-d120-4d93-8552-2737670f726d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prop.properties" beforeDir="false" afterPath="$PROJECT_DIR$/prop.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Modele/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modele/Utilisateur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientPaiement/src/Modele/Protocole/Protocole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientPaiement/src/Modele/Singleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientPaiement/src/Modele/Singleton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/properties.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/properties.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Modele/Serveur/Serveur.java" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,7 +44,7 @@
     "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "340",
     "WebServerToolWindowFactoryState": "false",
     "dart.analysis.tool.window.visible": "false",
-    "last_opened_file_path": "C:/Users/Romain/OneDrive/Bureau/ProjetRTI/Java/ClientJava",
+    "last_opened_file_path": "C:/Users/user/Desktop/SpringBoot_Theorie/seance 1/helloworldwebservice",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -102,6 +110,8 @@
       <workItem from="1699609092704" duration="6460000" />
       <workItem from="1699642454067" duration="4673000" />
       <workItem from="1699796298794" duration="3277000" />
+      <workItem from="1700034314869" duration="1976000" />
+      <workItem from="1700123309540" duration="47000" />
     </task>
     <servers />
   </component>

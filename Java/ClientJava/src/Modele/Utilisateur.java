@@ -126,7 +126,7 @@ public class Utilisateur {
             else
             {
                 System.out.println("Erreur d achat");
-                MessageErr = "Erreur d achat";
+                MessageErr = "Erreur d achat stock insuffisant";
             }
         }
         else

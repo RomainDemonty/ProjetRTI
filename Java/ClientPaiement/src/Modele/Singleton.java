@@ -12,6 +12,7 @@ import Modele.Protocole.Paiement.RequetePaiement;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class Singleton {
 
@@ -60,8 +61,11 @@ public class Singleton {
 
     public boolean envoyerRequeteLOGIN(String u , String mdp) throws IOException, ClassNotFoundException {
 
+        Properties P = new Properties() ;
+        P.load(new FileInputStream(System.getProperty("user.dir")+"\\properties.properties"));
+
         System.out.println("avant csocket ");
-        csocket = new Socket("localhost",50000);
+        csocket = new Socket(P.getProperty("ipAdress"),Integer.parseInt(P.getProperty("socket")));
         System.out.println("apres csocket  -> valeur : " +csocket);
 
         oos = new ObjectOutputStream(csocket.getOutputStream());

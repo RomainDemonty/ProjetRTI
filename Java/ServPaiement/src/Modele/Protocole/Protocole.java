@@ -18,6 +18,7 @@ import java.util.HashMap;
 
 public class Protocole {
 
+    //todo faire en sorte d'instanceir que une fois la base de donnéé et tester avec le client nonsecu
     private AccesBD  donnees;
     private String nom ;
     public String getNom()
@@ -91,7 +92,6 @@ public class Protocole {
             FinConnexionException, SQLException, IOException, ClassNotFoundException {
         System.out.println("dans ReponsePaiement");
         donnees  = new AccesBD();
-        //TODO verifie la carte , si ok faire une requete qui place le booleen a true pour paye
         if(isCarteValid(requete.getNumeroVisa()))
         {
             String tmp[] = new String[1];
