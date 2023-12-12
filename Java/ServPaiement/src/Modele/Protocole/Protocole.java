@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class Protocole {
 
-    //todo faire en sorte d'instanceir que une fois la base de donnéé et tester avec le client nonsecu
+    //todo  si ca fonctionne tjrs
     private AccesBD  donnees;
     private String nom ;
     public String getNom()
@@ -27,10 +27,10 @@ public class Protocole {
     }
     private HashMap<String,Socket> clientsConnectes;
 
-    public Protocole()
-    {
+    public Protocole() throws SQLException, IOException, ClassNotFoundException {
+        donnees  = new AccesBD();
         clientsConnectes = new HashMap<>();
-        donnees = null ;
+
     }
 
     public synchronized Reponse TraiteRequete(Requete requete, Socket socket) throws
@@ -51,7 +51,7 @@ public class Protocole {
     private synchronized ReponseLOGIN TraiteRequeteLOGIN(RequeteLOGIN requete, Socket socket) throws FinConnexionException, SQLException, ClassNotFoundException, IOException {
 
         System.out.println(" [protocole] dans ReponseLOGIN  avec user = "+requete.getLogin()+ " et mdp = "+requete.getPassword() );
-        donnees  = new AccesBD();
+
         boolean trouve = false  ;
 
         ResultSet rs = donnees.selection(null, "employes", null);
@@ -67,7 +67,7 @@ public class Protocole {
 
         }
         System.out.println("je passe apres rs next");
-        donnees.close();
+
         if(trouve==true)
         {
             clientsConnectes.put(requete.getLogin(), socket);
@@ -91,7 +91,7 @@ public class Protocole {
     private synchronized ReponsePaiement TraiteRequetePAIEMENT(RequetePaiement requete) throws
             FinConnexionException, SQLException, IOException, ClassNotFoundException {
         System.out.println("dans ReponsePaiement");
-        donnees  = new AccesBD();
+
         if(isCarteValid(requete.getNumeroVisa()))
         {
             String tmp[] = new String[1];
@@ -102,7 +102,7 @@ public class Protocole {
                 return new ReponsePaiement(true);
             }
         }
-        donnees.close();
+
         return new ReponsePaiement(false);
 
     }
@@ -113,7 +113,7 @@ public class Protocole {
 
                 ReponseGetFactureTab reponse = new ReponseGetFactureTab();
                 System.out.println(" [protocole] dans Reponse GETFACTURE" );
-                donnees  = new AccesBD();
+
 
                 ResultSet rs = donnees.selection(null, "factures", null);
                 while(rs.next())
@@ -136,7 +136,6 @@ public class Protocole {
                     }
 
                 }
-                donnees.close();
                 return reponse ;
             }
 
@@ -159,7 +158,6 @@ public class Protocole {
             somme += chiffre;
             doubleDigit = !doubleDigit;
         }
-
         return somme % 10 == 0;
     }
 

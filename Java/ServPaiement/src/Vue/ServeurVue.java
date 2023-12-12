@@ -6,6 +6,7 @@ import Modele.Protocole.Protocole;
 import Modele.Serveur.ThreadServeur;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ServeurVue extends JFrame {
 
@@ -43,7 +44,7 @@ public class ServeurVue extends JFrame {
         return arreterLeServeurButton ;
     }
 
-    public void setThreadS() throws IOException {
+    public void setThreadS() throws IOException, SQLException, ClassNotFoundException {
         Protocole p = new Protocole() ;
         System.out.println(p);
         threadS = new ThreadServeur(Integer.parseInt(port.getText()),p,getNbthread());

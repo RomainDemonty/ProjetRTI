@@ -4,6 +4,7 @@ import Vue.ServeurVue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class Controller implements ActionListener{
 
@@ -21,6 +22,10 @@ public class Controller implements ActionListener{
             try {
                 svue.setThreadS();
             } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
             svue.getThreadS().start();

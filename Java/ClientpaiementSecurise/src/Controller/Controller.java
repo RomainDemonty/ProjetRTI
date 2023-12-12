@@ -27,6 +27,8 @@ public class Controller implements ActionListener , WindowListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==c.getSeConnecterButton())
         {
+            //TODO demande au prof si c'es notre serveur qui doit faire un digest pour comparere les 2 digest ou si tout se fait dans la classe requeteLOGIN
+            // avec du coup des get dans la classe en plus pour recup els apram or pswd
             System.out.println("bouton connecter");
             //todo envoyer un digest sale pour se connecter ou le password est "crypté"
             // reception d'une cle de session
@@ -49,7 +51,7 @@ public class Controller implements ActionListener , WindowListener {
 
         if(e.getSource()==app.getVoirFacturesButton())
         {
-
+            System.out.println("bouton voir factures ");
 
         }
 
