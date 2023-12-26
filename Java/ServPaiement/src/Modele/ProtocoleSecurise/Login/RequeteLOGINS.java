@@ -1,6 +1,6 @@
-package Modele.Protocole.Login;
+package Modele.ProtocoleSecurise.Login;
 
-import Modele.Protocole.Requete;
+import Modele.ProtocoleSecurise.Requete;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -11,14 +11,14 @@ import java.security.*;
 import java.util.Date;
 
 
-public class RequeteLOGIN implements Requete {
+public class RequeteLOGINS implements Requete {
 
 
     private String login;
     private Date d ;
     private double alea ;
     private byte[] digest;
-    public RequeteLOGIN(String l,String p) throws NoSuchAlgorithmException, NoSuchProviderException, IOException {
+    public RequeteLOGINS(String l, String p) throws NoSuchAlgorithmException, NoSuchProviderException, IOException {
         login = l;
         d = new Date();
         alea =  Math.random()%10;
@@ -37,5 +37,17 @@ public class RequeteLOGIN implements Requete {
 
     public String getLogin() {
         return login;
+    }
+
+    public double getAlea() {
+        return alea;
+    }
+
+    public Date getD() {
+        return d;
+    }
+
+    public byte[] getDigest() {
+        return digest;
     }
 }

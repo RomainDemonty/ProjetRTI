@@ -1,4 +1,4 @@
-package Modele.Protocole;
+package Modele.ProtocoleSecurise;
 
 public class FinConnexionException extends Exception
 {

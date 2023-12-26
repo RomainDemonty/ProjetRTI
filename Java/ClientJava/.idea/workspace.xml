@@ -5,13 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67071f21-d120-4d93-8552-2737670f726d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prop.properties" beforeDir="false" afterPath="$PROJECT_DIR$/prop.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Modele/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modele/Utilisateur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ClientPaiement/src/Modele/Protocole/Protocole.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ClientPaiement/src/Modele/Singleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientPaiement/src/Modele/Singleton.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ServPaiement/src/Modele/ProtocoleSecurise/VESPAPS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/Facture/ReponseGetFacture.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/Facture/ReponseGetFactureS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/Facture/ReponseGetFactureTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/Facture/ReponseGetFactureTabS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/Facture/RequeteGetFacture.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/Facture/RequeteGetFactureS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/FinConnexionException.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/FinConnexionException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/LOGOUT/RequeteLOGOUT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/LOGOUT/RequeteLOGOUTS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/Login/ReponseLOGIN.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/Login/ReponseLOGINS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/Login/RequeteLOGIN.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/Login/RequeteLOGINS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/Paiement/ReponsePaiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/Paiement/ReponsePaiementS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/Paiement/RequetePaiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/Paiement/RequetePaiementS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/Reponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/Reponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Protocole/Requete.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/ProtocoleSecurise/Requete.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Singleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientpaiementSecurise/src/Modele/Singleton.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ServPaiement/properties.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/properties.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Modele/Serveur/Serveur.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/src/Controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Modele/BD/SqlBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/src/Modele/BD/SqlBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Modele/Protocole/Protocole.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/src/Modele/Protocole/Protocole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Modele/Protocole/VESPAPS.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Modele/Serveur/ThreadPaiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/src/Modele/Serveur/ThreadPaiement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Modele/Serveur/ThreadPaiementSecu.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/src/Modele/Serveur/ThreadPaiementSecu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Modele/Serveur/ThreadServeurSecu.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/src/Modele/Serveur/ThreadServeurSecu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Vue/ServeurVue.form" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/src/Vue/ServeurVue.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServPaiement/src/Vue/ServeurVue.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ServPaiement/src/Vue/ServeurVue.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +62,7 @@
     "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "340",
     "WebServerToolWindowFactoryState": "false",
     "dart.analysis.tool.window.visible": "false",
-    "last_opened_file_path": "C:/Users/user/Desktop/SpringBoot_Theorie/seance 1/helloworldwebservice",
+    "last_opened_file_path": "C:/Users/user/Desktop/ProjetRTI/Java/ClientJava",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -112,6 +130,7 @@
       <workItem from="1699796298794" duration="3277000" />
       <workItem from="1700034314869" duration="1976000" />
       <workItem from="1700123309540" duration="47000" />
+      <workItem from="1703060701547" duration="14000" />
     </task>
     <servers />
   </component>

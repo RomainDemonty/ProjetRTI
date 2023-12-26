@@ -1,7 +1,6 @@
 package Modele.Serveur;
 
-import Modele.Protocole.Protocole;
-import Modele.Protocole.VESPAPS;
+import Modele.ProtocoleSecurise.VESPAPS;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -37,10 +36,16 @@ public class ThreadServeurSecu extends Thread{
     public void run()
     {
 
+        try
+        {
             for (int i=0 ; i<taillePool ; i++)
             {
-               //todo : lance le threadpaiementsecu +try catch
+                new ThreadPaiementSecu(protocole , connexionsEnAttente,pool).start();
             }
+        } catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
 
         // Attente des connexions
         while(!this.isInterrupted())
@@ -56,7 +61,7 @@ public class ThreadServeurSecu extends Thread{
             }
             catch (SocketTimeoutException ex)
             {
-                System.out.println("exception socketTimeout dans le thread Serveur");
+                //System.out.println("exception socketTimeout dans le thread Serveur secu ");
             }
             catch (IOException ex)
             {

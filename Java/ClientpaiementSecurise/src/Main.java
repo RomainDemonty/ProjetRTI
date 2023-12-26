@@ -1,5 +1,5 @@
 import Controller.Controller;
-import Modele.Protocole.Login.RequeteLOGIN;
+import Modele.ProtocoleSecurise.Login.RequeteLOGINS;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.IOException;
@@ -10,11 +10,9 @@ import java.security.Security;
 public class Main {
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, IOException {
 
-        //todo dmd au prof si le provider est bien msi
         Security.addProvider(new BouncyCastleProvider());
 
         Controller controller = new Controller();
-        new RequeteLOGIN("s","s");
     }
 
 }

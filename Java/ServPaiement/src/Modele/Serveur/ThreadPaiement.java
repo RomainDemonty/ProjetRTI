@@ -55,7 +55,6 @@ public class ThreadPaiement extends Thread {
             try
             {
                 boolean deconnecte = true ;
-                //TODO , quand un client ferme son appli le quitter aussi dans le protocole
                 System.out.println("Attente d'une connexion...");
                 csocket = connexionsEnAttente.getConnexion();
                 System.out.println("Connexion prise en charge.");

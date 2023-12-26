@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class Protocole {
 
     //todo  si ca fonctionne tjrs
-    private AccesBD  donnees;
+    protected AccesBD  donnees;
     private String nom ;
     public String getNom()
     {
@@ -161,5 +161,11 @@ public class Protocole {
         return somme % 10 == 0;
     }
 
-
+    public AccesBD getDonnees() {
+        return donnees;
     }
+
+    public HashMap<String, Socket> getClientsConnectes() {
+        return clientsConnectes;
+    }
+}
