@@ -78,6 +78,59 @@ public class Controller implements ActionListener , WindowListener {
 
         if(e.getSource()==app.getConfirmer()) {
             System.out.println("bouton Acheter ");
+
+            JPanel tmpPanel = app.getPanelFacture();
+            for (Component check : tmpPanel.getComponents()) {
+                if (check instanceof JCheckBox) {
+                    JCheckBox checkBox = (JCheckBox) check;
+                    if (checkBox.isSelected()) {
+                        for (int i = 0; i < Singleton.getInstance().getFactures().size(); i++) {
+                            if (checkBox.getText().equals(Singleton.getInstance().getFactures().get(i).toString())) {
+
+                                try {
+                                    if(Singleton.getInstance().envoyerRequetePayer(Integer.parseInt(Singleton.getInstance().getFactures().get(i).getIdFacture()), app.getNomVISA(), app.getNumeroVISA()))
+                                    {
+                                        Singleton.getInstance().getFactures().remove(Singleton.getInstance().getFactures().get(i));
+                                        tmpPanel.remove(checkBox);
+                                        app.setErrorVisa("");
+                                    }
+                                    else
+                                    {
+                                        app.setErrorVisa("Numero de visa invalid ! ");
+                                    }
+                                }catch (SocketException ex )
+                                {
+                                    app.setVisible(false);
+                                    c.setVisible(true);
+                                    try {
+                                        Singleton.getInstance().getCsocket().close();
+                                    } catch (IOException exc) {
+                                        throw new RuntimeException(exc);
+                                    }
+                                    c.setError("error de connexion au seveur");
+                                }
+                                catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                } catch (ClassNotFoundException ex) {
+                                    throw new RuntimeException(ex);
+                                } catch (NoSuchPaddingException ex) {
+                                    throw new RuntimeException(ex);
+                                } catch (IllegalBlockSizeException ex) {
+                                    throw new RuntimeException(ex);
+                                } catch (NoSuchAlgorithmException ex) {
+                                    throw new RuntimeException(ex);
+                                } catch (BadPaddingException ex) {
+                                    throw new RuntimeException(ex);
+                                } catch (InvalidKeyException ex) {
+                                    throw new RuntimeException(ex);
+                                } catch (NoSuchProviderException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         if(e.getSource()==app.getLogoutButton())

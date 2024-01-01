@@ -11,14 +11,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-import Modele.Protocole.LOGOUT.RequeteLOGOUT;
+import Modele.Protocole.Paiement.ReponsePaiement;
 import Modele.Protocole.Protocole;
 import Modele.ProtocoleSecurise.Facture.ReponseGetFactureS;
 import Modele.ProtocoleSecurise.Facture.ReponseGetFactureSer;
 import Modele.ProtocoleSecurise.Facture.ReponseGetFactureTabS;
 import Modele.ProtocoleSecurise.Facture.RequeteGetFactureS;
+import Modele.ProtocoleSecurise.LOGOUT.RequeteLOGOUT;
 import Modele.ProtocoleSecurise.Login.ReponseLOGINS;
 import Modele.ProtocoleSecurise.Login.RequeteLOGINS;
+import Modele.ProtocoleSecurise.Paiement.ReponsePaiementS;
+import Modele.ProtocoleSecurise.Paiement.RequetePaiementS;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.*;
@@ -50,10 +53,42 @@ public class VESPAPS extends Protocole {
         if (requete instanceof RequeteLOGOUT)  TraiteRequeteLOGOUTS((RequeteLOGOUT) requete);
 
         if(requete instanceof RequeteGetFactureS) return TraiteRequeteGetFactureS((RequeteGetFactureS)requete) ;
+        if(requete instanceof RequetePaiementS) return TraiteRequetePaiementS((RequetePaiementS)requete) ;
 
 
 
         return null;
+    }
+
+    private synchronized ReponsePaiementS TraiteRequetePaiementS(RequetePaiementS requete) throws
+            Modele.Protocole.FinConnexionException, SQLException, IOException, ClassNotFoundException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, NoSuchProviderException, InvalidKeyException, CertificateException, KeyStoreException {
+        System.out.println("dans ReponsePaiementSecurisé ");
+        //todo decrypté le msg
+
+        byte [] messageDecrypte = MyCrypto.DecryptSymDES(cleSession,requete.getData());
+        System.out.println("Decryptage du message...");
+
+        // Récupération des données claires
+        ByteArrayInputStream bais = new ByteArrayInputStream(messageDecrypte);
+        DataInputStream dis = new DataInputStream(bais);
+        int idFacture = dis.readInt();
+        String nom = dis.readUTF();
+        String visa = dis.readUTF();
+        System.out.println("----serveur :   idfacture = "+idFacture +"nom =  " + nom +"visa = "+visa    );
+
+        if(isCarteValid(visa))
+        {
+            String tmp[] = new String[1];
+            tmp[0] = "idfacture = \'" + idFacture + "\'";
+            int rs = donnees.update("factures", "paye = true",tmp) ;
+            if(rs!=0)
+            {
+                return new ReponsePaiementS(true , cleSession);
+            }
+        }
+
+        return new ReponsePaiementS(false,cleSession);
+
     }
 
     public synchronized ReponseGetFactureSer TraiteRequeteGetFactureS(RequeteGetFactureS requete) throws SQLException, CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, SignatureException, NoSuchProviderException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
@@ -126,7 +161,6 @@ public class VESPAPS extends Protocole {
             if(rs.getString("username").equals(requete.getLogin()))
             {
                 System.out.println("meme username , comparaison des digest");
-                //todo verif du digest du mdp
                 MessageDigest md = MessageDigest.getInstance("SHA-1","BC");
                 md.update(requete.getLogin().getBytes());
                 md.update(rs.getString("password").getBytes());

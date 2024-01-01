@@ -4,6 +4,7 @@ import Modele.ProtocoleSecurise.LOGOUT.RequeteLOGOUT;
 import Modele.ProtocoleSecurise.Login.ReponseLOGINS;
 import Modele.ProtocoleSecurise.Login.RequeteLOGINS;
 import Modele.ProtocoleSecurise.Facture.*;
+import Modele.ProtocoleSecurise.Paiement.*;
 import Modele.ProtocoleSecurise.MyCrypto;
 
 import javax.crypto.BadPaddingException;
@@ -110,15 +111,38 @@ public class Singleton {
 
     }
 
+    public boolean envoyerRequetePayer(int id , String nom ,String visa ) throws IOException, ClassNotFoundException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, NoSuchProviderException {
+
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(baos);
+        dos.writeInt(id);
+        dos.writeUTF(nom);
+        dos.writeUTF(visa);
+        byte[] messageClair = baos.toByteArray();
+
+        RequetePaiementS requete = new RequetePaiementS( MyCrypto.CryptSymDES(cleSession,messageClair));
+        oos.writeObject(requete);
+       ReponsePaiementS  reponse = (ReponsePaiementS) ois.readObject();
+       System.out.println("reponse du serveur pour la requete de payement de la facture : id  =>" + reponse);
+        if(reponse.VerifyAuthenticity(cleSession))
+        {
+            System.out.println("----le hmac est correct ----");
+            return reponse.isOk() ;
+        }
+        else
+            System.out.println("----le hmac est Incorrect !!! ----");
+            return false ;
+    }
 
     public boolean envoyerRequeteGetFactures(String id) throws IOException, ClassNotFoundException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, SignatureException, NoSuchProviderException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 
         factures=new ArrayList<>() ;
-        //todo signer la requete pour assurer que on est bien nous meme
+
         RequeteGetFactureS requete = new RequeteGetFactureS(id , RecupereClePriveeClient());
         oos.writeObject(requete);
 
-        //todo decrypte la lise des facture symetriquement ( avec cle session)
+
         ReponseGetFactureSer rep = (ReponseGetFactureSer) ois.readObject();
 
         byte[] messagedecrypte =  MyCrypto.DecryptSymDES(cleSession,rep.getData());

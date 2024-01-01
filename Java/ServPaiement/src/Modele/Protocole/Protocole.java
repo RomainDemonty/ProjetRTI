@@ -140,7 +140,7 @@ public class Protocole {
             }
 
 
-    public static boolean isCarteValid(String numeroCarte) {
+    protected static boolean isCarteValid(String numeroCarte) {
         int somme = 0;
         boolean doubleDigit = false;
 

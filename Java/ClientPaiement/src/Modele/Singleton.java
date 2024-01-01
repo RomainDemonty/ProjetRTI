@@ -128,9 +128,7 @@ public class Singleton {
         oos.writeObject(requete);
         ReponsePaiement  reponse = (ReponsePaiement) ois.readObject();
         System.out.println("reponse du serveur pour la requete de payement de la facture : id " + reponse);
-
-
-
+        
         return reponse.isOk() ;
     }
 
