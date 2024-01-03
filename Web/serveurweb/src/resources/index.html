@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site du Maraicher en ligne !!!</title>
+    <link href="./css/style.css" rel="stylesheet" type="text/css">
+    <link rel="icon" href="./image/logo/panier.png" type="image/x-icon">
+</head>
+<body>
+<header>
+    <h1>!!! Bienvenue sur le site du maraicher en ligne !!!</h1>
+</header>
+<article>
+    <div id="tableau">
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Article</th>
+                    <th>Prix à l'unité</th>
+                    <th>Quantité</th>
+                </tr>
+            </thead>
+            <tbody id="maTable">
+            </tbody>
+        </table>
+    </div>
+    <div id="articleSelect">
+        <form id ="form">
+            <h2>Article sélectionné: </h2>
+            <span>id : </span> 
+            <input type="number" id="idArticle" name="idArticle" value="0" min="0">
+            <br>
+            <br>
+            <span>Article : </span>
+            <input type="text"  name="nomArticle" placeholder="nom article" value="Aucun">
+            <br>
+            <br>
+            <span>Prix à l'unité : </span>
+            <input type="text" id="prixArticle" name="prixArticle" placeholder="prix" value="0">
+            <br>
+            <br>
+            <span>Quantité : </span>
+            <input type="number" id="quantiteArticle" name="quantiteArticle" value="0" min="0">
+            <br>
+            <br>
+            <input id="update" type="button" name="Mettre à jour" value="Mettre à jour">
+        </form>
+        <div id="imageArticleSelect">
+            <img src="./image/logo/panier.png" alt="imageArticleSelect">
+        </div>
+        <p id="message"></p>
+    </div>
+</article>
+<script src="./app.js"></script>
+</body>
+</html>

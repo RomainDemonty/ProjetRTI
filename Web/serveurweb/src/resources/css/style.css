@@ -1,0 +1,145 @@
+body{
+    background-color: #26577C;
+    max-width: 1300px;
+    margin: auto;
+    width: 100%;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    margin: auto;
+}
+
+h1{
+    text-align: center;
+    padding: 5px;
+    border: solid black 1px;
+    background-color: white;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 15px 30px 15px 30px;
+}
+
+h2{
+    text-decoration: underline;
+    color: white;
+}
+
+span{
+    color: white;
+}
+
+article{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+div{
+    margin: 10px;
+}
+
+#imageArticleSelect{
+    width: 20%;
+}
+
+#imageArticleSelect img{
+    width: 100%;
+    border-radius: 20px;
+    border: solid white 3px;
+    padding: 8px;
+    max-width: 150px;
+    max-height: 150px;
+}
+
+#form{
+    width: 60%;
+}
+
+input[type="number"] {
+    width: 20%;
+}
+
+input[type="submit"] {
+    min-height: 20px;
+}
+
+input {
+    min-width: 50px;
+    max-width: 120px;
+    min-height: 10px;
+    max-height: 10px;
+}
+
+#articleSelect{
+    border: solid white 3px;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    max-height: 250px;
+}
+
+td , th{
+    text-align: center;
+    width: 100%;
+    border: lightgray solid 1px;
+    padding: none;
+    width: 25%;
+    height: 30px;
+    color:white;
+}
+
+th{
+    background-color: white;
+    color: black;
+}
+
+table {
+    border-collapse: collapse;
+    margin: auto;
+    width: 100%;
+  }
+
+#tableau{
+    width: 50%;
+}
+
+.selected{
+    background-color: lightgray;
+    color:black;
+    font-size: 1.5em;
+}
+
+
+  @media screen and (max-width: 769px) {
+    article{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 80%;
+        align-items: center;
+        margin: auto;
+    }
+
+    #tableau{
+        width: 100%;
+    }
+
+    body{
+        font-size: 0.5em;
+    }
+
+    #articleSelect > div {
+        width: 80%;
+    }
+
+    #articleSelect :nth-child(2) {
+        margin: center;
+    }
+
+    #articleSelect :nth-child(2) {
+        text-align: center;
+    }
+  }
