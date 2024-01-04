@@ -62,15 +62,15 @@ input[type="number"] {
     width: 20%;
 }
 
-input[type="submit"] {
-    min-height: 20px;
-}
-
 input {
     min-width: 50px;
     max-width: 120px;
     min-height: 10px;
-    max-height: 10px;
+    max-height: 15px;
+}
+
+input[type="button"] {
+    min-height: 30px;
 }
 
 #articleSelect{
@@ -81,11 +81,15 @@ input {
     max-height: 250px;
 }
 
+p{
+    font-size: 1.2em;
+}
+
 td , th{
     text-align: center;
     width: 100%;
     border: lightgray solid 1px;
-    padding: none;
+    padding: 0px;
     width: 25%;
     height: 30px;
     color:white;
@@ -136,7 +140,7 @@ table {
     }
 
     #articleSelect :nth-child(2) {
-        margin: center;
+        text-align: center;
     }
 
     #articleSelect :nth-child(2) {

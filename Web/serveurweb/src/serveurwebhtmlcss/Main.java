@@ -1,12 +1,16 @@
 package serveurwebhtmlcss;
 
 import com.sun.net.httpserver.HttpServer;
+
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class Main
 {
+    //public static String ipServ;
 
     public static void main(String[] args)
     {
@@ -15,6 +19,10 @@ public class Main
         HttpServer servApi = null;
         try
         {
+            //Properties P = new Properties() ;
+            //P.load(new FileInputStream(System.getProperty("user.dir")+"\\properties.properties"));
+            //ipServ =  P.getProperty("serveurWeb");
+
             serveur = HttpServer.create(new InetSocketAddress(8080),0);
             serveur.createContext("/",new HandlerHtml());
             serveur.createContext("/css",new HandlerCss());

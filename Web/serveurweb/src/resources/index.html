@@ -27,14 +27,14 @@
         </table>
     </div>
     <div id="articleSelect">
-        <form id ="form">
+        <form id ="form" method="POST" action="/api/tasks">
             <h2>Article sélectionné: </h2>
             <span>id : </span> 
-            <input type="number" id="idArticle" name="idArticle" value="0" min="0">
+            <input type="number" id="idArticle" name="idArticle" value="0" min="0" readonly>
             <br>
             <br>
             <span>Article : </span>
-            <input type="text"  name="nomArticle" placeholder="nom article" value="Aucun">
+            <input type="text"  name="nomArticle" placeholder="nom article" value="Aucun" readonly>
             <br>
             <br>
             <span>Prix à l'unité : </span>
@@ -49,8 +49,9 @@
         </form>
         <div id="imageArticleSelect">
             <img src="./image/logo/panier.png" alt="imageArticleSelect">
+            <p id="message"></p>
         </div>
-        <p id="message"></p>
+
     </div>
 </article>
 <script src="./app.js"></script>

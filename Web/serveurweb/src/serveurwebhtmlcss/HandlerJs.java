@@ -18,7 +18,7 @@ public class HandlerJs implements HttpHandler
         // Ecriture de la reponse
         if (requestPath.endsWith(".js"))
         {
-            String fichier = "C:\\Users\\romai\\Desktop\\ProjetRTI\\Web\\serveurweb\\src\\resources\\app.js";
+            String fichier = "src\\resources\\app.js";
             File file = new File(fichier);
             if (file.exists())
             {

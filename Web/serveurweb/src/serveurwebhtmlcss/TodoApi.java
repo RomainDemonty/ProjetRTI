@@ -39,7 +39,7 @@ public class TodoApi
         {
             // CORS (Cross-Origin Resource Sharing)
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-            exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST");
+            exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
             exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "ContentType");
 
             String requestMethod = exchange.getRequestMethod();
@@ -56,8 +56,23 @@ public class TodoApi
                 // Ajouter une nouvelle tâche
                 String requestBody = readRequestBody(exchange);
                 System.out.println("requestbody = " + requestBody);
-                updateArticle(1,1.2f, 9);
-                sendResponse(exchange, 201, "Tache ajoutee avec succes");
+
+                // Analyser le corps de la requête pour extraire les données
+                Map<String, String> formData = parseQueryParams(requestBody);
+                // Récupérer les données de la requête
+                int idArticle = Integer.parseInt(formData.get("id"));
+                float nouveauPrix = Float.parseFloat(formData.get("prix"));
+                int nouvelleQuantite = Integer.parseInt(formData.get("stock"));
+                // Mettre à jour l'article
+                try {
+                    updateArticle(idArticle, nouveauPrix, nouvelleQuantite);
+                    System.out.println("Stock mise a jour");
+                    sendResponse(exchange, 201, "Article mise a jour");
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
             else sendResponse(exchange, 405, "Methode non autorisee");
         }
@@ -124,11 +139,15 @@ public class TodoApi
     {
         listeArticle.add(article);
     }
-    private static void updateArticle(int idUpdateArticle, float updatedPrix, int updatedStock) {
+    private static void updateArticle(int idUpdateArticle, float updatedPrix, int updatedStock) throws SQLException, IOException, ClassNotFoundException {
         if (idUpdateArticle >= 1 && idUpdateArticle <= listeArticle.size()) {
             Article articleToUpdate = listeArticle.get(idUpdateArticle - 1);
             articleToUpdate.setPrix(updatedPrix);
             articleToUpdate.setStock(updatedStock);
+            AccesBD accesBD = new AccesBD();
+            String[] condition = new String[]{"id =" + idUpdateArticle};
+            String update = "prix = " + updatedPrix + ",stock = " + updatedStock;
+            accesBD.update("articles" , update ,condition );
         }
     }
 

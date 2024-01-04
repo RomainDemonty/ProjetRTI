@@ -18,7 +18,7 @@ public class HandlerCss implements HttpHandler
         // Ecriture de la reponse
         if (requestPath.endsWith(".css"))
         {
-            String fichier = "C:\\Users\\romai\\Desktop\\ProjetRTI\\Web\\serveurweb\\src\\resources\\css\\style.css";
+            String fichier = "src\\resources\\css\\style.css";
             File file = new File(fichier);
             if (file.exists())
             {

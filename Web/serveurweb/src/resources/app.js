@@ -3,56 +3,69 @@
     miseAJourTable();
 })();
 
+//const PropertiesReader = require('properties-reader');
+//const properties = PropertiesReader('serveurweb\\properties.properties');
+
+const ipServ = "192.168.1.179";//properties.get('serveurWeb');
 
 document.getElementById('update').addEventListener("click", function(e) {
     e.stopPropagation();
-    // Crée une instance de l'objet XMLHttpRequest
-    var xhr = new XMLHttpRequest();
 
     // Récupère l'ID de l'article
     var idArticle = document.getElementById('idArticle').value;
-
-    // Configure la requête POST vers le serveur
-    xhr.open("POST", "http://192.168.1.179:8081/api/tasks", true);
-    xhr.responseType = "text";
-    xhr.setRequestHeader("Content-type", "application/json"); // Utilisez application/json si vous envoyez des données JSON
 
     // Récupère les valeurs mises à jour depuis le formulaire
     var nouveauPrix = document.getElementById('prixArticle').value;
     var nouvelleQuantite = document.getElementById('quantiteArticle').value;
 
-    // Crée un objet JSON avec les valeurs mises à jour, y compris l'ID
-    var body = JSON.stringify({
-        id: idArticle,
-        prix: nouveauPrix,
-        stock: nouvelleQuantite
-    });
+    console.log(nouvelleQuantite);
 
-    // Gestionnaire d'événements de changement d'état
-    xhr.onreadystatechange = function() {
-        console.log(this);
-        if (this.readyState == 4) {
-            if (this.status == 200) {
-                console.log(this.response);
-                // Met à jour la table après la réussite de la requête POST
-                miseAJourTable();
+    if(idArticle === 0)
+    {
+        let monTexte = document.getElementById("message");
+        monTexte.innerHTML = "Aucun article selectionne";
+        monTexte.style.color = "red";
+    }
+    else if( (nouveauPrix === "" || nouvelleQuantite === "") || (nouveauPrix < 0 || nouvelleQuantite < 0 ))
+    {
+        let monTexte = document.getElementById("message");
+        monTexte.innerHTML = "Les champs ne peuvent pas etre inferieur a 0";
+        monTexte.style.color = "red";
+    }else{
+        // Encode les données du formulaire
+        var data = "id=" + idArticle +
+            "&prix=" + encodeURIComponent(nouveauPrix) +
+            "&stock=" + encodeURIComponent(nouvelleQuantite);
 
-                // Affiche le message de réponse dans un élément avec l'ID "message"
-                var monTexte = document.getElementById("message");
-                monTexte.innerHTML = this.responseText;
-            } else {
-                alert("Une erreur est survenue...");
+        // Crée une instance de l'objet XMLHttpRequest
+        var xhr = new XMLHttpRequest();
+
+        // Configure la requête POST vers le serveur
+        xhr.open("POST", "http://" + ipServ + ":8081/api/tasks", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        // Gestionnaire d'événements de changement d'état
+        xhr.onreadystatechange = function() {
+            console.log(this);
+            if (this.readyState === 4) {
+                if (this.status === 201) {
+                    console.log(this.response);
+                    // Met à jour la table après la réussite de la requête POST
+                    miseAJourTable();
+
+                    // Affiche le message de réponse dans un élément avec l'ID "message"
+                    let monTexte = document.getElementById("message");
+                    monTexte.innerHTML = this.responseText;
+                    monTexte.style.color = "green";
+                } else {
+                    alert("Une erreur est survenue...");
+                }
             }
-        }
-    };
+        };
+        xhr.send(data);
+    }
 
-    // Envoie la requête POST avec le corps de la requête mis à jour
-    xhr.send(body);
 
-    // Réinitialise les champs du formulaire
-    document.getElementById('prixArticle').value = "";
-    document.getElementById('quantiteArticle').value = "";
-    document.getElementById('idArticle').value = "";
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -84,6 +97,9 @@ document.addEventListener("DOMContentLoaded", function() {
             formulaire.elements["prixArticle"].value = prix;
             formulaire.elements["quantiteArticle"].value = stock;
 
+            var monTexte = document.getElementById("message");
+            monTexte.innerHTML = "";
+
             var xhr = new XMLHttpRequest();
             var url = "http://192.168.1.179:8080/image/" + intitule + ".jpg";
             xhr.open("GET", url, true);
@@ -91,8 +107,8 @@ document.addEventListener("DOMContentLoaded", function() {
             xhr.responseType = "blob"; // Indique que la réponse sera sous forme de Blob
 
             xhr.onreadystatechange = function() {
-                if (this.readyState == 4) {
-                    if (this.status == 200) {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
                         // La réponse du serveur est le contenu de l'image sous forme de Blob
                         var blob = this.response;
 
@@ -100,8 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         var imgElement = imageArticle.querySelector("img");
 
                         // Créez une URL à partir du Blob et attribuez-la à la source de l'image
-                        var nouvelleSource = URL.createObjectURL(blob);
-                        imgElement.src = nouvelleSource;
+                        imgElement.src = URL.createObjectURL(blob);
                     } else {
                         // Gestion des erreurs, si nécessaire
                         console.error("Erreur de requête : " + this.status);
@@ -119,8 +134,8 @@ function miseAJourTable()
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         console.log(this);
-        if (this.readyState == 4) {
-            if (this.status == 200) {
+        if (this.readyState === 4) {
+            if (this.status === 200) {
                 console.log(this.response);
                 var articles = this.response;
                 console.log(articles);
