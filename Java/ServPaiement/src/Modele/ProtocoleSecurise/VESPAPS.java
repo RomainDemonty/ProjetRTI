@@ -63,7 +63,6 @@ public class VESPAPS extends Protocole {
     private synchronized ReponsePaiementS TraiteRequetePaiementS(RequetePaiementS requete) throws
             Modele.Protocole.FinConnexionException, SQLException, IOException, ClassNotFoundException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, NoSuchProviderException, InvalidKeyException, CertificateException, KeyStoreException {
         System.out.println("dans ReponsePaiementSecurisé ");
-        //todo decrypté le msg
 
         byte [] messageDecrypte = MyCrypto.DecryptSymDES(cleSession,requete.getData());
         System.out.println("Decryptage du message...");
@@ -112,7 +111,6 @@ public class VESPAPS extends Protocole {
         rss.next() ;
         System.out.println("reponse de la selection a partir de usrname" + rss.getString("id"));
 
-            // todo essaye ne mettant directement en cond que idfacture = id actuel
         ResultSet rs = donnees.selection(null, "factures", null);
         while(rs.next())
         {

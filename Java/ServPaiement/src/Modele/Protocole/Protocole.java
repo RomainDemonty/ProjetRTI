@@ -18,7 +18,6 @@ import java.util.HashMap;
 
 public class Protocole {
 
-    //todo  si ca fonctionne tjrs
     protected AccesBD  donnees;
     private String nom ;
     public String getNom()

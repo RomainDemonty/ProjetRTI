@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact name="ClientpaiementSecurise:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ClientpaiementSecurise_jar</output-path>
+    <root id="root">
+      <element id="archive" name="ClientpaiementSecurise.jar">
+        <element id="module-output" name="ClientpaiementSecurise" />
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/jars/bcprov-jdk15to18-169.jar" />
+    </root>
+  </artifact>
+</component>

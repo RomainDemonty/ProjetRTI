@@ -31,7 +31,7 @@ public class ServeurVue extends JFrame {
 
         arreterLeServeurButton.setEnabled(false);
         port.setText("50000");
-        portsecu.setText("50001");
+        portsecu.setText("50010");
         nbthread.setText("1");
         setLocationRelativeTo(null);
         setSize(600,300);
@@ -68,7 +68,7 @@ public class ServeurVue extends JFrame {
 
     public void setThreadSS() throws IOException, SQLException, ClassNotFoundException {
         VESPAPS p = new VESPAPS() ;
-        threadSS = new ThreadServeurSecu(Integer.parseInt(portsecu.getText()),p,getNbthread());
+        threadSS = new ThreadServeurSecu(Integer.parseInt(portsecu.getText()),p);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 

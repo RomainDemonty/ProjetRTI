@@ -17,7 +17,7 @@ import java.sql.SQLException;
 
 public class ThreadPaiementSecu extends Thread {
 
-    private FileAttente connexionsEnAttente;
+
 
 
     protected VESPAPS protocole;
@@ -34,22 +34,19 @@ public class ThreadPaiementSecu extends Thread {
         this.numero = numCourant++;
     }
 
-    public ThreadPaiementSecu(VESPAPS protocole, FileAttente file, ThreadGroup groupe)
+    public ThreadPaiementSecu(VESPAPS protocole, Socket clientSocket, ThreadGroup groupe)
             throws IOException {
         super(groupe, "TH Paiement securisé  " + numCourant + " (protocole=" + protocole.getNom()
                 + ")");
         this.protocole = protocole;
-        this.csocket = null;
+        this.csocket = clientSocket;
         this.numero = numCourant++;
-        this.connexionsEnAttente = file ;
     }
 
     @Override
     public void run() {
-
-        System.out.println("TH Client (Pool) démarre...");
+        System.out.println("TH Client (dmd) démarre...");
         boolean interrompu = false;
-
 
         while(!interrompu && !this.isInterrupted())
         {
@@ -57,7 +54,6 @@ public class ThreadPaiementSecu extends Thread {
             {
                 boolean deconnecte = true ;
                 System.out.println("[ThreadPaiementSecu] Attente d'une connexion...");
-                csocket = connexionsEnAttente.getConnexion();
                 System.out.println("[ThreadPaiementSecu] Connexion prise en charge.");
                 ObjectOutputStream oos = null;
                 ObjectInputStream ois = null;
@@ -114,16 +110,9 @@ public class ThreadPaiementSecu extends Thread {
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                try {if(csocket!=null)
-                    csocket.close();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                interrompu=true;
             }
         }
-        System.out.println("TH Client (Pool) se termine.");
+        System.out.println("TH Client (dmd) se termine.");
         try {
             if(csocket!=null)
                 csocket.close();

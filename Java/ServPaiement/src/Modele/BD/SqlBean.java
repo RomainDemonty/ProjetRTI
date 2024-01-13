@@ -16,15 +16,14 @@ public class SqlBean
 
     public SqlBean(String type,String server,String dbName,String  user,String password) throws ClassNotFoundException, SQLException
     {
-        // Chargement du driver
         Class leDriver = Class.forName(drivers.get(type));
         System.out.println("Obtention du driver OK...");
 
-        // Création de l'URL
+
         String url =  "jdbc:mysql://" + server + "/" + dbName;
 
         System.out.println("creation de l'url : "+ url);
-        // Connexion à la BD
+
         connection = DriverManager.getConnection(url,user,password);
         System.out.println("Obtention de connection OK...");
     }

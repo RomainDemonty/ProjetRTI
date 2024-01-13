@@ -8,26 +8,23 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 public class ThreadServeurSecu extends Thread{
-    private FileAttente connexionsEnAttente;
     private ThreadGroup pool;
-    private int taillePool;
+    private static int taillePool = 0 ;
 
     protected int port;
 
     protected VESPAPS protocole;
     protected ServerSocket ssocket;
 
-    public ThreadServeurSecu(int port, VESPAPS protocole, int taillePool) throws
+    public ThreadServeurSecu(int port, VESPAPS protocole) throws
             IOException
     {
         super("TH Serveur (port=" + port + ",protocole=" + protocole.getNom() + ")");
         this.port = port;
         this.protocole = protocole;
         ssocket = new ServerSocket(port);
-
-        connexionsEnAttente = new FileAttente();
-        pool = new ThreadGroup("POOL");
-        this.taillePool = taillePool;
+        pool = new ThreadGroup("DEMANDE");
+        this.taillePool ++;
     }
 
 
@@ -35,17 +32,6 @@ public class ThreadServeurSecu extends Thread{
     @Override
     public void run()
     {
-
-        try
-        {
-            for (int i=0 ; i<taillePool ; i++)
-            {
-                new ThreadPaiementSecu(protocole , connexionsEnAttente,pool).start();
-            }
-        } catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
 
         // Attente des connexions
         while(!this.isInterrupted())
@@ -56,7 +42,8 @@ public class ThreadServeurSecu extends Thread{
                 ssocket.setSoTimeout(2000);
                 System.out.println(ssocket.getLocalPort());
                 csocket = ssocket.accept();
-                connexionsEnAttente.addConnexion(csocket);
+                new ThreadPaiementSecu(protocole , csocket,pool).start();
+                System.out.println("Creation du thread qui ecoute sur la socket : " + csocket);
 
             }
             catch (SocketTimeoutException ex)
