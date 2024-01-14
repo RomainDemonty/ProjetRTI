@@ -16,7 +16,7 @@ public class HandlerHtml implements HttpHandler
         System.out.print("HandlerHtml (methode " + requestMethod + ") = " +
                 requestPath + " --> ");
         // Ecriture de la reponse
-        if (requestPath.endsWith(".html"))
+        if (requestPath.endsWith(".html")||requestPath.endsWith("/"))
         {
             String fichier = "src\\resources\\index.html";
             File file = new File(fichier);

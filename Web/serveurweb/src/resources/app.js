@@ -6,7 +6,7 @@
 //const PropertiesReader = require('properties-reader');
 //const properties = PropertiesReader('serveurweb\\properties.properties');
 
-const ipServ = "192.168.1.179";//properties.get('serveurWeb');
+let ipServ = "localhost";//properties.get('serveurWeb');
 
 document.getElementById('update').addEventListener("click", function(e) {
     e.stopPropagation();
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
             monTexte.innerHTML = "";
 
             var xhr = new XMLHttpRequest();
-            var url = "http://192.168.1.179:8080/image/" + intitule + ".jpg";
+            var url = "http://localhost:8080/image/" + intitule + ".jpg";
             xhr.open("GET", url, true);
 
             xhr.responseType = "blob"; // Indique que la réponse sera sous forme de Blob
@@ -148,7 +148,7 @@ function miseAJourTable()
             }
         }
     };
-    xhr.open("GET", "http://192.168.1.179:8081/api/tasks", true);
+    xhr.open("GET", "http://localhost:8081/api/tasks", true);
     xhr.responseType = "json";
     xhr.send();
 }
@@ -184,7 +184,7 @@ function ajouteLigne(idArticle,nomArticle,prixArticle,quantiteArticle)
 function videTable()
 {
     var maTable = document.getElementById("maTable");
-    while (maTable.rows.length > 1) {
+    while (maTable.rows.length >= 1) {
         maTable.deleteRow(-1); // supprimer dernière ligne
     }
 }
